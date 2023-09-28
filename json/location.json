@@ -1,0 +1,22 @@
+{
+    "Grauholz": {
+        "Bootssteg": {
+            "description": "Eine düstere Zelle im Kerker von Hundewacht.",
+            "num_of_items": 0
+        },
+        "Dorfmarkt": {
+            "description": "Eine düstere Zelle im Kerker von Hundewacht.",
+            "num_of_items": 0
+        },
+        "Zuhause": {
+            "description": "Eine düstere Zelle im Kerker von Hundewacht.",
+            "num_of_items": 0
+        }
+    },
+    "Hundewacht": {
+        "Gefängniszelle": {
+            "description": "Eine düstere Zelle im Kerker von Hundewacht.",
+            "num_of_items": 0
+        }
+    }
+}

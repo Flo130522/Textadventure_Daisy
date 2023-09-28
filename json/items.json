@@ -1,0 +1,9 @@
+{
+    "waffen": {
+        "Schwert": "Ein scharfes Schwert, das mehr Schaden im Kampf verursacht."
+    },
+    "traenke": {
+        "Trank (20 HP)": "Ein Trank, der 20 Gesundheitspunkte wiederherstellt.",
+        "Trank (40 HP)": "Ein stärkerer Trank, der 40 Gesundheitspunkte wiederherstellt."
+    }
+}
