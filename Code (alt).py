@@ -28,7 +28,6 @@ available_skills = {
     "Schwertkampf": "Erlernbar, wenn ein Schwert im Inventar ist.",
     "Feuerball": "Erlernbar ab Level 5.",
     "Tarnung": "Erlernbar ab Level 3.",
-    # Weitere Fähigkeiten und ihre Voraussetzungen hier hinzufügen
 }
 
 
