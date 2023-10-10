@@ -54,8 +54,8 @@
             "num_of_items": 0
         }
     },
-    "Chihuahua-Höllenreich":{ 
-        "Höllenschloss":{
+    "Feuerreich":{ 
+        "Chihuahua-Höllenreich":{
             "description": "Das dunkle Reich, in dem der Höllenhund Huberus Snickers seine Untertanen unterdrückt.",
             "num_of_items": 0,
             "min_level": 100
@@ -85,7 +85,7 @@
             "num_of_items": 0
         }
     },
-    "Waldreich":{
+    "Erdreich":{
         "Bootswacht":{ 
             "description": "Ein kleines Dorf, in dem die Bewohner Boote herstellen und verkaufen.",
             "num_of_items": 0
