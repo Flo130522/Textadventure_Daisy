@@ -11,7 +11,20 @@
         "Zuhause": {
             "description": "Dein gemütliches Zuhause.",
             "num_of_items": 0
+        },
+        "Nachbarhaus": {
+            "description": "Leikas Zuhause.",
+            "num_of_items": 0
+        },
+        "Vor deinem Zuhause":{
+            "description": "Vor deinem Zuhause.",
+            "num_of_items": 0
+        },
+        "Rettungs-Hundehütte":{
+            "description": "Hier wohnt Jack, der Rettungshund!.",
+            "num_of_items": 0
         }
+
     },
     "Hundewacht": {
         "Gefängniszelle": {
@@ -19,7 +32,6 @@
             "num_of_items": 0
         }
     },
-
     "Finsterwald": {
         "Waldlichtung": {
             "description": "Der Eingang zum Finsterwald.",
@@ -45,21 +57,28 @@
     "Chihuahua-Höllenreich":{ 
         "Höllenschloss":{
             "description": "Das dunkle Reich, in dem der Höllenhund Huberus Snickers seine Untertanen unterdrückt.",
-            "num_of_items": 0
+            "num_of_items": 0,
+            "min_level": 100
         },
         "Säuresumpf":{ 
             "description": "Sümpfe, in denen sich fiese Sumpfschnecken aufhalten.",
-            "num_of_items": 0
+            "num_of_items": 0,
+            "min_level": 90,
+            "monsters": [
+                {"name": "Sumpfschnecke", "min_level": 90, "max_level": 99}
+            ]
         }
     },
     "Himmelreich":{
         "Wolkenstadt":{ 
             "description": "Eine Stadt, die auf Wolken schwebt.",
-            "num_of_items": 0
+            "num_of_items": 0,
+            "min_level": 80
         },
         "Himmelstor":{
             "description": "Das Tor zum Himmelreich.",
-            "num_of_items": 0
+            "num_of_items": 0,
+            "min_level": 89
         },
         "Himmelsmarkt":{
             "description": "Ein Markt, auf dem viele Händler ihre Stände haben.",
@@ -68,18 +87,20 @@
     },
     "Waldreich":{
         "Bootswacht":{ 
-            "description": "Ein kleines Dorf, in dem die Bewohner Booten herstellen und verkaufen.",
+            "description": "Ein kleines Dorf, in dem die Bewohner Boote herstellen und verkaufen.",
             "num_of_items": 0
         }
     },
     "Wasserreich":{
         "Water-City":{ 
             "description": "Eine Stadt, die auf dem Wasser schwimmt.",
-            "num_of_items": 0
+            "num_of_items": 0,
+            "min_level": 41
         },
         "Heilender See":{ 
             "description": "Ein See, in dem sich die Bewohner des Wasserreichs heilen.",
-            "num_of_items": 0
+            "num_of_items": 0,
+            "min_level": 41
         }
     }
 }

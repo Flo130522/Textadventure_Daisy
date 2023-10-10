@@ -90,10 +90,6 @@ class Location:
             if hidden_location_choice.lower() == "ja":
                 self.explore_hidden_location()
 
-        # Aktualisiere den aktuellen Ort des Charakters
-        #TODO bitte prüfen
-        # self.current_character.location = current_location.random_friend()
-
     def explore_hidden_location(self):
         """
         Erkundet einen versteckten Ort und führt Ereignisse aus.

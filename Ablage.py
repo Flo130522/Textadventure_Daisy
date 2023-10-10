@@ -1,6 +1,4 @@
-import random 
-import json      
-import art 
+import random         
 def main():
     """
     Die Hauptfunktion, um das Spiel zu starten.
@@ -27,7 +25,6 @@ def main():
             
 def start_adventure(daisy, monster):
     while True:
-        #TODO Main Menu neu gestalten -> Ascii Art
         print("\nWas möchtest du tun?")
         print("1. Ort erkunden")
         print("2. Charakter anzeigen")
@@ -43,12 +40,16 @@ def start_adventure(daisy, monster):
             break
         else:
             print("Ungültige Eingabe. Bitte wähle eine der verfügbaren Optionen.")
-    with open("locations.json", "r") as f:
-        locations = json.load(f)
-    with open ("characters.json", "r") as f:
-        characters = json.load(f)
-    with open ("items.json", "r") as f:
-        items = json.load(f)
+
+    locations = initialize_locations()
+    # Erstelle Charaktere
+    daisy = Character("Daisy", 4, "Rauhaardackel-Terrier Mix", "Nahkampf-Spezialist", is_enemy=False)
+    bruno = Character("Bruno", 3, "Bernhardiner", "Fernkampf-Spezialist", is_enemy=False)
+    leika = Character("Leika", 5, "Pudel-Yorkshire Mix", "Nahkampf-Spezialistin", is_enemy=False)
+    jack = Character("Jack", 6, "Pudel", "Heiler", is_enemy=False)
+    leo = Character("Leo", 12, "Maltester", "Magier", is_enemy=False)
+    hubertus = Character("Hubertus Snickers", 30, "Chihuahua", "Höllenhund aus dem Chihuahuareich", is_enemy=True)
+    team = [daisy, bruno, leika, jack, leo]
 
     # Erstelle Orte
     village = Location("Grauholz", "Ein friedliches Dorf, in dem alles begann.")
@@ -56,8 +57,37 @@ def start_adventure(daisy, monster):
         ("Spinne", 5, 10),  # Monstername, min_level, max_level
         ("Wildschwein", 8, 15),
         ("Wolf", 12, 20),
-    ])
+    ])    
+    forest = Location("Finsterwald", "Ein dunkler Wald, der viele Gefahren birgt.")
+    city = Location("Hundewacht", "Eine belebte Stadt mit vielen Menschen.")
+    endgame = Location("Chihuahua-Höllenreich", "Das dunkle Reich, in dem der Höllenhund Hubertus Snickers sein Unwesen treibt")
+    home = Location("Zuhause", "Daisys gemütliches Zuhause.")
+    dock = Location("Bootssteg", "Der Bootssteg am Flussufer.")
+    market = Location("Dorfmarkt", "Der belebte Dorfmarkt, auf dem viele Geschäfte sind.")
+    woodhome = Location("Höhle im Wald", "Eine kleine Höhle im Wald, in der sich Bruno wohl fühlt")
+    homemagic = Location("Magierturm", "Hoher Magierturm, tief im Wald versteckt, in dem Leo Zauberexperimente durchführt")
+    homenah = Location("Nachbarhaus", "Das Nachbarhaus, hier duftet es immer wieder nach leckerem Kuchen")
+    homemed = Location("Rettungs-Hundehütte", "Hier wohnt Jack, der Rettungshund!")
+    homeend = Location("Thron im Höllenschlund", "Hier sitzt Hubertus und versklavt seine Untertanen und sein Gefolge")
+    in_front_of_home = Location("Vor dem Haus", "Direkt vor deinem gemütlichen Zuhause.")
+    dungon = Location("Waldverlies", "Ein gefährliches Dungeon im Finsterwald")
 
+    # Setze die Startorte für die Charaktere
+    daisy.current_location = home
+    bruno.current_location = woodhome
+    leika.current_location = homenah
+    jack.current_location = homemed
+    leo.current_location = homemagic
+    hubertus.current_location = homeend
+
+    # Füge Charaktere zu Orten hinzu
+    forest.add_friend(bruno)
+    village.add_friend(leika)
+    village.add_friend(daisy)
+    village.add_friend(leo)
+    city.add_friend(jack)
+    city.add_friend(daisy)
+    endgame.add_enemy(hubertus)
 
     # Backstory
     print("Huberus Snickers schickt sein Gefolge los, um das Schutzgeld aus Grauholz und anderen Dörfern einzutreiben.")

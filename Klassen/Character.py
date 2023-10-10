@@ -1,3 +1,4 @@
+import random
 class Character:
     def __init__(self, name, age, breed, role, is_enemy=False):
         self.name = name
