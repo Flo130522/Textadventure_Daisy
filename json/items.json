@@ -2,31 +2,111 @@
     "waffen": {
         "Schwert": {
             "name": "Schwert",
-            "Beschreibung": "Ein einfaches Schwert, das 5 Schaden verursacht."
+            "Beschreibung": "Ein einfaches Schwert, das 5 Schaden verursacht.",
+            "damage_bonus": 0.4,
+            "enchantments": {
+                "Feuer": {
+                    "damage_bonus": 1.0,  
+                    "effect": "Verbrennung"  
+                },
+                "Gift": {
+                    "damage_bonus": 1.0,
+                    "effect": "Vergiftung" 
+                }
+            }
         },
         "Bogen": {
             "name": "Bogen",
-            "Beschreibung": "Ein einfacher Bogen, der 3 Schaden verursacht."
+            "Beschreibung": "Ein einfacher Bogen, der 3 Schaden verursacht.",
+            "hit_chance": 0.5,
+            "damage_bonus_min": 0.3,
+            "damage_bonus_max": 0.5,
+            "enchantments": {
+                "Luft": {
+                    "damage_bonus": 1.0,  
+                    "effect": "Verwirrung" 
+                }
+            }
         },
         "Dolch": {
             "name": "Dolch",
-            "Beschreibung": "Ein einfacher Dolch, der 2 Schaden verursacht."
+            "Beschreibung": "Ein einfacher Dolch, der 2 Schaden verursacht.",
+            "damage_bonus_min": 0.05,
+            "damage_bonus_max": 0.25,
+            "enchantments": {
+                "Erde": {
+                    "damage_bonus_min": 0.75,
+                    "damage_bonus_max": 1.0,  
+                    "effect": "Verlangsamung" 
+                }
+            }
         },
         "Zauberstab": {
             "name": "Zauberstab",
-            "Beschreibung": "Ein einfacher Zauberstab, der 4 Schaden verursacht."
+            "Beschreibung": "Ein einfacher Zauberstab, der 4 Schaden verursacht.",
+            "min_level": 80,
+            "damage_bonus": 0.75,
+            "enchantments": {
+                "Feuer": {
+                    "damage_bonus": 1.0,  
+                    "effect": "Verbrennung" 
+                },
+                "Wasser": {
+                    "damage_bonus": 1.0,  
+                    "effect": "Erfrieren" 
+                },
+                "Erde": {
+                    "damage_bonus": 1.0,  
+                    "effect": "Verlangsamung" 
+                },
+                "Luft": {
+                    "damage_bonus": 1.0,  
+                    "effect": "Verwirrung" 
+                }
+            }
+
         },
         "Katana": {
             "name": "Katana",
-            "Beschreibung": "Ein einfaches Katana, das 6 Schaden verursacht."
+            "Beschreibung": "Ein einfaches Katana, das 6 Schaden verursacht.",
+            "damage_bonus": 0.7,
+            "enchantments": {
+                "Wasser": {
+                    "damage_bonus": 0.9,  
+                    "effect": "Erfrieren" 
+                }
+            }
         },
         "Messer": {
             "name": "Messer",
-            "Beschreibung": "Ein einfaches Messer, das 1 Schaden verursacht."
+            "Beschreibung": "Ein einfaches Messer, das 1 Schaden verursacht.",
+            "damage_bonus": 0.15,
+            "enchantments": {
+                "Feuer": {
+                    "damage_bonus": 0.8,  
+                    "effect": "Verbrennung" 
+                }
+            }
         },
         "Peitsche": {
             "name": "Peitsche",
-            "Beschreibung": "Eine einfache Peitsche, die 2 Schaden verursacht."
+            "Beschreibung": "Eine einfache Peitsche, die 2 Schaden verursacht.",
+            "damage_bonus": 0.6,
+            "enchantments": {
+                "Gift": {
+                    "damage_bonus": 1.0,
+                    "effect": "Vergiftung" 
+                },
+                "Feuer": {
+                    "damage_bonus": 1.0,  
+                    "effect": "Verbrennung" 
+                },
+                "Eis": {
+                    "damage_bonus": 1.0,  
+                    "effect": "Erfrieren" 
+                }
+            }
+
         }
     }, 
     "traenke": {
