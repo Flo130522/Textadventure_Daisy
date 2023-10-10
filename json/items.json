@@ -1,10 +1,43 @@
 {
     "waffen": {
-        "Schwert": "Ein scharfes Schwert, das mehr Schaden im Kampf verursacht."
-    },
+        "Schwert": {
+            "name": "Schwert",
+            "Beschreibung": "Ein einfaches Schwert, das 5 Schaden verursacht."
+        },
+        "Bogen": {
+            "name": "Bogen",
+            "Beschreibung": "Ein einfacher Bogen, der 3 Schaden verursacht."
+        },
+        "Dolch": {
+            "name": "Dolch",
+            "Beschreibung": "Ein einfacher Dolch, der 2 Schaden verursacht."
+        },
+        "Zauberstab": {
+            "name": "Zauberstab",
+            "Beschreibung": "Ein einfacher Zauberstab, der 4 Schaden verursacht."
+        },
+        "Katana": {
+            "name": "Katana",
+            "Beschreibung": "Ein einfaches Katana, das 6 Schaden verursacht."
+        },
+        "Messer": {
+            "name": "Messer",
+            "Beschreibung": "Ein einfaches Messer, das 1 Schaden verursacht."
+        },
+        "Peitsche": {
+            "name": "Peitsche",
+            "Beschreibung": "Eine einfache Peitsche, die 2 Schaden verursacht."
+        }
+    }, 
     "traenke": {
-        "Trank (30 HP)": "Ein Trank, der 30 Gesundheitspunkte wiederherstellt.",
-        "Trank (60 HP)": "Ein stärkerer Trank, der 60 Gesundheitspunkte wiederherstellt.",
-        "Trank (90 HP)": "Ein Trank, der 90 Gesundheitspunkte wiederherstellt"
+        "Trank (30 HP)": {
+            "Beschreibung": "Ein Trank, der 30 Gesundheitspunkte wiederherstellt."
+        },
+        "Trank (60 HP)": {
+            "Beschreibung": "Ein stärkerer Trank, der 60 Gesundheitspunkte wiederherstellt."
+        },
+        "Trank (90 HP)": {
+            "Beschreibung": "Ein Trank, der 90 Gesundheitspunkte wiederherstellt."
+        }
     }
 }

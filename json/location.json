@@ -51,5 +51,35 @@
             "description": "Sümpfe, in denen sich fiese Sumpfschnecken aufhalten.",
             "num_of_items": 0
         }
+    },
+    "Himmelreich":{
+        "Wolkenstadt":{ 
+            "description": "Eine Stadt, die auf Wolken schwebt.",
+            "num_of_items": 0
+        },
+        "Himmelstor":{
+            "description": "Das Tor zum Himmelreich.",
+            "num_of_items": 0
+        },
+        "Himmelsmarkt":{
+            "description": "Ein Markt, auf dem viele Händler ihre Stände haben.",
+            "num_of_items": 0
+        }
+    },
+    "Waldreich":{
+        "Bootswacht":{ 
+            "description": "Ein kleines Dorf, in dem die Bewohner Booten herstellen und verkaufen.",
+            "num_of_items": 0
+        }
+    },
+    "Wasserreich":{
+        "Water-City":{ 
+            "description": "Eine Stadt, die auf dem Wasser schwimmt.",
+            "num_of_items": 0
+        },
+        "Heilender See":{ 
+            "description": "Ein See, in dem sich die Bewohner des Wasserreichs heilen.",
+            "num_of_items": 0
+        }
     }
 }
