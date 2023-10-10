@@ -1,108 +1,108 @@
 {
-    "waffen": {
-        "Schwert": {
+    "weapons": {
+        "sword": {
             "name": "Schwert",
-            "Beschreibung": "Ein einfaches Schwert, das 5 Schaden verursacht.",
+            "description": "Ein einfaches Schwert, das 5 Schaden verursacht.",
             "damage_bonus": 0.4,
             "enchantments": {
-                "Feuer": {
+                "fire": {
                     "damage_bonus": 1.0,  
                     "effect": "Verbrennung"  
                 },
-                "Gift": {
+                "poison": {
                     "damage_bonus": 1.0,
                     "effect": "Vergiftung" 
                 }
             }
         },
-        "Bogen": {
+        "bow": {
             "name": "Bogen",
-            "Beschreibung": "Ein einfacher Bogen, der 3 Schaden verursacht.",
+            "description": "Ein einfacher Bogen, der 3 Schaden verursacht.",
             "hit_chance": 0.5,
             "damage_bonus_min": 0.3,
             "damage_bonus_max": 0.5,
             "enchantments": {
-                "Luft": {
+                "air": {
                     "damage_bonus": 1.0,  
                     "effect": "Verwirrung" 
                 }
             }
         },
-        "Dolch": {
+        "dagger": {
             "name": "Dolch",
-            "Beschreibung": "Ein einfacher Dolch, der 2 Schaden verursacht.",
+            "description": "Ein einfacher Dolch, der 2 Schaden verursacht.",
             "damage_bonus_min": 0.05,
             "damage_bonus_max": 0.25,
             "enchantments": {
-                "Erde": {
+                "earth": {
                     "damage_bonus_min": 0.75,
                     "damage_bonus_max": 1.0,  
                     "effect": "Verlangsamung" 
                 }
             }
         },
-        "Zauberstab": {
+        "wand": {
             "name": "Zauberstab",
-            "Beschreibung": "Ein einfacher Zauberstab, der 4 Schaden verursacht.",
+            "description": "Ein einfacher Zauberstab, der 4 Schaden verursacht.",
             "min_level": 80,
             "damage_bonus": 0.75,
             "enchantments": {
-                "Feuer": {
+                "fire": {
                     "damage_bonus": 1.0,  
                     "effect": "Verbrennung" 
                 },
-                "Wasser": {
+                "water": {
                     "damage_bonus": 1.0,  
                     "effect": "Erfrieren" 
                 },
-                "Erde": {
+                "earth": {
                     "damage_bonus": 1.0,  
                     "effect": "Verlangsamung" 
                 },
-                "Luft": {
+                "air": {
                     "damage_bonus": 1.0,  
                     "effect": "Verwirrung" 
                 }
             }
 
         },
-        "Katana": {
+        "katana": {
             "name": "Katana",
-            "Beschreibung": "Ein einfaches Katana, das 6 Schaden verursacht.",
+            "description": "Ein einfaches Katana, das 6 Schaden verursacht.",
             "damage_bonus": 0.7,
             "enchantments": {
-                "Wasser": {
+                "water": {
                     "damage_bonus": 0.9,  
                     "effect": "Erfrieren" 
                 }
             }
         },
-        "Messer": {
+        "knife": {
             "name": "Messer",
-            "Beschreibung": "Ein einfaches Messer, das 1 Schaden verursacht.",
+            "description": "Ein einfaches Messer, das 1 Schaden verursacht.",
             "damage_bonus": 0.15,
             "enchantments": {
-                "Feuer": {
+                "fire": {
                     "damage_bonus": 0.8,  
                     "effect": "Verbrennung" 
                 }
             }
         },
-        "Peitsche": {
+        "whip": {
             "name": "Peitsche",
-            "Beschreibung": "Eine einfache Peitsche, die 2 Schaden verursacht.",
+            "description": "Eine einfache Peitsche, die 2 Schaden verursacht.",
             "damage_bonus": 0.6,
             "min_level": 60,
             "enchantments": {
-                "Gift": {
+                "poison": {
                     "damage_bonus": 1.0,
                     "effect": "Vergiftung" 
                 },
-                "Feuer": {
+                "fire": {
                     "damage_bonus": 1.0,  
                     "effect": "Verbrennung" 
                 },
-                "Eis": {
+                "ice": {
                     "damage_bonus": 1.0,  
                     "effect": "Erfrieren" 
                 }
@@ -110,15 +110,15 @@
 
         }
     }, 
-    "traenke": {
-        "Trank (30 HP)": {
-            "Beschreibung": "Ein Trank, der 30 Gesundheitspunkte wiederherstellt."
+    "potions": {
+        "healing_potion (30 HP)": {
+            "description": "Ein Trank, der 30 Gesundheitspunkte wiederherstellt."
         },
-        "Trank (60 HP)": {
-            "Beschreibung": "Ein stärkerer Trank, der 60 Gesundheitspunkte wiederherstellt."
+        "healing_potion (60 HP)": {
+            "description": "Ein stärkerer Trank, der 60 Gesundheitspunkte wiederherstellt."
         },
-        "Trank (90 HP)": {
-            "Beschreibung": "Ein Trank, der 90 Gesundheitspunkte wiederherstellt."
+        "healing_potion (90 HP)": {
+            "description": "Ein Trank, der 90 Gesundheitspunkte wiederherstellt."
         }
     }
 }

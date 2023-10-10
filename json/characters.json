@@ -78,7 +78,7 @@
                 }
         },
         "monsters": {
-            "Spinne": {
+            "spider": {
                 "name": "Spinne",
                 "level": 5,
                 "breed": "Riesenspinne",
@@ -103,7 +103,7 @@
                     }
                 }
             },
-            "Wildschwein": {
+            "hog": {
                 "name": "Wildschwein",
                 "level": 6,
                 "breed": "Wütendes Wildschwein",
@@ -128,7 +128,7 @@
                     }
                 }
             },
-            "Wolf": {
+            "wolf": {
                 "name": "Wolf",
                 "level": 3,
                 "breed": "Wolf",
@@ -153,7 +153,7 @@
                     }
                 }
             },
-            "Troll": {
+            "troll": {
                 "name": "Troll",
                 "level": 4,
                 "breed": "Troll",
@@ -178,7 +178,7 @@
                     }
                 }
             },
-            "Sumpfschnecken": {
+            "swamp snails": {
                 "name": "Sumpfschnecke",
                 "level": 4,
                 "breed": "Sumpfschnecke",
