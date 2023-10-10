@@ -92,6 +92,7 @@
             "name": "Peitsche",
             "Beschreibung": "Eine einfache Peitsche, die 2 Schaden verursacht.",
             "damage_bonus": 0.6,
+            "min_level": 60,
             "enchantments": {
                 "Gift": {
                     "damage_bonus": 1.0,
