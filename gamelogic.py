@@ -1,19 +1,21 @@
 import json
 import art
 
+# region load data
 #Locations aus JSON Datei laden
-with open('locations.json') as f:
-    locations = json.load(f)
+with open(r"json\locations.json") as fd:
+    locations = json.load(fd)
 in_front_of_home = locations['Grauholz']['Vor deinem Zuhause']
     
 #Items aus JSON Datei laden
-with open('items.json') as f:
-    items = json.load(f)
+with open(r"json\items.json") as fd:
+    items = json.load(fd)
 
 #Charaktere aus JSON Datei laden
-with open('characters.json') as f:
-    characters = json.load(f)
+with open(r"json\characters.json") as fd:
+    characters = json.load(fd)
 daisy = characters["friends"]["Daisy"]
+# endregion load data
 #ASCII Art bauen
 ascii_art1 = art.text2art("Das Abenteuer des Rachedackels", font="small")
 ascii_art2 = ascii_art1 + "\n" + art.text2art("Daisy gegen Hubertus Snickers", font="small")

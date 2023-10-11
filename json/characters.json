@@ -6,8 +6,11 @@
                 "breed": "Rauhaardackel-Terrier Mix",
                 "role": "Main",
                 "health": 100,
+                "max_health": 100,
                 "attack": 20,
-                "is_enemy": false
+                "is_enemy": false,
+                "starting_location": "Zuhause",
+                "location":[]
             },
             "Bruno": {
                 "name": "Bruno",
@@ -15,9 +18,12 @@
                 "breed": "Bernhardiner",
                 "role": "Fernkampf-Spezialist",
                 "health": 100,
+                "max_health": 100,
                 "attack": 20,
                 "is_enemy": false,
-                "starting_location": "Höhle zwischen den Bäumen"
+                "starting_location": "Höhle zwischen den Bäumen",
+                "location":[]
+
             },
             "Leika": {
                 "name": "Leika",
@@ -25,9 +31,12 @@
                 "breed": "Pudel-Yorkshire Mix",
                 "role": "Nahkampf-Spezialistin",
                 "health": 100,
+                "max_health": 100,
                 "attack": 20,
                 "is_enemy": false,
-                "starting_location": "Nachbarhaus"
+                "starting_location": "Nachbarhaus",
+                "location":[]
+
             },
             "Jack": {
                 "name": "Jack",
@@ -35,9 +44,12 @@
                 "breed": "Pudel",
                 "role": "Heiler",
                 "health": 100,
+                "max_health": 100,
                 "attack": 20,
                 "is_enemy": false,
-                "Starting_location":"Rettungs-Hundehütte"
+                "Starting_location":"Rettungs-Hundehütte",
+                "location":[]
+
             },
             "Leo": {
                 "name": "Leo",
@@ -45,9 +57,12 @@
                 "breed": "Malteser",
                 "role": "Magier",
                 "health": 100,
+                "max_health": 100,
                 "attack": 20,
                 "is_enemy": false,
-                "Starting_location": "Magierturm"
+                "Starting_location": "Magierturm",
+                "location":[]
+
             }
         },
         "enemies": {
@@ -59,6 +74,7 @@
                 "health": 100,
                 "is_enemy": true,
                 "starting_location": "Höllenschloss",
+                "location":[],
                 "attacks": {
                     "Schwarzes Loch": {
                         "base_damage": 54,

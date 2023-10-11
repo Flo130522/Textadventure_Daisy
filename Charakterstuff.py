@@ -7,13 +7,18 @@ with open('skills.json') as f:
     skills = json.load(f)
 
 #Level-Up Funktion
-def level_up(self):
-    self.level += 1
-    self.max_health += 10
-    self.health = self.max_health
-    self.attack_damage += 2
-    self.defense += 1
-    print(f"{self.name} hat Level {self.level} erreicht!")
+def level_up(characters):
+        level = characters["level"]
+        max_health = characters["max_health"]
+        health = characters["health"]
+        attack_damage = characters["attack"]
+        defense = characters["defense"]
+        
+        level += 1
+        max_health += 10
+        health = max_health
+        attack_damage += 5
+        defense += 2
 
 def learn_skill(self,skill):
     if skill not in self.skills:
