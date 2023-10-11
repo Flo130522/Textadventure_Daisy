@@ -1,116 +1,12 @@
 import random         
-def main():
-    """
-    Die Hauptfunktion, um das Spiel zu starten.
-    """
-    # print("Willkommen zum Abenteuerspiel!")
 
-    # while True:
-    #     print("\nHauptmenü:")
-    #     print("1. Abenteuer starten")
-    #     print("2. Zuhause erkunden")
-    #     print("3. Spiel beenden")
-    #     choice = input("Bitte wählen Sie eine Option: ")
-
-    #     if choice == "1":
-    #         start_adventure()
-    #     elif choice == "2":
-    #         explore_home()
-    #     elif choice == "3":
-    #         print("Das Spiel wurde beendet.")
-    #         break
-    #     else:
-    #         print("Ungültige Option. Bitte wählen Sie erneut.")
-    
-            
-def start_adventure(daisy, monster):
-    while True:
-        print("\nWas möchtest du tun?")
-        print("1. Ort erkunden")
-        print("2. Charakter anzeigen")
-        print("3. Spiel beenden")
-        choice = input("Bitte wähle eine Option: ")
-
-        if choice == "1":
-            daisy.explore_location()
-        elif choice == "2":
-            daisy.show_character()
-        elif choice == "3":
-            print("Das Spiel wird beendet. Auf Wiedersehen!")
-            break
-        else:
-            print("Ungültige Eingabe. Bitte wähle eine der verfügbaren Optionen.")
-
-    locations = initialize_locations()
-    # Erstelle Charaktere
-    daisy = Character("Daisy", 4, "Rauhaardackel-Terrier Mix", "Nahkampf-Spezialist", is_enemy=False)
-    bruno = Character("Bruno", 3, "Bernhardiner", "Fernkampf-Spezialist", is_enemy=False)
-    leika = Character("Leika", 5, "Pudel-Yorkshire Mix", "Nahkampf-Spezialistin", is_enemy=False)
-    jack = Character("Jack", 6, "Pudel", "Heiler", is_enemy=False)
-    leo = Character("Leo", 12, "Maltester", "Magier", is_enemy=False)
-    hubertus = Character("Hubertus Snickers", 30, "Chihuahua", "Höllenhund aus dem Chihuahuareich", is_enemy=True)
     team = [daisy, bruno, leika, jack, leo]
 
     # Erstelle Orte
-    village = Location("Grauholz", "Ein friedliches Dorf, in dem alles begann.")
-    village.add_dungeon("Verlassene Höhle", "Eine düstere, verlassene Höhle", [
+
         ("Spinne", 5, 10),  # Monstername, min_level, max_level
         ("Wildschwein", 8, 15),
         ("Wolf", 12, 20),
-    ])    
-    forest = Location("Finsterwald", "Ein dunkler Wald, der viele Gefahren birgt.")
-    city = Location("Hundewacht", "Eine belebte Stadt mit vielen Menschen.")
-    endgame = Location("Chihuahua-Höllenreich", "Das dunkle Reich, in dem der Höllenhund Hubertus Snickers sein Unwesen treibt")
-    home = Location("Zuhause", "Daisys gemütliches Zuhause.")
-    dock = Location("Bootssteg", "Der Bootssteg am Flussufer.")
-    market = Location("Dorfmarkt", "Der belebte Dorfmarkt, auf dem viele Geschäfte sind.")
-    woodhome = Location("Höhle im Wald", "Eine kleine Höhle im Wald, in der sich Bruno wohl fühlt")
-    homemagic = Location("Magierturm", "Hoher Magierturm, tief im Wald versteckt, in dem Leo Zauberexperimente durchführt")
-    homenah = Location("Nachbarhaus", "Das Nachbarhaus, hier duftet es immer wieder nach leckerem Kuchen")
-    homemed = Location("Rettungs-Hundehütte", "Hier wohnt Jack, der Rettungshund!")
-    homeend = Location("Thron im Höllenschlund", "Hier sitzt Hubertus und versklavt seine Untertanen und sein Gefolge")
-    in_front_of_home = Location("Vor dem Haus", "Direkt vor deinem gemütlichen Zuhause.")
-    dungon = Location("Waldverlies", "Ein gefährliches Dungeon im Finsterwald")
-
-    # Setze die Startorte für die Charaktere
-    daisy.current_location = home
-    bruno.current_location = woodhome
-    leika.current_location = homenah
-    jack.current_location = homemed
-    leo.current_location = homemagic
-    hubertus.current_location = homeend
-
-    # Füge Charaktere zu Orten hinzu
-    forest.add_friend(bruno)
-    village.add_friend(leika)
-    village.add_friend(daisy)
-    village.add_friend(leo)
-    city.add_friend(jack)
-    city.add_friend(daisy)
-    endgame.add_enemy(hubertus)
-
-    # Backstory
-    print("Huberus Snickers schickt sein Gefolge los, um das Schutzgeld aus Grauholz und anderen Dörfern einzutreiben.")
-    print("Daisys Eltern haben nicht genug Geld, um das Schutzgeld zu bezahlen. Sie verstecken Daisy, die Eltern werden jedoch nach einem angespannten Gespräch mit dem Gefolge getötet.")
-    print("Daisy bekommt alles mit und schwört sich Rache.")
-
-    print(f"{daisy.name} erwacht aus ihrem Versteck und sieht eine Blutspur vor sich.")
-    choice = input("Möchtest du der Blutspur folgen oder das Haus verlassen? (Blutspur folgen / Haus verlassen): ").strip().lower()
-
-    if choice == "blutspur folgen":
-        print("Das willst du nicht sehen, gehe lieber nach draußen.")
-    elif choice == "haus verlassen":
-        print("Du gehst nach draußen.")
-        daisy.current_location = in_front_of_home  
-    else:
-        print("Ungültige Auswahl. Du gehst sicherheitshalber nach draußen.")
-        
-    while True:
-        current_location = daisy.current_location  # Aktualisiere den aktuellen Ort
-        explore_location(daisy)  # Hier rufen wir die explore_location-Funktion auf
-
-        print("\nAktueller Ort:", current_location.name)
-        print(current_location.description)
 
         # Zeige freundliche und feindliche Charaktere im aktuellen Ort an
         print("Freundliche Charaktere im aktuellen Ort:")
@@ -174,24 +70,3 @@ def start_adventure(daisy, monster):
         if not daisy.is_alive():
             print("Daisy wurde besiegt. Hubertus Snickers triumphiert und das Dorf bleibt in Angst.")
             break
-def explore_home():
-    print("Daisy lebt mit ihren Eltern in Grauholz. Es ist ein Tag wie jeder andere, die Sonne scheint und es ist angenehm warm.")
-
-    while True:
-        print("\nDu befindest dich im Wohnzimmer von Daisys Zuhause.")
-        print("1. Mit deinem Papa reden")
-        print("2. Mit deiner Mama reden")
-        print("3. Zurück zum Hauptmenü")
-
-        choice = input("Bitte wähle eine Option: ")
-
-        if choice == "1":
-            print("Dein Papa ist in seine Zeitung vertieft und sagt, 'Guten Morgen, kleines.'")
-        elif choice == "2":
-            print("Deine Mama lächelt und sagt, 'Guten Morgen Daisylein, iss dein Frühstück bevor es kalt wird!'")
-        elif choice == "3":
-            break
-        else:
-            print("Ungültige Option. Bitte wähle 1, 2 oder 3.")
-if __name__ == "__main__":
-    main()

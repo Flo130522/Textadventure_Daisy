@@ -1,9 +1,10 @@
 import json
+import art
 
 #Locations aus JSON Datei laden
 with open('locations.json') as f:
     locations = json.load(f)
-in_front_of_home = locations['Vor deinem Zuhause']
+in_front_of_home = locations['Grauholz']['Vor deinem Zuhause']
     
 #Items aus JSON Datei laden
 with open('items.json') as f:
@@ -12,9 +13,28 @@ with open('items.json') as f:
 #Charaktere aus JSON Datei laden
 with open('characters.json') as f:
     characters = json.load(f)
-daisy = characters["Daisy"]
+daisy = characters["friends"]["Daisy"]
+#ASCII Art bauen
+ascii_art1 = art.text2art("Das Abenteuer des Rachedackels", font="small")
+ascii_art2 = ascii_art1 + "\n" + art.text2art("Daisy gegen Hubertus Snickers", font="small")
 
-
+def main():
+    print(ascii_art2)
+    while True:
+        print("\nHauptmenü:")
+        print("1. Abenteuer starten")
+        print("2. Zuhause erkunden")
+        print("3. Spiel beenden")
+        choice = input("Bitte wählen Sie eine Option: ")
+        if choice == "1":
+            start_adventure()
+        elif choice == "2":
+            explore_home()
+        elif choice == "3":
+            print("Das Spiel wurde beendet.")
+            break
+        else:
+            print("Ungültige Option. Bitte wählen Sie erneut.")
 
 #Funktion "Explore Home" aus run_game.py
 #TODO Storyline erweitern
@@ -39,13 +59,19 @@ def explore_home():
             print("Ungültige Option. Bitte wähle 1, 2 oder 3.")
             
 #Einführung
-    print(f"{daisy.name} erwacht aus ihrem Versteck und sieht eine Blutspur vor sich.")
+def start_adventure():
+    print(f"{daisy['name']} erwacht aus ihrem Versteck und sieht eine Blutspur vor sich.")
     choice = input("Möchtest du der Blutspur folgen oder das Haus verlassen? (Blutspur folgen / Haus verlassen): ").strip().lower()
 
     if choice == "blutspur folgen":
         print("Das willst du nicht sehen, gehe lieber nach draußen.")
     elif choice == "haus verlassen":
         print("Du gehst nach draußen.")
-        daisy.current_location = in_front_of_home  
+        daisy['location'] = in_front_of_home  
     else:
         print("Ungültige Auswahl. Du gehst sicherheitshalber nach draußen.")
+        daisy['location'] = in_front_of_home
+        
+
+if __name__ == "__main__":
+    main()
