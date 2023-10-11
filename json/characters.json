@@ -2,6 +2,7 @@
     "friends": {
             "Daisy": {
                 "name": "Daisy",
+                "xp": 0,
                 "level": 4,
                 "breed": "Rauhaardackel-Terrier Mix",
                 "role": "Main",
@@ -10,7 +11,8 @@
                 "attack": 20,
                 "is_enemy": false,
                 "starting_location": "Zuhause",
-                "location":[]
+                "location":[],
+                "inventory":[]
             },
             "Bruno": {
                 "name": "Bruno",

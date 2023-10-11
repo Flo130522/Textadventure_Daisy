@@ -1,3 +1,4 @@
+#ABLAGE - Fehler werden ignoriert da der Code nach und nach gelöscht wird
 import random         
 
     team = [daisy, bruno, leika, jack, leo]
