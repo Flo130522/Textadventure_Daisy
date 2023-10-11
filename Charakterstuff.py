@@ -75,3 +75,4 @@ def collect_xp(characters, ep):
         print(f"{characters['Name']} hat Level {characters['level']} erreicht!")
         characters.ep = 0
 
+#TODO Vergleich mit "import random 1-5" -> alle Funktionen implementieren
