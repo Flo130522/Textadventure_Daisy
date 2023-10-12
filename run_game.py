@@ -30,22 +30,7 @@ def game():
     while True:
         print(ascii_art2)
         main_menu()
-        new_game_menu()
-        load_game()
-        start_adventure()
-        display_team()
-        display_inventory()
-        display_stats()
-        add_friend()
-        add_to_inventory()
-        learn_skill()
-        collect_xp()
-        level_up()
-        travel_menu()
-        ingame_menu()
-        random_encounter()
-        explore_location()
-
+        
 game()
 
 

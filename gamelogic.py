@@ -120,6 +120,7 @@ def start_adventure():
     else:
         print("Ungültige Auswahl. Du gehst sicherheitshalber nach draußen.")
         daisy['location'] = in_front_of_home
+        ingame_menu()
 
 def ingame_menu():
     while True:
