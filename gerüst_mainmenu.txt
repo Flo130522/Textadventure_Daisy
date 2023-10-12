@@ -1,0 +1,6 @@
+Hauptmenü 
+1. Neues Spiel starten
+1.1 Zuhause erkunden
+1.2 Abenteuer starten
+2. Spiel laden
+3. Spiel beenden

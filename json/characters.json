@@ -12,7 +12,8 @@
                 "is_enemy": false,
                 "starting_location": "Zuhause",
                 "location":[],
-                "inventory":[]
+                "inventory":[],
+                "inventory_limit": 20
             },
             "Bruno": {
                 "name": "Bruno",
