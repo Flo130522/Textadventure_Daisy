@@ -2,6 +2,7 @@ import json
 import art
 import pickle
 from datetime import datetime
+from Charakterstuff import *
 
 
 # region load data
@@ -36,24 +37,6 @@ with open(r"json\effects.json") as fd:
 ascii_art1 = art.text2art("Das Abenteuer des Rachedackels", font="small")
 ascii_art2 = ascii_art1 + "\n" + art.text2art("Daisy gegen Hubertus Snickers", font="small")
 
-def main():
-    print(ascii_art2)
-    while True:
-        print("\nHauptmenü:")
-        print("1. Abenteuer starten")
-        print("2. Zuhause erkunden")
-        print("3. Spiel beenden")
-        choice = input("Bitte wählen Sie eine Option: ")
-        if choice == "1":
-            start_adventure()
-        elif choice == "2":
-            explore_home()
-        elif choice == "3":
-            print("Das Spiel wurde beendet.")
-            break
-        else:
-            print("Ungültige Option. Bitte wählen Sie erneut.")
-
 #Funktion "Explore Home" aus run_game.py
 #TODO Storyline erweitern
 def explore_home():
@@ -76,19 +59,7 @@ def explore_home():
         else:
             print("Ungültige Option. Bitte wähle 1, 2 oder 3.")
             
-#Einführung
-def start_adventure():
-    print(f"{daisy['name']} erwacht aus ihrem Versteck und sieht eine Blutspur vor sich.")
-    choice = input("Möchtest du der Blutspur folgen oder das Haus verlassen? (Blutspur folgen / Haus verlassen): ").strip().lower()
 
-    if choice == "blutspur folgen":
-        print("Das willst du nicht sehen, gehe lieber nach draußen.")
-    elif choice == "haus verlassen":
-        print("Du gehst nach draußen.")
-        daisy['location'] = in_front_of_home  
-    else:
-        print("Ungültige Auswahl. Du gehst sicherheitshalber nach draußen.")
-        daisy['location'] = in_front_of_home
         
 #Main Menu
 def main_menu():
@@ -126,9 +97,63 @@ def new_game_menu():
     else:
         print("Ungültige Option. Bitte wähle erneut.")
 
-def load_game():
+def load_game(self):
     print("Spiel wird geladen...")
+    filename = input("Geben Sie den Dateinamen des Spielstands ein (oder 'zurück' zum Hauptmenü): ")
+    if filename.lower() == "zurück":
+        return 
+    loaded_game = self.load_game(filename)
+    if loaded_game:
+        self.menu_stack.append(self.loaded_game_menu)  
 
+#Einführung
+def start_adventure():
+    print(f"{daisy['name']} erwacht aus ihrem Versteck und sieht eine Blutspur vor sich.")
+    choice = input("Möchtest du der Blutspur folgen oder das Haus verlassen? (Blutspur folgen / Haus verlassen): ").strip().lower()
+
+    if choice == "blutspur folgen":
+        print("Das willst du nicht sehen, gehe lieber nach draußen.")
+    elif choice == "haus verlassen":
+        print("Du gehst nach draußen.")
+        daisy['location'] = in_front_of_home  
+    else:
+        print("Ungültige Auswahl. Du gehst sicherheitshalber nach draußen.")
+        daisy['location'] = in_front_of_home
+
+def ingame_menu():
+    while True:
+        print("\nWas möchtest du tun?")
+        print("1. Reisen")
+        print("2. Inventar anzeigen")
+        print("3. Team anzeigen")
+        print("4. Speichern")
+        print("5. Spiel beenden")
+
+        choice = input("Bitte wähle eine Option: ")
+        choice = int(choice)
+        
+        if choice == 1:
+            travel_menu()
+        elif choice == 2:
+            daisy.display_inventory()
+        elif choice == 3:
+            display_team()
+        elif choice == 4:
+            save_game()
+        elif choice == 5:
+            print("Spiel wird beendet. Auf Wiedersehen!")
+            break
+        else:
+            print("Ungültige Option. Bitte wähle erneut.")
+
+
+
+def travel_menu():
+    while True:
+        print("\nWohin möchtest du reisen?")
+        
+        
+    
 if __name__ == "__main__":
     main_menu()
 

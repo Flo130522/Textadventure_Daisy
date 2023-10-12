@@ -28,4 +28,10 @@ with open(r"json\effects.json") as fd:
 #Main Menu
 print(ascii_art2)
 main_menu()
+new_game_menu()
+load_game()
+start_adventure()
+ingame_menu()
+explore_home()
+
 
