@@ -102,5 +102,64 @@
             "num_of_items": 0,
             "min_level": 41
         }
+    },
+    "Dungeons": {
+        "Verlies des Schreckens": {
+            "description": "Ein dunkles Verlies, in dem sich viele Monster aufhalten.",
+            "num_of_items": 0,
+            "min_level": 1,
+            "rooms": [
+                {
+                    "name": "Verlies des Schreckens",
+                    "min_level": 1,
+                    "max_level": 10,
+                    "monsters": [
+                        {
+                            "name": "Goblin",
+                            "level": 3
+                        },
+                        {
+                            "name": "Ork",
+                            "level": 5
+                        }
+                    ],
+                    "loot": [
+                        {
+                            "item": "Schwert",
+                            "chance": 0.2,
+                            "quantity": 1
+                        },
+                        {
+                            "item": "Trank der Heilung",
+                            "chance": 0.4,
+                            "quantity": 3
+                        }
+                    ]
+                },
+                {
+                    "name": "Waffenkammer",
+                    "min_level": 1,
+                    "max_level": 10,
+                    "monsters": [
+                        {
+                            "name": "Wächter",
+                            "level": 8
+                        }
+                    ],
+                    "loot": [
+                        {
+                            "item": "Großes Schwert",
+                            "chance": 0.3,
+                            "quantity": 1
+                        },
+                        {
+                            "item": "Rüstung des Beschützers",
+                            "chance": 0.1,
+                            "quantity": 1
+                        }
+                    ]
+                }
+            ]
+        }
     }
 }

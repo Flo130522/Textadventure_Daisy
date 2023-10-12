@@ -1,0 +1,86 @@
+{
+    "dungeon_name": "Verlies des Schreckens",
+    "description": "Ein dunkler, gefährlicher Dungeon, gefüllt mit schrecklichen Kreaturen und tödlichen Fallen.",
+    "rooms": [
+        {
+            "room_name": "Eingangshalle",
+            "description": "Du betrittst eine große Eingangshalle mit hohen Decken. Vor dir siehst du drei Türen.",
+            "exits": [
+                {
+                    "direction": "Norden",
+                    "destination": "Raum der Prüfungen"
+                },
+                {
+                    "direction": "Osten",
+                    "destination": "Waffenkammer"
+                },
+                {
+                    "direction": "Westen",
+                    "destination": "Verbotener Keller"
+                }
+            ]
+        },
+        {
+            "room_name": "Raum der Prüfungen",
+            "description": "Dieser Raum ist mit Rätseln gefüllt. Löse sie, um zum nächsten Raum zu gelangen.",
+            "exits": [
+                {
+                    "direction": "Süden",
+                    "destination": "Eingangshalle"
+                }
+            ]
+        },
+        {
+            "room_name": "Waffenkammer",
+            "description": "Hier findest du mächtige Waffen und Ausrüstung.",
+            "exits": [
+                {
+                    "direction": "Westen",
+                    "destination": "Eingangshalle"
+                }
+            ],
+            "loot": [
+                {
+                    "item": "Schwert",
+                    "quantity": 1
+                },
+                {
+                    "item": "Trank der Heilung",
+                    "quantity": 3
+                }
+            ]
+        },
+        {
+            "room_name": "Verbotener Keller",
+            "description": "Ein gruseliger Keller, in dem schreckliche Kreaturen hausen.",
+            "exits": [
+                {
+                    "direction": "Osten",
+                    "destination": "Eingangshalle"
+                }
+            ],
+            "enemies": [
+                {
+                    "enemy_type": "Zombie",
+                    "quantity": 5
+                }
+            ]
+        },
+        {
+            "room_name": "Geheimer Raum",
+            "description": "Ein finsterer Raum mit gefährlichen Monstern.",
+            "exits": [
+                {
+                    "direction": "Westen",
+                    "destination": "Verbotener Keller"
+                }
+            ],
+            "enemies": [
+                {
+                    "enemy_type": "Vampir",
+                    "quantity": 2
+                }
+            ]
+        }
+    ]
+}

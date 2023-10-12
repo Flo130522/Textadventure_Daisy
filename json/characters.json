@@ -13,7 +13,26 @@
                 "starting_location": "Zuhause",
                 "location":[],
                 "inventory":[],
-                "inventory_limit": 20
+                "inventory_limit": 20,
+                "in battle": false,
+                "is alive": true,
+                "skills": {
+                    "Biss": {
+                        "base_damage": 20,
+                        "level_multiplier": 2,
+                        "description": "Beißt den Gegner."
+                    },
+                    "Heilung": {
+                        "base_damage": 20,
+                        "level_multiplier": 2,
+                        "description": "Heilt sich selbst."
+                    },
+                    "Schutzschild": {
+                        "base_damage": 20,
+                        "level_multiplier": 2,
+                        "description": "Schützt sich selbst."
+                    }
+                }
             },
             "Bruno": {
                 "name": "Bruno",
@@ -25,7 +44,8 @@
                 "attack": 20,
                 "is_enemy": false,
                 "starting_location": "Höhle zwischen den Bäumen",
-                "location":[]
+                "location":[],
+                "inventory":[]
 
             },
             "Leika": {
@@ -38,7 +58,8 @@
                 "attack": 20,
                 "is_enemy": false,
                 "starting_location": "Nachbarhaus",
-                "location":[]
+                "location":[],
+                "inventory":[]
 
             },
             "Jack": {
@@ -51,7 +72,8 @@
                 "attack": 20,
                 "is_enemy": false,
                 "Starting_location":"Rettungs-Hundehütte",
-                "location":[]
+                "location":[],
+                "inventory":[]
 
             },
             "Leo": {
@@ -64,7 +86,8 @@
                 "attack": 20,
                 "is_enemy": false,
                 "Starting_location": "Magierturm",
-                "location":[]
+                "location":[],
+                "inventory":[]
 
             }
         },

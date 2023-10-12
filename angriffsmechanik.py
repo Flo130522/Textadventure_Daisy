@@ -9,6 +9,8 @@ with open(r"json\locations.json") as fd:
 #Charaktere aus JSON Datei laden
 with open(r"json\characters.json") as fd:
     characters = json.load(fd)
+    friends = characters["friends"]
+    enemys = characters["enemy"]
 # endregion load data
 
 def is_alive(character):
@@ -47,18 +49,18 @@ def calculate_damage(character):
         return random.randint(1, 10)
     
 #Mob-Angriff ausführen    
-def perform_attack(character, enemy, damage):
+def perform_attack(character, enemys):
     if character.role == "Spinnen":
         if random.randint(1, 2) == 1:
-            print(f"{character.name} führt Seidenfaden aus und kann sich nicht mehr bewegen!")
+            print(f"{[character].name} führt Seidenfaden aus und kann sich nicht mehr bewegen!")
             character.can_attack = False
         else:
-            print(f"{character.name} führt Giftzahn aus und vergiftet {enemy.name}!")
-            enemy.poisoned = True
+            print(f"{enemys.name} führt Giftzahn aus und vergiftet {friends.name}!")
+            friends.poisoned = True
     elif character.role == "Wildschwein":
         if random.randint(1, 2) == 1:
-            print(f"{character.name} führt Rammbock aus und verwirrt {enemy.name}!")
-            enemy.confused = True
+            print(f"{enemys.name} führt Rammbock aus und verwirrt {friends.name}!")
+            friends.confused = True
         else:
             print(f"{character.name} führt Teleportation aus und greift in der nächsten Runde an (Gegner kann ihn nicht angreifen).")
             
@@ -104,16 +106,15 @@ def heal(character, amount):
     print(f"{character.name} hat {amount} Gesundheit erhalten.")
     
 def encounter(character, locations):
-    current_location = character.current_location
-    if current_location.enemies:
+    current_location = locations.get(character['location'])
+
+    if current_location.get('enemies'):
         print("Feindliche Charaktere nähern sich!")
-        character.in_battle = True
-        while character.in_battle:
+        character['in_battle'] = True
+        while character['in_battle']:
             # Überprüfen Sie, ob es noch lebende Feinde in der aktuellen Location gibt
-            living_enemies = [enemy for enemy in current_location.enemies if isinstance(enemy, character) and enemy.is_alive()]
+            living_enemies = [enemy for enemy in current_location['enemies'] if isinstance(enemy, dict) and enemy['is_alive']]
             if not living_enemies:
-                character.in_battle = False
+                character['in_battle'] = False
                 break  # Beenden Sie den Kampf, wenn keine lebenden Feinde mehr vorhanden sind
             pass  # Hier geht der Kampf weiter
-    if current_location.friends:
-        print("Freundliche Charaktere sind hier und könnten dir helfen!")
