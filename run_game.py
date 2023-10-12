@@ -1,4 +1,5 @@
 # region load data
+#Externe Files importieren
 from Charakterstuff import *
 from angriffsmechanik import *
 from gamelogic import *

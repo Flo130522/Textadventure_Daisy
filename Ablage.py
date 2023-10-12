@@ -71,3 +71,39 @@ import random
         if not daisy.is_alive():
             print("Daisy wurde besiegt. Hubertus Snickers triumphiert und das Dorf bleibt in Angst.")
             break
+        
+--------
+import json
+
+# Load your JSON data
+with open('locations.json', 'r') as json_file:
+    locations = json.load(json_file)
+
+# Function to display information about a location
+def display_location(location_name):
+    location = locations.get(location_name)
+    if location:
+        print(f"Location: {location_name}")
+        print(location["description"])
+        # You can add code here to display items or other information about the location
+    else:
+        print("Location not found.")
+
+# Function to explore a location
+def explore_location(location_name):
+    # Add your game logic for exploring a location here
+    print(f"You are exploring {location_name}...")
+
+# Example usage:
+location_name = "Grauholz"
+display_location(location_name)
+
+while True:
+    choice = input("What would you like to do? (1. Explore, 2. Go back): ")
+    
+    if choice == "1":
+        explore_location(location_name)
+    elif choice == "2":
+        break
+    else:
+        print("Invalid choice.")

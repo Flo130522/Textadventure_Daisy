@@ -146,11 +146,27 @@ def ingame_menu():
         else:
             print("Ungültige Option. Bitte wähle erneut.")
 
-
-
 def travel_menu():
     while True:
         print("\nWohin möchtest du reisen?")
+
+        # List all available locations
+        for key in locations:
+            print(f"{key}. {key}")
+
+        choice = input("Bitte wähle eine Location (oder 'zurück', um zum Hauptmenü zurückzukehren): ")
+
+        if choice == 'zurück':
+            # Return to the main menu
+            return
+        elif choice in locations:
+            # The chosen location exists in the data
+            location_info = locations[choice]
+            print(f"\n{choice}: {location_info['description']}")
+            # You can add more functionality here, like interacting with the location
+        else:
+            print("Ungültige Auswahl. Bitte wähle eine der verfügbaren Locations.")
+
         
         
     
