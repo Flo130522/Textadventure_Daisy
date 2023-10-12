@@ -53,12 +53,11 @@ def start_adventure():
         print("Das willst du nicht sehen, gehe lieber nach draußen.")
     elif choice == "haus verlassen":
         print("Du gehst nach draußen.")
-        daisy['location'] = in_front_of_home
-        ingame_menu()  
+        daisy['location'] = in_front_of_home  
     else:
         print("Ungültige Auswahl. Du gehst sicherheitshalber nach draußen.")
         daisy['location'] = in_front_of_home
-        ingame_menu()
+    ingame_menu()
 
 def ingame_menu():
     while True:

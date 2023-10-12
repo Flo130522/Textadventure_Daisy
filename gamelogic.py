@@ -67,8 +67,6 @@ def main_menu():
     while True:
         print("\nHauptmenü:")
         print("1. Neues Spiel starten")
-        print("  1.1 Zuhause erkunden")
-        print("  1.2 Abenteuer starten")
         print("2. Spiel laden")
         print("3. Spiel beenden")
 
@@ -120,7 +118,7 @@ def start_adventure():
     else:
         print("Ungültige Auswahl. Du gehst sicherheitshalber nach draußen.")
         daisy['location'] = in_front_of_home
-        ingame_menu()
+    ingame_menu()
 
 def ingame_menu():
     while True:
@@ -137,7 +135,7 @@ def ingame_menu():
         if choice == 1:
             travel_menu()
         elif choice == 2:
-            daisy.display_inventory()
+            display_inventory()
         elif choice == 3:
             display_team()
         elif choice == 4:
