@@ -1,6 +1,7 @@
 import json
 import art
 import pickle
+import random
 from datetime import datetime
 from Charakterstuff import *
 
@@ -149,22 +150,61 @@ def ingame_menu():
 def travel_menu():
     while True:
         print("\nWohin möchtest du reisen?")
-        for key in locations:
-            print(f"{key}. {key}")
+        for key in locations.keys():
+            print(f"{key}")
 
-        choice = input("Bitte wähle eine Location (oder 'zurück', um zum Hauptmenü zurückzukehren): ")
+        choice = input("Bitte wähle einen Ort (oder 'zurück', um zum Hauptmenü zurückzukehren): ")
 
         if choice == 'zurück':
             return
         elif choice in locations:
             location_info = locations[choice]
-            print(f"\n{choice}: {location_info['description']}")
+            print(f"Wohin in {choice} möchtest du reisen?")
+            for sub_location in location_info:
+                print(f"{sub_location}:\n{locations[choice][sub_location]['description']}")
+            sub_choice = input("Bitte wähle einen Ort (oder 'zurück', um zur Hauptauswahl zurückzukehren): ")
+            if sub_choice == 'zurück':
+                continue
+            elif sub_choice in location_info:
+                sub_location_info = location_info[sub_choice]
+                print(f"\n{sub_choice}: {sub_location_info['description']}")
+            else:
+                print("Ungültige Auswahl. Bitte wähle eine der verfügbaren Orte.")
         else:
-            print("Ungültige Auswahl. Bitte wähle eine der verfügbaren Locations.")
+            print("Ungültige Auswahl. Bitte wähle eine der verfügbaren Orte.")
+def random_encounter():
+    if random < 0.5:
+            encounter = random.choice['characters']['enemies'] #TODO: Gegner in Zufallskämpfe anpassen
+            print(f"Du triffst auf {encounter['name']}.")
+    #TODO: Kämpfe implementieren -> angriffslogik.py
+            
+def explore_location():
+    print("Du befindet dich in daisy['location'] ")        
+        
+def main():
+    while True:
+        print(ascii_art2)
+        main_menu()
+        new_game_menu()
+        load_game()
+        start_adventure()
+        ingame_menu()
+        display_team()
+        display_inventory()
+        display_stats()
+        add_friend()
+        add_to_inventory()
+        learn_skill()
+        collect_xp()
+        level_up()
+        travel_menu()
+        random_encounter()
+        explore_location()
+        # Add an option to exit the game gracefully
+        exit_choice = input("Möchtest du das Spiel beenden? (ja/nein): ").strip().lower()
+        if exit_choice == "ja":
+            print("Spiel wird beendet. Auf Wiedersehen!")
+            break
 
-        
-        
-    
 if __name__ == "__main__":
-    main_menu()
-
+    main()

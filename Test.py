@@ -1,11 +1,11 @@
 import json
 
-with open(r"json\locations.json") as fd:
+with open(r"json\locations.json",encoding="utf-8") as fd:
     locations = json.load(fd)
 def travel_menu():
     while True:
         print("\nWohin möchtest du reisen?")
-        for key in locations:
+        for key in locations.keys():
             print(f"{key}")
 
         choice = input("Bitte wähle einen Ort (oder 'zurück', um zum Hauptmenü zurückzukehren): ")
@@ -16,7 +16,7 @@ def travel_menu():
             location_info = locations[choice]
             print(f"Wohin in {choice} möchtest du reisen?")
             for sub_location in location_info:
-                print(f"{sub_location}{['description']}")
+                print(f"{sub_location}:\n{locations[choice][sub_location]['description']}")
             sub_choice = input("Bitte wähle einen Ort (oder 'zurück', um zur Hauptauswahl zurückzukehren): ")
             if sub_choice == 'zurück':
                 continue
@@ -27,5 +27,8 @@ def travel_menu():
                 print("Ungültige Auswahl. Bitte wähle eine der verfügbaren Orte.")
         else:
             print("Ungültige Auswahl. Bitte wähle eine der verfügbaren Orte.")
-            
+def explore_location():
+    print("Du befindet dich in daisy['location'] ")
+    
+               
 travel_menu()

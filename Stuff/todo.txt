@@ -1,1 +1,1 @@
-TODO Schadensbonus + Verzauberungsbonus an die Waffen
+TODO Gefolge für Zufallskampf in characters.json 
