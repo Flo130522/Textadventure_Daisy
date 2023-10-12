@@ -147,4 +147,3 @@ def auto_save(self, filename):
         self.save_game(filename)
         self.last_save_time = current_time
 #endregion Savegame/Loadgame
-#TODO Vergleich mit "import random 1-5" -> alle Funktionen implementieren
