@@ -3,7 +3,7 @@ import json
 
 with open(r"json\locations.json") as fd:
     locations = json.load(fd)
-    dungeon = locations["Dungeon"]
+    dungeon = locations["Dungeons"]
 def enter_dungeon(character, dungeon, locations):
     if dungeon in locations:
         dungeon_location = locations[dungeon]
@@ -33,29 +33,14 @@ def add_monster(character, monster):
     Füge ein Monster zum Dungeon hinzu.
     """
     character.monsters.append(monster)
-def add_dungeon(character, dungeon):
-    character.dungeons.append(dungeon)
-    if __name__ == "__main__":
-        dungeon1 = Dungeon("Höhle des Unheils", 10, "Eine dunkle Höhle, in der gefährliche Monster lauern.")
-        dungeon2 = Dungeon("Verzauberter Wald", 25, "Ein Wald voller magischer Geheimnisse.")
-        location = Location("Geheimer Wald", "Ein abgelegener Wald, den nur die Mutigsten betreten.")
-        location.add_dungeon(dungeon1)
-        location.add_dungeon(dungeon2)
-        print(f"Ort: {location.name}")
-        print(f"Beschreibung: {location.description}")
-        print("Dungeons:")
-        for dungeon in location.dungeons:
-            print(f"- {dungeon.name} (Empfohlenes Level: {dungeon.level})")
+
 def add_random_monster(character):
-    """
-    Füge ein zufälliges Monster zum Dungeon hinzu.
-    """
-    if character.monsters:
-        random_monster = random.choice(character.monsters)
+    if character['monsters']:
+        random_monster = random.choice(character['monsters'])
         character.add_monster(random_monster)
 def explore(character):
-    print(f"Du betrittst den Dungeon {character.name}. {character.description}")
-    for monster in character.monsters:
+    print(f"Du betrittst den Dungeon {dungeon['Name']}. {dungeon['description']}")
+    for monster in character['monsters']:
         print(f"Ein {monster} lauert hier!")
     while True:
         print("\nWas möchtest du tun?")

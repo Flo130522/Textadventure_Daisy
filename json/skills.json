@@ -1,0 +1,19 @@
+{
+    "skills": {
+        "Biss": {
+            "base_damage": 20,
+            "level_multiplier": 2,
+            "description": "Beißt den Gegner."
+        },
+        "Heilung": {
+            "base_damage": 20,
+            "level_multiplier": 2,
+            "description": "Heilt sich selbst."
+        },
+        "Schutzschild": {
+            "base_damage": 20,
+            "level_multiplier": 2,
+            "description": "Schützt sich selbst."
+        }
+    }
+}

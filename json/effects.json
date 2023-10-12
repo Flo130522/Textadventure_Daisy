@@ -1,0 +1,18 @@
+{
+    "statuseffects": {
+        "Gift": {
+            "description": "Verringert die Gesundheit des Ziels im Laufe der Zeit.",
+            "duration": "3 Runden",
+            "damage_per_round": 10
+        },
+        "Verwirrung": {
+            "description": "Verursacht eine zufällige Handlung des Ziels in seinem Zug.",
+            "duration": "2 Runden"
+        },
+        "Heilung": {
+            "description": "Stellt die Gesundheit des Ziels im Laufe der Zeit wieder her.",
+            "duration": "5 Runden",
+            "healing_per_round": 15
+        }
+    }
+}

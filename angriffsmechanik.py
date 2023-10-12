@@ -10,7 +10,7 @@ with open(r"json\locations.json") as fd:
 with open(r"json\characters.json") as fd:
     characters = json.load(fd)
     friends = characters["friends"]
-    enemys = characters["enemy"]
+    enemys = characters["enemies"]
 # endregion load data
 
 def is_alive(character):

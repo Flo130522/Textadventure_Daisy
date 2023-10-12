@@ -90,6 +90,45 @@ def start_adventure():
         print("Ungültige Auswahl. Du gehst sicherheitshalber nach draußen.")
         daisy['location'] = in_front_of_home
         
+#Main Menu
+def main_menu():
+    while True:
+        print("\nHauptmenü:")
+        print("1. Neues Spiel starten")
+        print("  1.1 Zuhause erkunden")
+        print("  1.2 Abenteuer starten")
+        print("2. Spiel laden")
+        print("3. Spiel beenden")
+
+        choice = input("Bitte wähle eine Option: ")
+
+        if choice == "1":
+            new_game_menu()
+        elif choice == "2":
+            load_game()
+        elif choice == "3":
+            print("Spiel wird beendet. Auf Wiedersehen!")
+            break
+        else:
+            print("Ungültige Option. Bitte wähle erneut.")
+
+def new_game_menu():
+    print("\nNeues Spiel starten:")
+    print("1. Zuhause erkunden")
+    print("2. Abenteuer starten")
+
+    choice = input("Bitte wähle eine Option: ")
+
+    if choice == "1":
+        explore_home()
+    elif choice == "2":
+        start_adventure()
+    else:
+        print("Ungültige Option. Bitte wähle erneut.")
+
+def load_game():
+    print("Spiel wird geladen...")
 
 if __name__ == "__main__":
-    main()
+    main_menu()
+
