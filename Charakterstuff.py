@@ -104,20 +104,31 @@ def display_inventory(character):
 #region Team
 
 #Charakter dem Team hinzufügen
-def add_friend(character):
-    character.friends.append(character)
-    character.team.append(character)
+def add_friend(character_data, character_name, new_friend_name, add_to_team=False):
+    if character_name in character_data['friends']:
+        character = character_data['friends'][character_name]
+        character['friends'].append(new_friend_name)
+        if add_to_team:
+            if 'team' not in character:
+                character['team'] = []
+            character['team'].append(new_friend_name)
+        save_character_data(character_data, 'characters.json')
+    else:
+        print(f"Character '{character_name}' not found in character data.")
 
-#Team anzeigen
-def display_team(character):
-    print("Teamübersicht")
-    print(f"{character['name']} - Gesundheit: {character.health}")
-    for character in character.team:
-        print(f"{character['name']} - Gesundheit: {character.health}")
+def save_character_data(character_data, filename):
+    with open(filename, 'w') as file:
+        json.dump(character_data, file, indent=4)
 
-def display_stats(character):
-        print(f"{character['name']} (Level {character['level']}) - Gesundheit: {character['level']} - Erfahrungspunkte: {character['ep']}")
-        print(f"Rolle: {character['role']} - Rasse: {character['breed']}")
+# Team anzeigen
+def display_team(character_data):
+    print("Teamübersicht:")
+    for character_name, character in character_data['friends'].items():
+        if 'team' in character and 'Daisy' in character['team']:
+            print(f"{character['name']} - Erfahrungspunkte: {character['ep']} - (Level {character['level']}) - Gesundheit: {character['health']} - ")
+            print(f"Rolle: {character['role']} - Rasse: {character['breed']}")
+
+
 
 #endregion Team
 #region Charaktereigenschaften

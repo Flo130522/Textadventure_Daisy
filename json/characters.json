@@ -2,8 +2,8 @@
     "friends": {
             "Daisy": {
                 "name": "Daisy",
-                "xp": 0,
-                "level": 4,
+                "ep": 0,
+                "level": 1,
                 "breed": "Rauhaardackel-Terrier Mix",
                 "role": "Main",
                 "health": 100,
@@ -16,6 +16,7 @@
                 "inventory_limit": 20,
                 "in battle": false,
                 "is alive": true,
+                "team":["Daisy"],
                 "skills": {
                     "Biss": {
                         "base_damage": 20,
