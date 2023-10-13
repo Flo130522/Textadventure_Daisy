@@ -122,17 +122,17 @@ class Character:
         print(f"{self['Name']} hat Level {self['level']} erreicht!")
     
     # Skills erlernen    
-    def learn_skill(character,skill):
-        if skill not in character.skills:
-            character.skills.append(skill)
-            print(f"{character['name']} hat die Fähigkeit {skill} erlernt!")
+    def learn_skill(self,skill):
+        if skill not in self.skills:
+            self.skills.append(skill)
+            print(f"{self.name} hat die Fähigkeit {skill} erlernt!")
         else:
-            print(f"{character['name']} hat die Fähigkeit {skill} bereits erlernt!")
+            print(f"{self.name} hat die Fähigkeit {skill} bereits erlernt!")
     
     # Item in Inventar aufnehmen
-    def add_to_inventory(character, item, quantity=1):
-        inventory_limit = character['inventory_limit']
-        inventory = character['inventory']
+    def add_to_inventory(self, item, quantity=1):
+        inventory_limit = self.inventory_limit
+        inventory = self.inventory
 
         # Inventar voll?
         if len(inventory) >= inventory_limit:
