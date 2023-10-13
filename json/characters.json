@@ -1,251 +1,276 @@
 {
     "friends": {
-            "Daisy": {
-                "name": "Daisy",
-                "ep": 0,
-                "level": 1,
-                "breed": "Rauhaardackel-Terrier Mix",
-                "role": "Main",
-                "health": 100,
-                "max_health": 100,
-                "attack": 20,
-                "is_enemy": false,
-                "starting_location": "Zuhause",
-                "location":[],
-                "inventory":[],
-                "inventory_limit": 20,
-                "in battle": false,
-                "is alive": true,
-                "team":["Daisy"],
-                "skills": {
-                    "Biss": {
-                        "base_damage": 20,
-                        "level_multiplier": 2,
-                        "description": "Beißt den Gegner."
-                    },
-                    "Heilung": {
-                        "base_damage": 20,
-                        "level_multiplier": 2,
-                        "description": "Heilt sich selbst."
-                    },
-                    "Schutzschild": {
-                        "base_damage": 20,
-                        "level_multiplier": 2,
-                        "description": "Schützt sich selbst."
-                    }
-                }
-            },
-            "Bruno": {
-                "name": "Bruno",
-                "level": 3,
-                "breed": "Bernhardiner",
-                "role": "Fernkampf-Spezialist",
-                "health": 100,
-                "max_health": 100,
-                "attack": 20,
-                "is_enemy": false,
-                "starting_location": "Höhle zwischen den Bäumen",
-                "location":[],
-                "inventory":[]
-
-            },
-            "Leika": {
-                "name": "Leika",
-                "level": 2,
-                "breed": "Pudel-Yorkshire Mix",
-                "role": "Nahkampf-Spezialistin",
-                "health": 100,
-                "max_health": 100,
-                "attack": 20,
-                "is_enemy": false,
-                "starting_location": "Nachbarhaus",
-                "location":[],
-                "inventory":[]
-
-            },
-            "Jack": {
-                "name": "Jack",
-                "level": 1,
-                "breed": "Pudel",
-                "role": "Heiler",
-                "health": 100,
-                "max_health": 100,
-                "attack": 20,
-                "is_enemy": false,
-                "Starting_location":"Rettungs-Hundehütte",
-                "location":[],
-                "inventory":[]
-
-            },
-            "Leo": {
-                "name": "Leo",
-                "level": 1,
-                "breed": "Malteser",
-                "role": "Magier",
-                "health": 100,
-                "max_health": 100,
-                "attack": 20,
-                "is_enemy": false,
-                "Starting_location": "Magierturm",
-                "location":[],
-                "inventory":[]
-
-            }
-        },
-        "enemies": {
-            "Huberus Snickers": {
-                "name": "Huberus Snickers",
-                "level": 1,
-                "breed": "Chihuahua",
-                "role": "Endboss",
-                "health": 100,
-                "is_enemy": true,
-                "starting_location": "Höllenschloss",
-                "location":[],
-                "attacks": {
-                    "Schwarzes Loch": {
-                        "base_damage": 54,
-                        "level_multiplier": 3,
-                        "description": "Saugt den Gegner in ein schwarzes Loch ein und fügt ihm Schaden zu."
-                    },
-                    "Krallen der Finsternis": {
-                        "base_damage": 72,
-                        "level_multiplier": 2,
-                        "description": "Greift mit seiner Kralle an, die in ein schwarzes Feuer gehüllt ist."
-                    },
-                    "Maul der Verderbnis": {
-                        "base_damage": 64,
-                        "level_multiplier": 2,
-                        "description": "Beißt den Gegner mehrmals mit einem festen Biss und vergiftet ihn."
-                    }
-                }
-        },
-        "monsters": {
-            "spider": {
-                "name": "Spinne",
-                "level": 5,
-                "breed": "Riesenspinne",
-                "role": "Monster",
-                "health": 150,
-                "is_enemy": true,
-                "attacks": {
-                    "Seidenfaden": {
-                        "base_damage": 30,
-                        "level_multiplier": 3,
-                        "description": "Umwickelt den Gegner komplett ein."
-                    },
-                    "Giftzahn": {
-                        "base_damage": 40,
-                        "level_multiplier": 2,
-                        "description": "Beißt den Gegner mit vergifteten Zähnen an."
-                    },
-                    "Turbosprung": {
-                        "base_damage": 30,
-                        "level_multiplier": 2,
-                        "description": "Springt auf den Gegner und fügt zufälligen Schaden zu."
-                    }
-                }
-            },
-            "hog": {
-                "name": "Wildschwein",
-                "level": 6,
-                "breed": "Wütendes Wildschwein",
-                "role": "Monster",
-                "health": 180,
-                "is_enemy": true,
-                "attacks": {
-                    "Rammbock": {
-                        "base_damage": 35,
-                        "level_multiplier": 2,
-                        "description": "Rennt mit schnellen Schritten auf den Gegner zu und fügt ihm zufälligen Schaden zu (Gegner ist verwirrt)."
-                    },
-                    "Stoßzahn": {
-                        "base_damage": 45,
-                        "level_multiplier": 3,
-                        "description": "Der Gegner wird im Nahkampf durch Stoßzähne verletzt."
-                    },
-                    "Teleportation": {
-                        "base_damage": 30,
-                        "level_multiplier": 3,
-                        "description": "Kann sich weg teleportieren und greift in der nächsten Runde an (Gegner kann ihn nicht angreifen)."
-                    }
-                }
-            },
-            "wolf": {
-                "name": "Wolf",
-                "level": 3,
-                "breed": "Wolf",
-                "role": "Monster",
-                "health": 120,
-                "is_enemy": true,
-                "attacks": {
-                    "Hyperstrahl": {
-                        "base_damage": 32,
-                        "level_multiplier": 3,
-                        "description": "Schießt einen Strahl aus der Schnauze."
-                    },
-                    "Mega-Biss": {
-                        "base_damage": 54,
-                        "level_multiplier": 2,
-                        "description": "Beißt sich am Gegner fest und fügt zufälligen Schaden zu."
-                    },
-                    "Riesenklaue": {
-                        "base_damage": 36,
-                        "level_multiplier": 2,
-                        "description": "Greift mit seinen Klauen an und fügt zufällig starken Schaden zu."
-                    }
-                }
-            },
-            "troll": {
-                "name": "Troll",
-                "level": 4,
-                "breed": "Troll",
-                "role": "Monster",
-                "health": 160,
-                "is_enemy": true,
-                "attacks": {
-                    "Keulenschlag": {
-                        "base_damage": 54,
-                        "level_multiplier": 3,
-                        "description": "Umwickelt den Gegner komplett ein."
-                    },
-                    "Giftzahn": {
-                        "base_damage": 72,
-                        "level_multiplier": 2,
-                        "description": "Beißt den Gegner mit vergifteten Zähnen an."
-                    },
-                    "Turbosprung": {
-                        "base_damage": 64,
-                        "level_multiplier": 2,
-                        "description": "Springt auf den Gegner und fügt zufälligen Schaden zu."
-                    }
-                }
-            },
-            "swamp snails": {
-                "name": "Sumpfschnecke",
-                "level": 4,
-                "breed": "Sumpfschnecke",
-                "role": "Monster",
-                "health": 200,
-                "is_enemy": true,
-                "attacks": {
-                    "Säurespeichel": {
-                        "base_damage": 54,
-                        "level_multiplier": 3,
-                        "description": "Spuckt giftigen Speichel auf den Gegner und vergiftet ihn damit."
-                    },
-                    "Schleimspur": {
-                        "base_damage": 72,
-                        "level_multiplier": 2,
-                        "description": "Legt eine rutschige Schleimspur damit die Gegner keinen festen Halt haben."
-                    },
-                    "Mega-Strahl": {
-                        "base_damage": 64,
-                        "level_multiplier": 2,
-                        "description": "Greift Gegner mit einem Strahl durch die Augen an."
-                    }
-                }
-            }
+      "Daisy": {
+        "name": "Daisy",
+        "ep": 0,
+        "level": 1,
+        "breed": "Rauhaardackel-Terrier Mix",
+        "role": "Main",
+        "health": 100,
+        "max_health": 100,
+        "attack": 20,
+        "is_enemy": false,
+        "starting_location": "Zuhause",
+        "location": [],
+        "inventory": [],
+        "inventory_limit": 20,
+        "in_battle": false,
+        "is_alive": true,
+        "team": ["Daisy"],
+        "skills": {
+          "Biss": {
+            "base_damage": 20,
+            "level_multiplier": 2,
+            "description": "Beißt den Gegner."
+          }
         }
+      },
+      "Bruno": {
+        "name": "Bruno",
+        "level": 3,
+        "breed": "Bernhardiner",
+        "role": "Fernkampf-Spezialist",
+        "health": 100,
+        "max_health": 100,
+        "attack": 20,
+        "is_enemy": false,
+        "starting_location": "Höhle zwischen den Bäumen",
+        "location": [],
+        "inventory": [],
+        "inventory_limit": 20,
+        "in_battle": false,
+        "is_alive": true,
+        "skills": {
+          "Biss": {
+            "base_damage": 20,
+            "level_multiplier": 2,
+            "description": "Beißt den Gegner."
+          }
+        }
+      },
+      "Leika": {
+        "name": "Leika",
+        "level": 2,
+        "breed": "Pudel-Yorkshire Mix",
+        "role": "Nahkampf-Spezialistin",
+        "health": 100,
+        "max_health": 100,
+        "attack": 20,
+        "is_enemy": false,
+        "starting_location": "Nachbarhaus",
+        "location": [],
+        "inventory": [],
+        "inventory_limit": 20,
+        "in_battle": false,
+        "is_alive": true,
+        "skills": {
+          "Biss": {
+            "base_damage": 20,
+            "level_multiplier": 2,
+            "description": "Beißt den Gegner."
+          }
+        }
+      },
+      "Jack": {
+        "name": "Jack",
+        "level": 1,
+        "breed": "Pudel",
+        "role": "Heiler",
+        "health": 100,
+        "max_health": 100,
+        "attack": 20,
+        "is_enemy": false,
+        "starting_location": "Rettungs-Hundehütte",
+        "location": [],
+        "inventory": [],
+        "inventory_limit": 20,
+        "in_battle": false,
+        "is_alive": true,
+        "skills": {
+          "Heilung": {
+            "healing_power": 30,
+            "description": "Heilt Verbündete."
+          }
+        }
+      },
+      "Leo": {
+        "name": "Leo",
+        "level": 1,
+        "breed": "Malteser",
+        "role": "Magier",
+        "health": 100,
+        "max_health": 100,
+        "attack": 20,
+        "is_enemy": false,
+        "starting_location": "Magierturm",
+        "location": [],
+        "inventory": [],
+        "inventory_limit": 20,
+        "in_battle": false,
+        "is_alive": true,
+        "skills": {
+          "Feuerball": {
+            "base_damage": 25,
+            "description": "Wirft einen Feuerball auf den Gegner."
+          }
+        }
+      }
+    },
+    "enemies": {
+      "Huberus Snickers": {
+        "name": "Huberus Snickers",
+        "level": 1,
+        "breed": "Chihuahua",
+        "role": "Endboss",
+        "health": 100,
+        "is_enemy": true,
+        "starting_location": "Höllenschloss",
+        "location": [],
+        "attacks": {
+          "Schwarzes Loch": {
+            "base_damage": 54,
+            "level_multiplier": 3,
+            "description": "Saugt den Gegner in ein schwarzes Loch ein und fügt ihm Schaden zu."
+          },
+          "Krallen der Finsternis": {
+            "base_damage": 72,
+            "level_multiplier": 2,
+            "description": "Greift mit seiner Kralle an, die in ein schwarzes Feuer gehüllt ist."
+          },
+          "Maul der Verderbnis": {
+            "base_damage": 64,
+            "level_multiplier": 2,
+            "description": "Beißt den Gegner mehrmals mit einem festen Biss und vergiftet ihn."
+          }
+        }
+      }
+    },
+    "monsters": {
+      "spider": {
+        "name": "Spinne",
+        "level": 5,
+        "breed": "Riesenspinne",
+        "role": "Monster",
+        "health": 150,
+        "is_enemy": true,
+        "attacks": {
+          "Seidenfaden": {
+            "base_damage": 30,
+            "level_multiplier": 3,
+            "description": "Umwickelt den Gegner komplett ein."
+          },
+          "Giftzahn": {
+            "base_damage": 40,
+            "level_multiplier": 2,
+            "description": "Beißt den Gegner mit vergifteten Zähnen an."
+          },
+          "Turbosprung": {
+            "base_damage": 30,
+            "level_multiplier": 2,
+            "description": "Springt auf den Gegner und fügt zufälligen Schaden zu."
+          }
+        }
+      },
+      "hog": {
+        "name": "Wildschwein",
+        "level": 6,
+        "breed": "Wütendes Wildschwein",
+        "role": "Monster",
+        "health": 180,
+        "is_enemy": true,
+        "attacks": {
+          "Rammbock": {
+            "base_damage": 35,
+            "level_multiplier": 2,
+            "description": "Rennt mit schnellen Schritten auf den Gegner zu und fügt ihm zufälligen Schaden zu (Gegner ist verwirrt)."
+          },
+          "Stoßzahn": {
+            "base_damage": 45,
+            "level_multiplier": 3,
+            "description": "Der Gegner wird im Nahkampf durch Stoßzähne verletzt."
+          },
+          "Teleportation": {
+            "base_damage": 30,
+            "level_multiplier": 3,
+            "description": "Kann sich weg teleportieren und greift in der nächsten Runde an (Gegner kann ihn nicht angreifen)."
+          }
+        }
+      },
+      "wolf": {
+        "name": "Wolf",
+        "level": 3,
+        "breed": "Wolf",
+        "role": "Monster",
+        "health": 120,
+        "is_enemy": true,
+        "attacks": {
+          "Hyperstrahl": {
+            "base_damage": 32,
+            "level_multiplier": 3,
+            "description": "Schießt einen Strahl aus der Schnauze."
+          },
+          "Mega-Biss": {
+            "base_damage": 54,
+            "level_multiplier": 2,
+            "description": "Beißt sich am Gegner fest und fügt zufälligen Schaden zu."
+          },
+          "Riesenklaue": {
+            "base_damage": 36,
+            "level_multiplier": 2,
+            "description": "Greift mit seinen Klauen an und fügt zufällig starken Schaden zu."
+          }
+        }
+      },
+      "troll": {
+        "name": "Troll",
+        "level": 4,
+        "breed": "Troll",
+        "role": "Monster",
+        "health": 160,
+        "is_enemy": true,
+        "attacks": {
+          "Keulenschlag": {
+            "base_damage": 54,
+            "level_multiplier": 3,
+            "description": "Umwickelt den Gegner komplett ein."
+          },
+          "Giftzahn": {
+            "base_damage": 72,
+            "level_multiplier": 2,
+            "description": "Beißt den Gegner mit vergifteten Zähnen an."
+          },
+          "Turbosprung": {
+            "base_damage": 64,
+            "level_multiplier": 2,
+            "description": "Springt auf den Gegner und fügt zufälligen Schaden zu."
+          }
+        }
+      },
+      "swamp_snails": {
+        "name": "Sumpfschnecke",
+        "level": 4,
+        "breed": "Sumpfschnecke",
+        "role": "Monster",
+        "health": 200,
+        "is_enemy": true,
+        "attacks": {
+          "Säurespeichel": {
+            "base_damage": 54,
+            "level_multiplier": 3,
+            "description": "Spuckt giftigen Speichel auf den Gegner und vergiftet ihn damit."
+          },
+          "Schleimspur": {
+            "base_damage": 72,
+            "level_multiplier": 2,
+            "description": "Legt eine rutschige Schleimspur, damit die Gegner keinen festen Halt haben."
+          },
+          "Mega-Strahl": {
+            "base_damage": 64,
+            "level_multiplier": 2,
+            "description": "Greift den Gegner mit einem Strahl durch die Augen an."
+          }
+        }
+      }
     }
-}
+  }
+  
