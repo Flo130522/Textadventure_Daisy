@@ -37,11 +37,34 @@ ascii_art1 = art.text2art("Das Abenteuer des Rachedackels", font="small")
 ascii_art2 = ascii_art1 + "\n" + art.text2art("Daisy gegen Hubertus Snickers", font="small")
 print(ascii_art2)
 
-class MainMenu:
+class MainMenu():
     ascii_art1 = art.text2art("Das Abenteuer des Rachedackels", font="small")
     ascii_art2 = ascii_art1 + "\n" + art.text2art("Daisy gegen Hubertus Snickers", font="small")
     print(ascii_art2)
 
+     #Untermenü "Spiel laden"
+    def load_game(self):
+        print("Spiel wird geladen...")
+        filename = input("Geben Sie den Dateinamen des Spielstands ein (oder 'zurück' zum Hauptmenü): ")
+        if filename.lower() == "zurück":
+            return 
+        loaded_game = self.load_game(filename)
+        if loaded_game:
+            self.menu_stack.append(self.loaded_game_menu)
+
+    def new_game_menu():
+        print("\nNeues Spiel starten:")
+        print("1. Zuhause erkunden")
+        print("2. Abenteuer starten")
+
+        choice = input("Bitte wähle eine Option: ")
+
+        if choice == "1":
+            explore_home()
+        elif choice == "2":
+            start_adventure()
+        else:
+            print("Ungültige Option. Bitte wähle erneut.")
     # Hauptmenü
     def main_menu():
         while True:
@@ -63,29 +86,7 @@ class MainMenu:
                 print("Ungültige Option. Bitte wähle erneut.")
                 
     # Untermenü "Neues Spiel erstellen"
-    def new_game_menu():
-        print("\nNeues Spiel starten:")
-        print("1. Zuhause erkunden")
-        print("2. Abenteuer starten")
-
-        choice = input("Bitte wähle eine Option: ")
-
-        if choice == "1":
-            explore_home()
-        elif choice == "2":
-            start_adventure()
-        else:
-            print("Ungültige Option. Bitte wähle erneut.")
-            
-    #Untermenü "Spiel laden"
-    def load_game(self):
-        print("Spiel wird geladen...")
-        filename = input("Geben Sie den Dateinamen des Spielstands ein (oder 'zurück' zum Hauptmenü): ")
-        if filename.lower() == "zurück":
-            return 
-        loaded_game = self.load_game(filename)
-        if loaded_game:
-            self.menu_stack.append(self.loaded_game_menu)
+    
 
 class Character:
     def __init__(self, name, breed, role, is_enemy=False):
@@ -165,13 +166,13 @@ class Character:
             print(f"{stack_quantity} x {item} wurde zum Inventar hinzugefügt.")
     
     # Inventar anzeigen
-    def display_inventory(character):
-        print(f"{character['name']}s Inventar:")
-        for item in character['inventory']:
+    def display_inventory(self):
+        print(f"{self.name}s Inventar:")
+        for item in self.inventory:
             print(item)
     
     # Location erkunden
-    def random_encounter(character):
+    def random_encounter(self):
         print(f"Du befindest dich in {daisy['location']}")
         if random.random() < 0.5:
             encounter = random.choice(character['enemies'])
