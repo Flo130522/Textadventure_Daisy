@@ -60,7 +60,6 @@ def start_adventure():
     ingame_menu()
 
 def ingame_menu():
-    while True:
         print("\nWas möchtest du tun?")
         print("1. Reisen")
         print("2. Inventar anzeigen")
@@ -80,7 +79,6 @@ def ingame_menu():
             save_game()
         elif choice == "5":
             print("Spiel wird beendet. Auf Wiedersehen!")
-            break
         else:
             print("Ungültige Option. Bitte wähle erneut.")
 

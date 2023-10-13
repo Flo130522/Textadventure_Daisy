@@ -1,1 +1,2 @@
 TODO Gefolge für Zufallskampf in characters.json 
+TODO Filedialog für Spielstand laden (tkinter.filedialog.askopenfilename)
