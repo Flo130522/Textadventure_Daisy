@@ -18,6 +18,7 @@ def is_alive(character):
 
 def take_damage(character, damage):
     character.health -= damage
+    
 def attack(character, enemy):
     if character.in_battle:
         if character.role == "Fernkampf-Spezialist":
@@ -105,16 +106,3 @@ def heal(character, amount):
         character.health = 100
     print(f"{character.name} hat {amount} Gesundheit erhalten.")
     
-def encounter(character, locations):
-    current_location = locations.get(character['location'])
-
-    if current_location.get('enemies'):
-        print("Feindliche Charaktere nähern sich!")
-        character['in_battle'] = True
-        while character['in_battle']:
-            # Überprüfen Sie, ob es noch lebende Feinde in der aktuellen Location gibt
-            living_enemies = [enemy for enemy in current_location['enemies'] if isinstance(enemy, dict) and enemy['is_alive']]
-            if not living_enemies:
-                character['in_battle'] = False
-                break  # Beenden Sie den Kampf, wenn keine lebenden Feinde mehr vorhanden sind
-            pass  # Hier geht der Kampf weiter

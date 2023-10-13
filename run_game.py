@@ -7,7 +7,7 @@ from gamelogic import *
 from dungeon import *
 
 # Laden der Daten
-with open(r"json\locations.json") as fd:
+with open(r"json\locations.json",encoding="utf-8") as fd:
     locations = json.load(fd)
 
 with open(r"json\items.json") as fd:
@@ -119,14 +119,11 @@ def random_encounter():
         print(f"Du triffst auf {encounter['name']}.")
         # Implementiere den Kampf hier
 
-# Weitere Funktionen wie display_team, display_inventory, etc. müssen noch implementiert werden
-
 def main():
     while True:
         print(ascii_art2)
         main_menu()
         ingame_menu()
-        # Weitere Funktionen aufrufen, wenn sie implementiert sind
         random_encounter()
         explore_location()
 
