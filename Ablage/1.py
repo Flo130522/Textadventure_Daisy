@@ -1,7 +1,6 @@
 import random
 import pickle
 from datetime import datetime
-from tkinter import NO
 from typing import Dict, Optional, List, Union
 
 class Character:
@@ -69,7 +68,8 @@ class Character:
         self.inventory.append({"item": item, "quantity": quantity})
         print(f"{quantity} x {item} wurde zum Inventar hinzugefügt.")
 
-    def generate_attacks(self):
+    @staticmethod
+    def generate_attacks():
         return {
             "Biss": {"damage": random.randint(5, 15), "description": "Ein kräftiger Biss."},
             "Kratzer": {"damage": random.randint(10, 20), "description": "Ein scharfer Kratzer mit den Pfoten."},
@@ -149,21 +149,6 @@ class Monster(Character):
         else:
             raise ValueError("Ungültiger Monstername.")
         return attacks
-        
-        
-        # Füge die Standardangriffe hinzu
-        attacks["Biss"] = {"damage": level * 2, "description": "Ein kräftiger Biss."}
-        attacks["Kratzer"] = {"damage": level * 3, "description": "Ein scharfer Kratzer mit den Pfoten."}
-        attacks["Bellender Angriff"] = {"damage": level * 2, "description": "Ein lauter bellender Angriff."}
-        attacks["Sprung"] = {"damage": level * 3, "description": "Ein mutiger Sprung auf den Feind."}
-        
-        # Attacks zufällig auswählen
-        selected_attacks = random.sample(attacks.items(), 3)
-        self.attacks = {}
-        for attack in selected_attacks:
-            self.attacks[attack[0]] = attack[1]
-            
-        return self.attacks
     
 class Location:
     def __init__(self, name: str, description: str):
@@ -220,7 +205,8 @@ class Game:
         self.saved_game_filename = "saved_game.pickle"
         self.current_state = None
 
-    def initialize_locations(self):
+    @staticmethod
+    def initialize_locations():
         """
         Initialisiert die Spielorte und ihre Verbindungen.
         
@@ -263,7 +249,8 @@ class Game:
         locations["Gefängniszelle"].add_connection(locations["Hundewacht"])
         return locations
     
-    def initialize_characters(self):
+    @staticmethod
+    def initialize_characters():
         """
         Initialisiert die Spielcharaktere.
         
@@ -361,7 +348,8 @@ class Game:
             print("Kein gespeichertes Spiel gefunden.")
             return None
     
-    def select_character(self, characters):
+    @staticmethod
+    def select_character(characters):
         """
         Lässt den Spieler einen Charakter auswählen.
 
@@ -380,8 +368,7 @@ class Game:
                 choice = int(input("Gib die Nummer des Charakters ein: ")) - 1
                 if 0 <= choice < len(characters):
                     return characters[choice]  # Gib den ausgewählten Charakter zurück
-                else:
-                    print("Ungültige Auswahl. Bitte wähle erneut.")
+                print("Ungültige Auswahl. Bitte wähle erneut.")
             except ValueError:
                 print("Ungültige Eingabe. Bitte gib eine Nummer ein.")
     
@@ -483,7 +470,8 @@ class Game:
                     if not self.check_battle_over(characters, monsters):
                         return
 
-    def player_turn(self, character, monsters):
+    @staticmethod
+    def player_turn(character, monsters):
         """
         Führt den Zug eines Spielercharakters im Kampf durch.
 
@@ -505,7 +493,8 @@ class Game:
         if not target_monster.is_alive():
             print(f"{target_monster.name} wurde besiegt!")
     
-    def monster_turn(self, monster, characters):
+    @staticmethod
+    def monster_turn(monster, characters):
         """
         Führt den Zug eines Monstercharakters im Kampf durch.
 
@@ -525,7 +514,8 @@ class Game:
         if not selected_character.is_alive():
             print(f"{selected_character.name} wurde besiegt!")
 
-    def check_battle_over(self, characters, monsters):
+    @staticmethod
+    def check_battle_over(characters, monsters):
         """
         Überprüft, ob der Kampf vorbei ist, indem geprüft wird, ob alle Charaktere oder Monster besiegt wurden.
 
@@ -539,7 +529,7 @@ class Game:
         if all(not character.is_alive() for character in characters):
             print("Alle Charaktere wurden besiegt! Die Monster gewinnen den Kampf.")
             return False
-        elif all(not monster.is_alive() for monster in monsters):
+        if all(not monster.is_alive() for monster in monsters):
             print("Alle Monster wurden besiegt! Die Charaktere gewinnen den Kampf.")
             return False
         return True
