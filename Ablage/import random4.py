@@ -25,12 +25,12 @@ class Character:
     def earn_experience_points(self, amount):
         self.experience_points += amount
         print(f"{self.name} hat {amount} EP erhalten!")
-    
+
     def check_level_up(self):
         if self.experience_points >= self.level * 100:  # Beispiel: Levelaufstieg alle 100 EP
             self.level += 1
             print(f"{self.name} ist auf Level {self.level} aufgestiegen!")
-    
+
     def earn_random_experience_points(self, enemy_level):
         min_ep = enemy_level * 5  # Minimale EP basierend auf dem Level des Gegners (kann angepasst werden)
         max_ep = enemy_level * 10  # Maximale EP basierend auf dem Level des Gegners (kann angepasst werden)
@@ -40,13 +40,13 @@ class Character:
 
         # Überprüfen, ob der Charakter aufsteigt
         self.check_level_up()
-    
+
     def add_to_inventory(self, item, quantity=1):
         # Überprüfen, ob das Inventar bereits das Limit erreicht hat
         if len(self.inventory) >= self.inventory_limit:
             print("Das Inventar ist voll. Du kannst nichts mehr hinzufügen.")
             return
-        
+
         # Durchsuchen Sie das Inventar, um festzustellen, ob das Element bereits vorhanden ist
         for item_stack in self.inventory:
             if item_stack["item"] == item:
@@ -54,7 +54,7 @@ class Character:
                 item_stack["quantity"] += quantity
                 print(f"{quantity} x {item} wurde zum Inventar hinzugefügt.")
                 return
-        
+
         # Wenn das Element nicht im Inventar ist, fügen Sie es hinzu
         self.inventory.append({"item": item, "quantity": quantity})
         print(f"{quantity} x {item} wurde zum Inventar hinzugefügt.")
@@ -107,7 +107,7 @@ class Character:
             print(f"{self.name} - Level {self.level} (EP: {self.experience_points}) - Gesundheit: {self.health}")
         for member in self.team:
             print(f"{member.name} - Level {member.level} (EP: {member.experience_points}) - Gesundheit: {member.health}")
-    
+
     def travel_and_encounter(self, destination_name, locations):
         destination = locations.get(destination_name)
         if destination:
@@ -119,7 +119,7 @@ class Character:
                 print(f"{self.name} ist nicht stark genug, um nach {destination.name} zu reisen.")
         else:
             print(f"{destination_name} ist kein gültiges Reiseziel.")
-    
+
     def fight_monsters_in_dungeon(self, dungeon):
         if self.in_battle:
             print("Du befindest dich bereits im Kampf.")
@@ -135,13 +135,13 @@ class Character:
 # Erstellen einer Liste der Monsterobjekte
 class Monster:
     monsters = []
-    
+
     def __init__(self, name, level):
         self.name = name
         self.level = level
         self.health = level * 10  # Beispiel: Gesundheit basierend auf dem Level
         self.attacks = self.generate_monster_attacks(name, level)  # Definieren Sie die Angriffe hier
-    
+
     def generate_monster_attacks(self, name, level):
         if name == "Spinne":
             if 1 <= level <= 19:
