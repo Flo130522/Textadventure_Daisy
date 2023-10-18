@@ -1,4 +1,4 @@
-﻿import random
+import random
 import pickle
 from datetime import datetime
 from tkinter import NO
