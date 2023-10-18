@@ -59,7 +59,8 @@ class Character:
         self.inventory.append({"item": item, "quantity": quantity})
         print(f"{quantity} x {item} wurde zum Inventar hinzugefügt.")
 
-    def generate_attacks(self):
+    @staticmethod
+    def generate_attacks():
         # Definiere die Standardangriffe für alle Charaktere
         return {
             "Biss": {"damage": random.randint(5, 15), "description": "Ein kräftiger Biss."},
