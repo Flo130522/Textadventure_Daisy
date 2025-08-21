@@ -18,7 +18,8 @@ class Character:
         if is_enemy:
             self.generate_monster_attributes(name, self.level)
 
-    def generate_attacks(self):
+    @staticmethod
+    def generate_attacks():
         # Definiere die Standardangriffe für alle Charaktere
         return {
             "Biss": {"damage": random.randint(5, 15), "description": "Ein kräftiger Biss."},
