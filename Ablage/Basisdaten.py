@@ -14,7 +14,7 @@ class Character:
         self.current_location = None
         self.in_battle = False
         self.attacks = self.generate_attacks()
-        
+
         if is_enemy:
             self.generate_monster_attributes(name, self.level)
 

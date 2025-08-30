@@ -27,9 +27,10 @@ class Game:
     
     @staticmethod
     def initialize_locations():
+
         """
         Initialisiert die Spielorte und ihre Verbindungen.
-        
+
         Returns:
             dict: Ein Dictionary von Ort-Namen auf Location-Objekte.
         """
@@ -68,12 +69,11 @@ class Game:
         locations["Hundewacht"].add_connection(locations["Gefängniszelle"])
         locations["Gefängniszelle"].add_connection(locations["Hundewacht"])
         return locations
-    
-    @staticmethod
+
     def initialize_characters():
         """
         Initialisiert die Spielcharaktere.
-        
+
         Returns:
             list: Eine Liste von Character-Objekten.
         """
@@ -85,7 +85,7 @@ class Game:
             Character("Leo", 12, "Maltester", "Magier", 100, 20, is_enemy=False),
             Character("Hubertus Snickers", 30, "Chihuahua", "Höllenhund aus dem Chihuahuareich", 100, 20, is_enemy=True),
         ]
-        
+
         # Spinnen-Monster hinzufügen
         spider_level = random.randint(1, 19)
         spider_health = spider_level * 10  # Pass Gesundheit entsprechend an
@@ -119,9 +119,9 @@ class Game:
         troll_attacks = Monster.generate_monster_attacks("Troll", "Troll", troll_level)
         troll_monster = Monster("Troll-Monster", troll_level, "Troll", "Monster", troll_health, troll_attack, attacks=troll_attacks)
         characters.append(troll_monster)
-        
+
         return characters
-    
+
     def auto_save(self):
         """
         Automatisches Speichern des Spiels, basierend auf dem angegebenen Intervall.
@@ -136,7 +136,7 @@ class Game:
     def save_game(self, filename):
         """
         Speichert den aktuellen Spielzustand in einer Datei.
-        
+
         Args:
             filename (str): Der Dateiname, unter dem das Spiel gespeichert wird.
         """
@@ -153,10 +153,10 @@ class Game:
     def load_game(filename):
         """
         Lädt einen gespeicherten Spielzustand aus einer Datei.
-        
+
         Args:
             filename (str): Der Dateiname der gespeicherten Spiels.
-            
+
         Returns:
             dict: Ein Dictionary mit den gespeicherten Spielinformationen.
         """
@@ -167,9 +167,9 @@ class Game:
         except FileNotFoundError:
             print("Kein gespeichertes Spiel gefunden.")
             return None
-    
-    @staticmethod
+
     def select_character(characters):
+
         """
         Lässt den Spieler einen Charakter auswählen.
 
@@ -192,7 +192,7 @@ class Game:
                     print("Ungültige Auswahl. Bitte wähle erneut.")
             except ValueError:
                 print("Ungültige Eingabe. Bitte gib eine Nummer ein.")
-    
+
     def start_new_game(self):
         """
         Startet ein neues Spiel und initialisiert die Charaktere und den aktuellen Ort.
@@ -268,11 +268,11 @@ class Game:
                 print("Ungültige Eingabe. Bitte wähle eine der verfügbaren Optionen.")
         else:
             print(f"{self.current_character.name} ist besiegt. Das Abenteuer endet hier.")
-    
+
     def start_battle(self, characters, monsters):
         """
         Startet einen Kampf zwischen Charakteren und Monstern.
-    
+
         Args:
             characters (list): Eine Liste von Charakteren, die am Kampf teilnehmen.
             monsters (list): Eine Liste von Monstern, die am Kampf teilnehmen.
@@ -301,21 +301,21 @@ class Game:
             monsters (list): Eine Liste von Monstern, die am Kampf teilnehmen.
         """
         print(f"Dein Zug mit {character.name}:")
-    
+
         # Implementiere hier die Aktionen für den ausgewählten Charakter
         # Zum Beispiel den Angriff auf ein zufälliges Monster
         target_monster = random.choice(monsters)
         damage_dealt = character.attack(target_monster)
-    
+
         print(f"{character.name} greift {target_monster.name} an und fügt {damage_dealt} Schaden zu.")
         print(f"{target_monster.name} hat noch {target_monster.health} Gesundheit.")
 
         # Überprüfe, ob das Monster besiegt wurde
         if not target_monster.is_alive():
             print(f"{target_monster.name} wurde besiegt!")
-    
-    @staticmethod
+
     def monster_turn(monster, characters):
+
         """
         Führt den Zug eines Monstercharakters im Kampf durch.
 
@@ -325,12 +325,12 @@ class Game:
         """
         monster_attack, attack_description = monster.attack()
         selected_character = random.choice(characters)
-    
+
         damage, status_message = selected_character.take_damage(monster_attack)
         print(f"{monster.name} kontert mit einem Angriff von {attack_description}.")
         print(f"{selected_character.name} erleidet {damage} Schaden.")
         print(f"Die Gesundheit von {selected_character.name}: {selected_character.health}")
-    
+
         # Überprüfe, ob der ausgewählte Charakter besiegt wurde
         if not selected_character.is_alive():
             print(f"{selected_character.name} wurde besiegt!")
@@ -362,7 +362,7 @@ class Game:
         """
         current_location = self.current_character.location
         print(f"Du erkundest {current_location.name}: {current_location.description}")
-        
+
         # Überprüfe, ob es Feinde gibt
         if current_location.enemies:
             print("Feinde nähern sich!")
@@ -401,14 +401,14 @@ class Game:
         if hidden_location_name in current_location.hidden_locations:
             hidden_location = self.locations[hidden_location_name]
             print(f"Du erkundest den versteckten Ort {hidden_location.name}: {hidden_location.description}")
-            
+
             # Überprüfe, ob es Feinde gibt
             if hidden_location.enemies:
                 print("Feinde nähern sich!")
                 self.start_battle(self.current_character.team, hidden_location.enemies)
             else:
                 print("Es gibt keine Feinde hier.")
-            
+
             # Überprüfe, ob es Gegenstände gibt
             if hidden_location.items:
                 print("Du findest Gegenstände:")

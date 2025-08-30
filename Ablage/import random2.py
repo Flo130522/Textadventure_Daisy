@@ -78,7 +78,7 @@ class Location:
 
     def add_friend(self, friend):
         self.friends.append(friend)
-        
+
 def main():
     print("Das Abenteuer des Rache-Dackels: Daisy gegen Huberus Snickers")
     while True:
@@ -120,14 +120,14 @@ def start_adventure():
     homenah = Location("Nachbarhaus", "Das Nachbarhaus, hier duftet es immer wieder nach leckerem Kuchen")
     homemed = Location("Rettungs-Hundehütte", "Hier wohnt Jack, der Rettungshund!")
     homeend = Location("Thron im Höllenschlund", "Hier sitzt Hubertus und versklavt seine Untertanen und sein Gefolge")
-    
+
     daisy.current_location = home
     bruno.current_location = woodhome
     leika.current_location = homenah
     jack.current_location = homemed
     leo.current_location = homemagic
     hubertus.current_location = homeend
-    
+
     # Füge Charaktere zu Orten hinzu
     forest.add_friend(bruno)
     village.add_friend(leika)
@@ -162,9 +162,9 @@ def start_adventure():
                 for index, enemy in enumerate(current_location.enemies):
                     if enemy.is_alive():
                         print(f"{index + 1}. {enemy.name} ({enemy.age} Jahre, {enemy.breed}) - Rolle: {enemy.role} - Gesundheit: {enemy.health}")
-                
+
                 enemy_choice = input("Wähle den Feind, den du angreifen möchtest (1, 2, ...): ")
-                
+
                 if enemy_choice.isdigit():
                     enemy_choice = int(enemy_choice) - 1
                     if 0 <= enemy_choice < len(current_location.enemies) and current_location.enemies[enemy_choice].is_alive():
@@ -179,7 +179,7 @@ def start_adventure():
                     print("Ungültige Eingabe.")
             else:
                 print("Du befindest dich nicht im Kampf. Du kannst nicht angreifen.")
-        
+
         elif action == "inventar anzeigen":
             daisy.display_inventory()
 
@@ -194,12 +194,12 @@ def start_adventure():
             else:
                 print("Ungültiges Reiseziel. Wähle Nach Hause, Zum Bootssteg oder Zum Dorfmarkt.")
             current_location = daisy.current_location  # Aktualisiere den aktuellen Ort nach dem Reisen
-        
+
         else:
             print("Ungültige Aktion. Wähle Angriff, Inventar anzeigen oder Reisen.")
 
     print("Daisy wurde besiegt. Hubertus Snickers triumphiert und das Dorf bleibt in Angst.")
-    
+
 def explore_home():
     print("Daisy lebt mit ihren Eltern in Grauholz. Es ist ein Tag wie jeder andere, die Sonne scheint und es ist angenehm warm.")
 
