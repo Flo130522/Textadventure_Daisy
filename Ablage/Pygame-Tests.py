@@ -24,8 +24,10 @@ class Game:
         self.last_save_time = datetime.now()
         self.saved_game_filename = "saved_game.pickle"
         self.current_state = None
+    
+    @staticmethod
+    def initialize_locations():
 
-    def initialize_locations(self):
         """
         Initialisiert die Spielorte und ihre Verbindungen.
 
@@ -68,7 +70,7 @@ class Game:
         locations["Gefängniszelle"].add_connection(locations["Hundewacht"])
         return locations
 
-    def initialize_characters(self):
+    def initialize_characters():
         """
         Initialisiert die Spielcharaktere.
 
@@ -166,7 +168,8 @@ class Game:
             print("Kein gespeichertes Spiel gefunden.")
             return None
 
-    def select_character(self, characters):
+    def select_character(characters):
+
         """
         Lässt den Spieler einen Charakter auswählen.
 
@@ -288,7 +291,8 @@ class Game:
                     if not self.check_battle_over(characters, monsters):
                         return
 
-    def player_turn(self, character, monsters):
+    @staticmethod
+    def player_turn(character, monsters):
         """
         Führt den Zug eines Spielercharakters im Kampf durch.
 
@@ -310,7 +314,8 @@ class Game:
         if not target_monster.is_alive():
             print(f"{target_monster.name} wurde besiegt!")
 
-    def monster_turn(self, monster, characters):
+    def monster_turn(monster, characters):
+
         """
         Führt den Zug eines Monstercharakters im Kampf durch.
 
@@ -330,7 +335,8 @@ class Game:
         if not selected_character.is_alive():
             print(f"{selected_character.name} wurde besiegt!")
 
-    def check_battle_over(self, characters, monsters):
+    @staticmethod
+    def check_battle_over(characters, monsters):
         """
         Überprüft, ob der Kampf vorbei ist, indem geprüft wird, ob alle Charaktere oder Monster besiegt wurden.
 

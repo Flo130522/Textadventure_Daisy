@@ -1,114 +1,63 @@
-import random
-
-class Character:
-    def __init__(self, name, age, breed, role, is_enemy=False):
-        self.name = name
-        self.age = age
-        self.breed = breed
-        self.role = role
-        self.health = 100
-        self.level = 1
-        self.inventory = []
-        self.skills = []
-        self.is_enemy = is_enemy  
-        self.current_location = None
-        self.in_battle = False  # Neue Variable für den Kampfstatus
-
-    def is_alive(self):
-        return self.health > 0
-
-    def take_damage(self, damage):
-        self.health -= damage
-
-    def attack(self, enemy):
-        if self.in_battle:
-            if self.role == "Fernkampf-Spezialist":
-                damage = random.randint(10, 20)
-            elif self.role == "Nahkampf-Spezialistin":
-                damage = random.randint(15, 25)
-            elif self.role == "Heiler":
-                damage = 0
-            elif self.role == "Magier":
-                damage = random.randint(5, 15)
-            else:
-                damage = random.randint(1, 10)
-            enemy.take_damage(damage)
-            return damage
-        else:
-            print(f"{self.name} ist nicht im Kampf und kann nicht angreifen.")
-
-    def level_up(self):
-        self.level += 1
-        print(f"{self.name} hat Level {self.level} erreicht!")
-
-    def learn_skill(self, skill):
-        self.skills.append(skill)
-
-    def add_item_to_inventory(self, item):
-        self.inventory.append(item)
-
-    def display_inventory(self):
-        print(f"{self.name}s Inventar:")
-        for item in self.inventory:
-            print(item)
-
-    def travel_and_encounter(self, destination):
-        self.current_location = destination
-        print(f"{self.name} reist nach {destination.name}.")
-
-        if random.randint(1, 3) == 1:
-            enemy_strength = random.randint(10, 30)
-            enemy = Character("Gefolgsmann", enemy_strength, "Unbekannt", "Gefolgsmann", is_enemy=True)
-            print(f"{self.name} wird von einem Gefolgsmann mit Stärke {enemy_strength} angegriffen!")
-            damage = self.attack(enemy)
-            print(f"{self.name} greift den Gefolgsmann an und fügt {damage} Schaden zu.")
-            if not enemy.is_alive():
-                print(f"Der Gefolgsmann wurde besiegt!")
-
-class Location:
-    def __init__(self, name, description):
-        self.name = name
-        self.description = description
-        self.enemies = []
-        self.friends = []
-        self.in_battle = False
-
-    def add_enemy(self, enemy):
-        self.enemies.append(enemy)
-
-    def add_friend(self, friend):
-        self.friends.append(friend)
-
+import random         
 def main():
-    print("Das Abenteuer des Rache-Dackels: Daisy gegen Huberus Snickers")
-    while True:
-        print("\nOptionen:")
-        print("1. Abenteuer beginnen")
-        print("2. Zuhause erkunden")
-        print("3. Beenden")
+    """
+    Die Hauptfunktion, um das Spiel zu starten.
+    """
+    # print("Willkommen zum Abenteuerspiel!")
 
-        choice = input("Bitte wählen Sie eine Option: ")
+    # while True:
+    #     print("\nHauptmenü:")
+    #     print("1. Abenteuer starten")
+    #     print("2. Zuhause erkunden")
+    #     print("3. Spiel beenden")
+    #     choice = input("Bitte wählen Sie eine Option: ")
+
+    #     if choice == "1":
+    #         start_adventure()
+    #     elif choice == "2":
+    #         explore_home()
+    #     elif choice == "3":
+    #         print("Das Spiel wurde beendet.")
+    #         break
+    #     else:
+    #         print("Ungültige Option. Bitte wählen Sie erneut.")
+    
+            
+def start_adventure(daisy, monster):
+    while True:
+        print("\nWas möchtest du tun?")
+        print("1. Ort erkunden")
+        print("2. Charakter anzeigen")
+        print("3. Spiel beenden")
+        choice = input("Bitte wähle eine Option: ")
 
         if choice == "1":
-            start_adventure()
+            daisy.explore_location()
         elif choice == "2":
-            explore_home()
+            daisy.show_character()
         elif choice == "3":
-            print("Vielen Dank fürs Spielen! Auf Wiedersehen.")
+            print("Das Spiel wird beendet. Auf Wiedersehen!")
             break
         else:
-            print("Ungültige Option. Bitte wählen Sie 1, 2 oder 3.")
-def start_adventure():
-        # Erstelle Charaktere
-    daisy = Character("Daisy", 4, "Rauhaardackel-Terrier Mix", "Main", is_enemy=False)
+            print("Ungültige Eingabe. Bitte wähle eine der verfügbaren Optionen.")
+
+    locations = initialize_locations()
+    # Erstelle Charaktere
+    daisy = Character("Daisy", 4, "Rauhaardackel-Terrier Mix", "Nahkampf-Spezialist", is_enemy=False)
     bruno = Character("Bruno", 3, "Bernhardiner", "Fernkampf-Spezialist", is_enemy=False)
     leika = Character("Leika", 5, "Pudel-Yorkshire Mix", "Nahkampf-Spezialistin", is_enemy=False)
     jack = Character("Jack", 6, "Pudel", "Heiler", is_enemy=False)
     leo = Character("Leo", 12, "Maltester", "Magier", is_enemy=False)
     hubertus = Character("Hubertus Snickers", 30, "Chihuahua", "Höllenhund aus dem Chihuahuareich", is_enemy=True)
+    team = [daisy, bruno, leika, jack, leo]
 
     # Erstelle Orte
     village = Location("Grauholz", "Ein friedliches Dorf, in dem alles begann.")
+    village.add_dungeon("Verlassene Höhle", "Eine düstere, verlassene Höhle", [
+        ("Spinne", 5, 10),  # Monstername, min_level, max_level
+        ("Wildschwein", 8, 15),
+        ("Wolf", 12, 20),
+    ])    
     forest = Location("Finsterwald", "Ein dunkler Wald, der viele Gefahren birgt.")
     city = Location("Hundewacht", "Eine belebte Stadt mit vielen Menschen.")
     endgame = Location("Chihuahua-Höllenreich", "Das dunkle Reich, in dem der Höllenhund Hubertus Snickers sein Unwesen treibt")
@@ -120,7 +69,10 @@ def start_adventure():
     homenah = Location("Nachbarhaus", "Das Nachbarhaus, hier duftet es immer wieder nach leckerem Kuchen")
     homemed = Location("Rettungs-Hundehütte", "Hier wohnt Jack, der Rettungshund!")
     homeend = Location("Thron im Höllenschlund", "Hier sitzt Hubertus und versklavt seine Untertanen und sein Gefolge")
+    in_front_of_home = Location("Vor dem Haus", "Direkt vor deinem gemütlichen Zuhause.")
+    dungon = Location("Waldverlies", "Ein gefährliches Dungeon im Finsterwald")
 
+    # Setze die Startorte für die Charaktere
     daisy.current_location = home
     bruno.current_location = woodhome
     leika.current_location = homenah
@@ -137,30 +89,47 @@ def start_adventure():
     city.add_friend(daisy)
     endgame.add_enemy(hubertus)
 
-    current_location = home
+    # Backstory
+    print("Huberus Snickers schickt sein Gefolge los, um das Schutzgeld aus Grauholz und anderen Dörfern einzutreiben.")
+    print("Daisys Eltern haben nicht genug Geld, um das Schutzgeld zu bezahlen. Sie verstecken Daisy, die Eltern werden jedoch nach einem angespannten Gespräch mit dem Gefolge getötet.")
+    print("Daisy bekommt alles mit und schwört sich Rache.")
 
-    while daisy.is_alive():
+    print(f"{daisy.name} erwacht aus ihrem Versteck und sieht eine Blutspur vor sich.")
+    choice = input("Möchtest du der Blutspur folgen oder das Haus verlassen? (Blutspur folgen / Haus verlassen): ").strip().lower()
+
+    if choice == "blutspur folgen":
+        print("Das willst du nicht sehen, gehe lieber nach draußen.")
+    elif choice == "haus verlassen":
+        print("Du gehst nach draußen.")
+        daisy.current_location = in_front_of_home  
+    else:
+        print("Ungültige Auswahl. Du gehst sicherheitshalber nach draußen.")
+        
+    while True:
+        current_location = daisy.current_location  # Aktualisiere den aktuellen Ort
+        explore_location(daisy)  # Hier rufen wir die explore_location-Funktion auf
+
         print("\nAktueller Ort:", current_location.name)
         print(current_location.description)
 
         # Zeige freundliche und feindliche Charaktere im aktuellen Ort an
         print("Freundliche Charaktere im aktuellen Ort:")
         for character in current_location.friends:
-            if character.is_alive():
+            if isinstance(character, Character) and character.is_alive():
                 print(f"{character.name} ({character.age} Jahre, {character.breed}) - Rolle: {character.role} - Gesundheit: {character.health}")
 
         print("Feindliche Charaktere im aktuellen Ort:")
         for character in current_location.enemies:
-            if character.is_alive():
+            if isinstance(character, Character) and character.is_alive():
                 print(f"{character.name} ({character.age} Jahre, {character.breed}) - Rolle: {character.role} - Gesundheit: {character.health}")
 
-        action = input("Was möchtest du tun? (Angriff / Inventar anzeigen / Reisen): ").lower()
+        action = input("Was möchtest du tun? (Angriff / Inventar anzeigen / Team anzeigen / Reisen): ").lower()
 
         if action == "angriff":
             if current_location.in_battle:
                 print("Feindliche Charaktere im aktuellen Ort:")
                 for index, enemy in enumerate(current_location.enemies):
-                    if enemy.is_alive():
+                    if isinstance(enemy, Character) and enemy.is_alive():
                         print(f"{index + 1}. {enemy.name} ({enemy.age} Jahre, {enemy.breed}) - Rolle: {enemy.role} - Gesundheit: {enemy.health}")
 
                 enemy_choice = input("Wähle den Feind, den du angreifen möchtest (1, 2, ...): ")
@@ -183,23 +152,28 @@ def start_adventure():
         elif action == "inventar anzeigen":
             daisy.display_inventory()
 
+        elif action == "team anzeigen":
+            daisy.display_team()
+
         elif action == "reisen":
-            destination = input("Wohin möchtest du reisen? (Nach Hause / Zum Bootssteg / Zum Dorfmarkt): ").lower()
+            destination = input("Wohin möchtest du reisen? (Nach Hause / Zum Wald / Zum Magierturm / Zum Nachbarhaus): ").lower()
+
+            # Überprüfen Sie die Benutzereingabe nach dem Ortswechsel innerhalb des entsprechenden Blocks
             if destination == "nach hause":
-                daisy.travel(home)
-            elif destination == "zum bootssteg":
-                daisy.travel(dock)
-            elif destination == "zum dorfmarkt":
-                daisy.travel(market)
+                daisy.travel_and_encounter("Zuhause", locations)
+            elif destination == "zum wald":
+                daisy.travel_and_encounter("Höhle im Wald", locations)
+            elif destination == "zum magierturm":
+                daisy.travel_and_encounter("Magierturm", locations)
+            elif destination == "zum nachbarhaus":
+                daisy.travel_and_encounter("Nachbarhaus", locations)
             else:
-                print("Ungültiges Reiseziel. Wähle Nach Hause, Zum Bootssteg oder Zum Dorfmarkt.")
-            current_location = daisy.current_location  # Aktualisiere den aktuellen Ort nach dem Reisen
+                print("Ungültiges Reiseziel. Wähle Nach Hause, Zum Wald, Zum Magierturm oder Zum Nachbarhaus.")
 
-        else:
-            print("Ungültige Aktion. Wähle Angriff, Inventar anzeigen oder Reisen.")
-
-    print("Daisy wurde besiegt. Hubertus Snickers triumphiert und das Dorf bleibt in Angst.")
-
+        # Überprüfen, ob Daisy besiegt wurde
+        if not daisy.is_alive():
+            print("Daisy wurde besiegt. Hubertus Snickers triumphiert und das Dorf bleibt in Angst.")
+            break
 def explore_home():
     print("Daisy lebt mit ihren Eltern in Grauholz. Es ist ein Tag wie jeder andere, die Sonne scheint und es ist angenehm warm.")
 
@@ -209,7 +183,7 @@ def explore_home():
         print("2. Mit deiner Mama reden")
         print("3. Zurück zum Hauptmenü")
 
-        choice = input("Bitte wählen Sie eine Option: ")
+        choice = input("Bitte wähle eine Option: ")
 
         if choice == "1":
             print("Dein Papa ist in seine Zeitung vertieft und sagt, 'Guten Morgen, kleines.'")
@@ -218,7 +192,6 @@ def explore_home():
         elif choice == "3":
             break
         else:
-            print("Ungültige Option. Bitte wählen Sie 1, 2 oder 3.")
-
+            print("Ungültige Option. Bitte wähle 1, 2 oder 3.")
 if __name__ == "__main__":
     main()
