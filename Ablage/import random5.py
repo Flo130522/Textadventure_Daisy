@@ -3,35 +3,8 @@ import pickle
 import os
 from datetime import datetime
 
-class Character:
-    def __init__(self, name, age, breed, role, health, attack, is_enemy=False):
-        self.name = name
-        self.age = age
-        self.breed = breed
-        self.role = role
-        self.health = health
-        self.attack = attack
-        self.level = 1
-        self.experience_points = 0
-        self.inventory = []
-        self.inventory_limit = 20
-        self.skills = []
-        self.is_enemy = is_enemy
-        self.current_location = None
-        self.in_battle = False
-        self.is_blocked = False
-        self.team = []
-        
-        if is_enemy:
-            self.attacks = self.generate_attacks()
 
-    def block(self):
-        self.is_blocked = True
     
-    def unblock(self):
-        self.is_blocked = False
-    
-    def earn_experience_points(self, amount):
         self.experience_points += amount
         print(f"{self.name} hat {amount} EP erhalten!")
     

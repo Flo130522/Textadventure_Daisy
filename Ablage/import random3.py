@@ -2,7 +2,7 @@ import random
 
 class Character:
     def __init__(self, name, age, breed, role, is_enemy=False):
-        self.name = name
+        self.name = name 
         self.age = age
         self.breed = breed
         self.role = role
@@ -15,6 +15,8 @@ class Character:
         self.in_battle = False
         self.attacks = self.generate_attacks()
         self.team = []
+        self.level = 1  # Hinzugefügtes Attribut für den Level
+        self.experience_points = 0 
         
         if is_enemy:
             self.generate_monster_attributes(name, self.level)
