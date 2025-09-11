@@ -226,7 +226,7 @@ def start_adventure():
     # Backstory
     print("Huberus Snickers schickt sein Gefolge los, um das Schutzgeld aus Grauholz und anderen Dörfern einzutreiben.")
     print("Daisys Eltern haben nicht genug Geld, um das Schutzgeld zu bezahlen. Sie verstecken Daisy, die Eltern werden jedoch nach einem angespannten Gespräch mit dem Gefolge getötet.")
-    print("Daisy bekommt alles mit und schwört sich Rache.")
+    print("Daisy bekommt alles mit und schwört sich Rache.") #TODO 
 
     # Einführung
     print(f"{daisy.name} erwacht aus ihrem Versteck und sieht eine Blutspur vor sich.")
