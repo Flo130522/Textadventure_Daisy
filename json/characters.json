@@ -202,6 +202,31 @@
                         "description": "Greift Gegner mit einem Strahl durch die Augen an."
                     }
                 }
+            },
+            "goblin": {
+                "name": "Goblin",
+                "level": 2,
+                "breed": "Goblin",
+                "role": "Monster",
+                "health": 80,
+                "is_enemy": true,
+                "attacks": {
+                    "Dolchstoß": {
+                        "base_damage": 30,
+                        "level_multiplier": 3,
+                        "description": "Greift den Gegner mit einem Dolch an."
+                    },
+                    "Wurfmesser": {
+                        "base_damage": 40,
+                        "level_multiplier": 2,
+                        "description": "Wirft ein Messer auf den Gegner."
+                    },
+                    "Hinterhalt": {
+                        "base_damage": 30,
+                        "level_multiplier": 2,
+                        "description": "Schleicht sich an den Gegner heran und fügt ihm Schaden zu."
+                    }
+                }    
             }
         }
     }

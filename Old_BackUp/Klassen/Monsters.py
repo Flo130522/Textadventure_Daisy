@@ -1,3 +1,5 @@
+import random
+from Character import Character
 class Monster(Character):
     def __init__(self, name, level, breed, role, health, attack, attacks=None, current_location=None):
         super().__init__(name, level, breed, role, health, attack)
