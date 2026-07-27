@@ -37,3 +37,23 @@ def test_enemy_cannot_have_negative_health():
     assert spider.health == 0
     assert not spider.is_alive
 
+
+def test_experience_can_award_multiple_levels():
+    daisy = Character("Daisy", "Dackel-Mix", "Nahkampf")
+
+    levels = daisy.gain_experience(350)
+
+    assert levels == 2
+    assert daisy.level == 3
+    assert daisy.experience == 50
+    assert daisy.max_health == 120
+    assert daisy.health == 120
+
+
+def test_victories_are_counted_by_enemy_name():
+    daisy = Character("Daisy", "Dackel-Mix", "Nahkampf")
+
+    daisy.record_victory("Spinne")
+    daisy.record_victory("Spinne")
+
+    assert daisy.defeated_enemies == {"Spinne": 2}

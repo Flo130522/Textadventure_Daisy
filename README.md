@@ -9,7 +9,10 @@ Der spielbare Kern enthält:
 - eine verbundene Welt mit mehreren Orten,
 - Reisen und Erkundung,
 - Gegenstände und Inventar,
-- einen einfachen rundenbasierten Kampf,
+- einen rundenbasierten Kampf mit mehreren Attacken,
+- Erfahrung, Level und Kampfstatistiken,
+- JSON-basierte Weltdaten und Spielstände,
+- eine Lebensanzeige für Bosskämpfe,
 - ein erreichbares Spielziel.
 
 Die früheren Experimente wurden aus dem aktuellen Projektstand entfernt. Sie
@@ -38,7 +41,9 @@ Im Spiel werden die verfügbaren Aktionen jeweils als Nummern angezeigt.
 ## Tests ausführen
 
 ```bash
+python -m pip install ".[dev]"
 python -m pytest
+ruff check daisy tests run_game.py
 ```
 
 ## Projektstruktur
@@ -47,7 +52,9 @@ python -m pytest
 daisy/
   game.py       Spielablauf und Benutzereingaben
   models.py     Figuren, Gegner und Orte
-  world.py      Welt, Geschichte und Startzustand
+  world.py      Laden und Validieren der Welt
+  persistence.py  Speichern und Laden als JSON
+  data/         Editierbare Welt- und Gegnerdaten
 tests/          Automatische Tests
 docs/           Präsentation und ursprüngliche Systemskizze
 run_game.py     Einfacher Einstiegspunkt
@@ -55,7 +62,6 @@ run_game.py     Einfacher Einstiegspunkt
 
 ## Geplante Erweiterungen
 
-- Speichern und Laden
 - weitere Orte und Begegnungen
 - individuelle Fähigkeiten für Daisys Freunde
 - ausführlichere Geschichte und Dialoge

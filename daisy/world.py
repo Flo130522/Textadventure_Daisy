@@ -1,57 +1,55 @@
-"""Aufbau der Spielwelt und des Startzustands."""
+"""Lädt die Spielwelt aus einer JSON-Datei."""
 
 from __future__ import annotations
 
+import json
+from pathlib import Path
+from typing import TYPE_CHECKING, Any
+
 from .models import Character, Enemy, Location
 
+if TYPE_CHECKING:
+    from .game import Game
 
-def create_world() -> dict[str, Location]:
-    world = {
-        "Zuhause": Location(
-            "Zuhause",
-            "Daisys Elternhaus. Eine Blutspur führt zur offenen Haustür.",
-            items=["Heilkraut"],
-        ),
-        "Grauholz": Location(
-            "Grauholz",
-            "Ein sonst friedliches Dorf. Heute sind die Straßen verdächtig still.",
-        ),
-        "Dorfmarkt": Location(
-            "Dorfmarkt",
-            "Zwischen verlassenen Ständen liegt eine zerrissene Karte.",
-            items=["Karte des Finsterwalds"],
-        ),
-        "Finsterwald": Location(
-            "Finsterwald",
-            "Dichte Zweige verschlucken das Tageslicht.",
-            enemy=Enemy("Spinnen-Monster", health=42, attack_power=9, reward="Silberner Schlüssel"),
-        ),
-        "Hundewacht": Location(
-            "Hundewacht",
-            "Die Stadtmauer trägt das Zeichen von Hubertus Snickers.",
-        ),
-        "Chihuahua-Höllenreich": Location(
-            "Chihuahua-Höllenreich",
-            "Hinter dem schwarzen Tor wartet Hubertus Snickers.",
-            enemy=Enemy("Hubertus Snickers", health=70, attack_power=13),
-        ),
-    }
+WORLD_FILE = Path(__file__).parent / "data" / "world.json"
 
-    _connect_both(world, "Zuhause", "Grauholz")
-    _connect_both(world, "Grauholz", "Dorfmarkt")
-    _connect_both(world, "Dorfmarkt", "Finsterwald")
-    _connect_both(world, "Finsterwald", "Hundewacht")
-    _connect_both(world, "Hundewacht", "Chihuahua-Höllenreich")
+
+def load_world_data(path: Path = WORLD_FILE) -> dict[str, Any]:
+    """Liest und validiert die grundlegende Struktur der Weltdaten."""
+
+    with path.open(encoding="utf-8") as file:
+        data = json.load(file)
+    if not isinstance(data.get("locations"), list):
+        raise TypeError("Die Weltdatei benötigt eine Liste 'locations'.")
+    return data
+
+
+def create_world(path: Path = WORLD_FILE) -> dict[str, Location]:
+    """Erzeugt Spielobjekte aus den deklarativen Weltdaten."""
+
+    world: dict[str, Location] = {}
+    for location_data in load_world_data(path)["locations"]:
+        enemy_data = location_data.get("enemy")
+        enemy = Enemy(**enemy_data) if enemy_data else None
+        location = Location(
+            name=location_data["name"],
+            description=location_data["description"],
+            connections=list(location_data.get("connections", [])),
+            items=list(location_data.get("items", [])),
+            enemy=enemy,
+        )
+        world[location.name] = location
+
+    for location in world.values():
+        unknown = set(location.connections) - world.keys()
+        if unknown:
+            raise ValueError(f"Unbekannte Verbindung bei {location.name}: {sorted(unknown)}")
     return world
 
 
-def _connect_both(world: dict[str, Location], first: str, second: str) -> None:
-    world[first].connect(second)
-    world[second].connect(first)
+def create_game() -> Game:
+    """Erzeugt einen neuen Spielstand."""
 
-
-def create_game() -> "Game":
-    # Lokaler Import vermeidet einen zyklischen Modulimport.
     from .game import Game
 
     daisy = Character(
@@ -60,4 +58,3 @@ def create_game() -> "Game":
         role="Nahkampf-Spezialistin",
     )
     return Game(player=daisy, locations=create_world(), current_location="Zuhause")
-

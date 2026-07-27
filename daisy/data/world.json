@@ -1,0 +1,51 @@
+{
+  "locations": [
+    {
+      "name": "Zuhause",
+      "description": "Daisys Elternhaus. Eine Blutspur führt zur offenen Haustür.",
+      "connections": ["Grauholz"],
+      "items": ["Heilkraut"]
+    },
+    {
+      "name": "Grauholz",
+      "description": "Ein sonst friedliches Dorf. Heute sind die Straßen verdächtig still.",
+      "connections": ["Zuhause", "Dorfmarkt"]
+    },
+    {
+      "name": "Dorfmarkt",
+      "description": "Zwischen verlassenen Ständen liegt eine zerrissene Karte.",
+      "connections": ["Grauholz", "Finsterwald"],
+      "items": ["Karte des Finsterwalds"]
+    },
+    {
+      "name": "Finsterwald",
+      "description": "Dichte Zweige verschlucken das Tageslicht.",
+      "connections": ["Dorfmarkt", "Hundewacht"],
+      "enemy": {
+        "name": "Spinnen-Monster",
+        "health": 42,
+        "attack_power": 9,
+        "reward": "Silberner Schlüssel",
+        "experience_reward": 45
+      }
+    },
+    {
+      "name": "Hundewacht",
+      "description": "Die Stadtmauer trägt das Zeichen von Hubertus Snickers.",
+      "connections": ["Finsterwald", "Chihuahua-Höllenreich"],
+      "items": ["Heilkraut"]
+    },
+    {
+      "name": "Chihuahua-Höllenreich",
+      "description": "Hinter dem schwarzen Tor wartet Hubertus Snickers.",
+      "connections": ["Hundewacht"],
+      "enemy": {
+        "name": "Hubertus Snickers",
+        "health": 70,
+        "attack_power": 13,
+        "experience_reward": 100
+      }
+    }
+  ]
+}
+
