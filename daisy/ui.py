@@ -8,6 +8,7 @@ from tkinter import messagebox, ttk
 from typing import TYPE_CHECKING
 
 from .persistence import DEFAULT_SAVE_FILE, load_game, save_game
+from .story import StoryEngine
 from .world import create_game
 
 if TYPE_CHECKING:
@@ -140,10 +141,6 @@ class DaisyApp(tk.Tk):
     def start_new_game(self) -> None:
         self.game = create_game()
         self.show_game()
-        self.log(
-            "Hubertus' Gefolge hat Grauholz überfallen. Daisy folgt der Spur "
-            "und schwört, das Dorf zu befreien."
-        )
 
     def load_saved_game(self) -> None:
         try:
@@ -154,7 +151,8 @@ class DaisyApp(tk.Tk):
             )
             return
         self.show_game()
-        self.log("Willkommen zurück, Daisy. Dein Abenteuer geht weiter.")
+        if self.game.story.complete:
+            self.log("Willkommen zurück, Daisy. Dein Abenteuer geht weiter.")
 
     def show_game(self) -> None:
         if self.game is None:
@@ -263,7 +261,10 @@ class DaisyApp(tk.Tk):
         ).pack(fill="x", pady=4)
 
         self.refresh()
-        self.show_main_actions()
+        if self.game.story.complete:
+            self.show_main_actions()
+        else:
+            self.show_story_node()
 
     def refresh(self) -> None:
         if self.game is None:
@@ -275,7 +276,8 @@ class DaisyApp(tk.Tk):
                 f"Level {player.level}\n"
                 f"{player.health}/{player.max_health} LP\n"
                 f"{player.experience}/{player.experience_for_next_level} EP\n"
-                f"{sum(player.defeated_enemies.values())} Siege"
+                f"{sum(player.defeated_enemies.values())} Siege\n\n"
+                f"{self.game.story.chapter}"
             )
         )
         self.inventory_label.configure(
@@ -321,6 +323,37 @@ class DaisyApp(tk.Tk):
             ]
         )
 
+    def show_story_node(self) -> None:
+        if self.game is None or self.game.story.complete:
+            self.show_main_actions()
+            return
+        node = StoryEngine(self.game).current
+        self.log(node.title.upper())
+        for paragraph in node.text:
+            self.log(paragraph)
+        self.set_actions(
+            [
+                (
+                    choice.label,
+                    lambda choice_id=choice.id: self.choose_story(choice_id),
+                    "Daisy.TButton",
+                )
+                for choice in node.choices
+            ]
+        )
+
+    def choose_story(self, choice_id: str) -> None:
+        if self.game is None:
+            return
+        for message in StoryEngine(self.game).choose(choice_id):
+            self.log(message)
+        self.refresh()
+        if self.game.story.complete:
+            self.log("Die offene Welt ist nun verfügbar.")
+            self.show_main_actions()
+        else:
+            self.show_story_node()
+
     def explore(self) -> None:
         if self.game is None:
             return
@@ -332,6 +365,10 @@ class DaisyApp(tk.Tk):
         self.refresh()
         if location.enemy and location.enemy.is_alive:
             self.start_battle(location.enemy)
+            return
+        for message in self.game.update_location_quests():
+            self.log(message)
+        self.refresh()
 
     def show_travel_actions(self) -> None:
         if self.game is None:

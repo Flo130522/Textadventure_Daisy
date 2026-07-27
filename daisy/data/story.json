@@ -1,0 +1,215 @@
+{
+  "nodes": [
+    {
+      "id": "prologue_morning",
+      "title": "Der letzte friedliche Morgen",
+      "text": [
+        "Sonnenlicht fällt durch die kleinen Fenster von Daisys Zuhause. Aus der Küche duftet es nach warmem Frühstück. Ihr Vater sitzt mit seiner Zeitung im Wohnzimmer, während ihre Mutter leise eine Melodie summt.",
+        "Für Grauholz ist es ein Morgen wie jeder andere. Für Daisy wird es der letzte dieser Art sein."
+      ],
+      "choices": [
+        {
+          "id": "father",
+          "label": "Mit Papa sprechen",
+          "next_node": "morning_father",
+          "effects": {"flag": "spoke_with_father"}
+        },
+        {
+          "id": "mother",
+          "label": "Mama in der Küche helfen",
+          "next_node": "morning_mother",
+          "effects": {"flag": "helped_mother"}
+        },
+        {
+          "id": "breakfast",
+          "label": "Gemeinsam frühstücken",
+          "next_node": "collectors_arrive",
+          "effects": {"flag": "shared_breakfast"}
+        }
+      ]
+    },
+    {
+      "id": "morning_father",
+      "title": "Papas Zeitung",
+      "text": [
+        "Daisys Vater faltet die Zeitung zusammen und lächelt. „Guten Morgen, Kleine. Draußen wird viel geredet. Aber solange wir zusammenhalten, wird aus Gerede keine Angst.“",
+        "Er stupst Daisy sanft mit der Pfote an. „Und jetzt iss etwas, bevor deine Mutter behauptet, ich hätte dich vom Frühstück abgehalten.“"
+      ],
+      "choices": [
+        {
+          "id": "continue",
+          "label": "Zum Frühstück gehen",
+          "next_node": "collectors_arrive",
+          "effects": {"flag": "remember_fathers_words"}
+        }
+      ]
+    },
+    {
+      "id": "morning_mother",
+      "title": "Ein Platz am Tisch",
+      "text": [
+        "Daisys Mutter stellt eine Schüssel auf den Tisch. „Guten Morgen, Daisylein. Probier mal – und sag deinem Vater, dass eine Zeitung kein Frühstück ersetzt.“",
+        "Als Daisy ihr hilft, streicht ihre Mutter ihr über das struppige Fell. „Du musst nicht immer alles allein schaffen.“"
+      ],
+      "choices": [
+        {
+          "id": "continue",
+          "label": "Gemeinsam frühstücken",
+          "next_node": "collectors_arrive",
+          "effects": {"flag": "remember_mothers_words"}
+        }
+      ]
+    },
+    {
+      "id": "collectors_arrive",
+      "title": "Das Klopfen",
+      "text": [
+        "Drei harte Schläge lassen das Geschirr erzittern. Vor der Tür stehen Hunde in schwarzen Mänteln. Auf ihren Spangen glänzt das Zeichen von Hubertus Snickers.",
+        "Sie fordern das Schutzgeld für Grauholz. Daisys Vater erklärt, dass die Ernte schlecht war und sie nicht genug besitzen. Die Antwort ist ein kaltes Lachen.",
+        "Daisys Eltern drängen sie in die Vorratskammer. „Keinen Laut“, flüstert ihre Mutter."
+      ],
+      "choices": [
+        {
+          "id": "hide",
+          "label": "Im Versteck bleiben",
+          "next_node": "the_silence",
+          "effects": {"flag": "obeyed_parents"}
+        },
+        {
+          "id": "resist",
+          "label": "Zur Tür zurückwollen",
+          "next_node": "the_silence",
+          "effects": {"flag": "tried_to_resist"}
+        }
+      ]
+    },
+    {
+      "id": "the_silence",
+      "title": "Danach",
+      "text": [
+        "Durch die dünne Holzwand hört Daisy wütende Stimmen, einen umfallenden Stuhl und das Splittern von Glas. Ihr Vater ruft etwas, das sie nicht versteht. Dann folgt ein Geräusch, das sie nie vergessen wird.",
+        "Als die Haustür schließlich zufällt, bleibt nur Stille.",
+        "Daisy wartet. Eine Minute. Vielleicht eine Stunde. Als sie die Kammer verlässt, zieht sich eine dunkle Blutspur durch das zerstörte Wohnzimmer."
+      ],
+      "choices": [
+        {
+          "id": "follow_blood",
+          "label": "Der Blutspur folgen",
+          "next_node": "blood_trail",
+          "effects": {"flag": "followed_blood"}
+        },
+        {
+          "id": "leave_house",
+          "label": "Das Haus verlassen",
+          "next_node": "outside_home",
+          "effects": {"flag": "left_without_looking"}
+        }
+      ]
+    },
+    {
+      "id": "blood_trail",
+      "title": "Das schwarze Zeichen",
+      "text": [
+        "Daisy folgt der Spur nur wenige Schritte. Zwischen zerbrochenem Holz liegt eine schwarze Metallspange. Dasselbe Zeichen trugen die Fremden an der Tür.",
+        "Sie nimmt die Spange an sich. Mehr kann sie jetzt nicht ertragen. Draußen ruft jemand ihren Namen."
+      ],
+      "choices": [
+        {
+          "id": "take_sigil",
+          "label": "Die Spange nehmen und hinausgehen",
+          "next_node": "leika_arrives",
+          "effects": {
+            "add_item": "Schwarzes Abzeichen",
+            "flag": "found_collectors_sigil"
+          }
+        }
+      ]
+    },
+    {
+      "id": "outside_home",
+      "title": "Vor dem Haus",
+      "text": [
+        "Daisy stolpert ins Freie. Grauholz wirkt unverändert, und genau das macht alles noch schlimmer. Vögel singen, irgendwo schlägt eine Tür, während Daisys Welt aufgehört hat.",
+        "Hinter dem Gartenzaun taucht Leika auf. Sie ist außer Atem und hält etwas Schwarzes zwischen den Pfoten."
+      ],
+      "choices": [
+        {
+          "id": "meet_leika",
+          "label": "Zu Leika gehen",
+          "next_node": "leika_arrives",
+          "effects": {"flag": "met_leika_outside"}
+        }
+      ]
+    },
+    {
+      "id": "leika_arrives",
+      "title": "Nicht allein",
+      "text": [
+        "Leika hat die Fremden vom Nachbarhaus aus gesehen. Einer von ihnen verlor ein schwarzes Abzeichen, bevor die Gruppe in Richtung Dorfmarkt verschwand.",
+        "„Ich weiß, was sie getan haben“, sagt sie mit zitternder Stimme. „Und ich weiß, was du jetzt vorhast.“",
+        "Leika stellt sich neben Daisy. „Du gehst nicht allein.“"
+      ],
+      "choices": [
+        {
+          "id": "accept",
+          "label": "„Dann gehen wir zusammen.“",
+          "next_node": "ashes_of_grauholz",
+          "effects": {
+            "join_party": "Leika",
+            "friendship": {"character": "Leika", "points": 2},
+            "flag": "accepted_leika"
+          }
+        },
+        {
+          "id": "push_away",
+          "label": "„Das ist nicht dein Kampf.“",
+          "next_node": "leika_refuses",
+          "effects": {
+            "friendship": {"character": "Leika", "points": 1},
+            "flag": "pushed_leika_away"
+          }
+        }
+      ]
+    },
+    {
+      "id": "leika_refuses",
+      "title": "Leikas Entscheidung",
+      "text": [
+        "Leika schüttelt den Kopf. „Doch. Ich habe es gesehen und nichts getan. Ich lasse nicht auch noch zu, dass du verschwindest.“",
+        "Daisy erkennt denselben Schmerz in ihrer Freundin. Leika wird ihr folgen – ob Daisy darum bittet oder nicht."
+      ],
+      "choices": [
+        {
+          "id": "relent",
+          "label": "Leika mitnehmen",
+          "next_node": "ashes_of_grauholz",
+          "effects": {"join_party": "Leika"}
+        }
+      ]
+    },
+    {
+      "id": "ashes_of_grauholz",
+      "title": "Kapitel I – Asche über Grauholz",
+      "text": [
+        "Die Spur der Eintreiber führt zum Dorfmarkt. Dort könnten Händler oder Reisende wissen, wohin Hubertus' Leute verschwunden sind.",
+        "Daisy verlässt ihr Zuhause nicht als Heldin. Sie verlässt es als trauernde Tochter mit einer Freundin an ihrer Seite und einer ersten Spur in den Pfoten."
+      ],
+      "choices": [
+        {
+          "id": "begin",
+          "label": "Die Spur aufnehmen",
+          "next_node": "COMPLETE",
+          "effects": {
+            "chapter": "Kapitel I – Asche über Grauholz",
+            "start_quest": {
+              "id": "trace_collectors",
+              "title": "Die Spur der Eintreiber",
+              "description": "Untersuche den Dorfmarkt und finde heraus, wohin Hubertus' Leute geflohen sind.",
+              "target": 1
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
