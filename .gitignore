@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+.venv/
+venv/
+saved_game.json
+
+# Lokale Editor-Dateien
+.vs/
+.vscode/
+
