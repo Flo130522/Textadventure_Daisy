@@ -1,0 +1,10 @@
+[project]
+name = "textadventure-daisy"
+version = "0.1.0"
+description = "Das Abenteuer des Rache-Dackels"
+requires-python = ">=3.10"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
