@@ -55,6 +55,25 @@ class Game:
         variation = generator.randint(-2, 2)
         return self.player.take_damage(enemy.attack_power + variation)
 
+    def complete_victory(self, enemy: Enemy) -> list[str]:
+        """Verarbeitet Belohnungen und gibt passende Meldungen zurück."""
+
+        messages = [f"{enemy.name} wurde besiegt!"]
+        self.player.record_victory(enemy.name)
+        levels = self.player.gain_experience(enemy.experience_reward)
+        messages.append(f"Daisy erhält {enemy.experience_reward} EP.")
+        if levels:
+            messages.append(f"Levelaufstieg! Daisy ist jetzt Level {self.player.level}.")
+        if enemy.reward:
+            self.player.add_item(enemy.reward)
+            messages.append(f"Daisy erhält: {enemy.reward}")
+        if enemy.name == "Hubertus Snickers":
+            self.finished = True
+            messages.append(
+                "Hubertus ist geschlagen. Grauholz ist frei – und Daisy wird zur Heldin des Dorfes!"
+            )
+        return messages
+
     def run(self, input_fn: Input = input, output: Output = print) -> None:
         output("Das Abenteuer des Rache-Dackels")
         output("Daisy gegen Hubertus Snickers\n")
@@ -192,21 +211,8 @@ class Game:
 
         if enemy.is_alive:
             return
-        output(f"{enemy.name} wurde besiegt!")
-        self.player.record_victory(enemy.name)
-        levels = self.player.gain_experience(enemy.experience_reward)
-        output(f"Daisy erhält {enemy.experience_reward} EP.")
-        if levels:
-            output(f"Levelaufstieg! Daisy ist jetzt Level {self.player.level}.")
-        if enemy.reward:
-            self.player.add_item(enemy.reward)
-            output(f"Daisy erhält: {enemy.reward}")
-        if enemy.name == "Hubertus Snickers":
-            self.finished = True
-            output(
-                "\nHubertus ist geschlagen. Grauholz ist frei – "
-                "und Daisy wird zur Heldin des Dorfes!"
-            )
+        for message in self.complete_victory(enemy):
+            output(message)
 
 
 def main() -> None:

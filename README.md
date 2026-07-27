@@ -26,6 +26,14 @@ Weitere Pakete werden für das Spiel nicht benötigt.
 
 ## Spiel starten
 
+Grafische Desktop-Version:
+
+```bash
+python run_gui.py
+```
+
+Terminal-Version:
+
 ```bash
 python run_game.py
 ```
@@ -57,7 +65,9 @@ daisy/
   data/         Editierbare Welt- und Gegnerdaten
 tests/          Automatische Tests
 docs/           Präsentation und ursprüngliche Systemskizze
+assets/         Illustrationen und visuelle Spielinhalte
 run_game.py     Einfacher Einstiegspunkt
+run_gui.py      Grafische Desktop-Version
 ```
 
 ## Geplante Erweiterungen
