@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import random
+from collections import Counter
 from collections.abc import Callable
 from dataclasses import dataclass, field
 
@@ -30,13 +31,34 @@ class Game:
     def travel(self, destination: str) -> bool:
         if destination not in self.location.connections:
             return False
+        target = self.locations[destination]
+        if self.player.level < target.required_level:
+            return False
+        if not set(target.required_flags).issubset(self.story.flags):
+            return False
         self.current_location = destination
         return True
 
+    def travel_block_reason(self, destination: str) -> str | None:
+        if destination not in self.location.connections:
+            return "Dieses Ziel ist von hier aus nicht erreichbar."
+        target = self.locations[destination]
+        if self.player.level < target.required_level:
+            return f"Benötigtes Level: {target.required_level}"
+        missing = set(target.required_flags) - self.story.flags
+        if missing:
+            return "Der Weg ist noch verborgen."
+        return None
+
     def collect_items(self) -> list[str]:
-        found = list(self.location.items)
-        self.player.inventory.extend(found)
-        self.location.items.clear()
+        found: list[str] = []
+        remaining: list[str] = []
+        for item in self.location.items:
+            if self.player.add_item(item):
+                found.append(item)
+            else:
+                remaining.append(item)
+        self.location.items = remaining
         return found
 
     def attack(
@@ -47,20 +69,65 @@ class Game:
     ) -> int:
         generator = rng or random
         selected_attack = attack or self.player.attacks[0]
+        self._apply_player_status_tick()
         spread = 5 if selected_attack.name == "Sprung" else 3
         variation = generator.randint(-spread, spread)
-        damage = max(1, self.player.attack_power + selected_attack.power + variation)
-        return enemy.take_damage(damage)
+        damage = max(
+            1,
+            self.player.attack_power
+            + selected_attack.power
+            + variation
+            + self._team_attack_bonus(),
+        )
+        dealt = enemy.take_damage(damage)
+        if selected_attack.effect and generator.random() < selected_attack.effect_chance:
+            enemy.statuses[selected_attack.effect] = selected_attack.effect_duration
+        return dealt
 
     def enemy_attack(self, enemy: Enemy, rng: random.Random | None = None) -> int:
         generator = rng or random
+        if enemy.statuses.get("Lähmung", 0) > 0:
+            enemy.statuses["Lähmung"] -= 1
+            return 0
         variation = generator.randint(-2, 2)
-        return self.player.take_damage(enemy.attack_power + variation)
+        weakened = 4 if enemy.statuses.get("Geschwächt", 0) > 0 else 0
+        if weakened:
+            enemy.statuses["Geschwächt"] -= 1
+        damage = max(
+            1,
+            enemy.attack_power + variation - weakened - self._team_defense_bonus(),
+        )
+        dealt = self.player.take_damage(damage)
+        if enemy.status_effect and generator.random() < enemy.effect_chance:
+            self.player.statuses[enemy.status_effect] = enemy.effect_duration
+        return dealt
+
+    def _apply_player_status_tick(self) -> None:
+        if self.player.statuses.get("Vergiftung", 0) > 0:
+            self.player.take_damage(5)
+            self.player.statuses["Vergiftung"] -= 1
+
+    def _team_attack_bonus(self) -> int:
+        bonus = 0
+        if "Leika" in self.story.party:
+            bonus += 2 + self.story.friendship_level("Leika")
+        if "Leo" in self.story.party:
+            bonus += 2 + self.story.friendship_level("Leo")
+        return bonus
+
+    def _team_defense_bonus(self) -> int:
+        bonus = 0
+        if "Bruno" in self.story.party:
+            bonus += 2 + self.story.friendship_level("Bruno")
+        if "Jack" in self.story.party:
+            bonus += 1 + self.story.friendship_level("Jack")
+        return bonus
 
     def complete_victory(self, enemy: Enemy) -> list[str]:
         """Verarbeitet Belohnungen und gibt passende Meldungen zurück."""
 
         messages = [f"{enemy.name} wurde besiegt!"]
+        self.story.flags.add(f"defeated:{enemy.name}")
         self.player.record_victory(enemy.name)
         levels = self.player.gain_experience(enemy.experience_reward)
         messages.append(f"Daisy erhält {enemy.experience_reward} EP.")
@@ -69,11 +136,11 @@ class Game:
         if enemy.reward:
             self.player.add_item(enemy.reward)
             messages.append(f"Daisy erhält: {enemy.reward}")
-        if enemy.name == "Hubertus Snickers":
-            self.finished = True
-            messages.append(
-                "Hubertus ist geschlagen. Grauholz ist frei – und Daisy wird zur Heldin des Dorfes!"
-            )
+        if "Jack" in self.story.party and self.player.is_alive:
+            healing = 10 + self.story.friendship_level("Jack") * 5
+            healed = self.player.heal(healing)
+            if healed:
+                messages.append(f"Jack versorgt das Team und heilt Daisy um {healed} LP.")
         return messages
 
     def update_location_quests(self) -> list[str]:
@@ -90,7 +157,32 @@ class Game:
                         "und schwarzen Stoff. Die Eintreiber flohen in den Finsterwald.",
                     ]
                 )
+        if self.current_location == "Rettungs-Hundehütte":
+            quest = self.story.quests.get("gather_herbs_for_jack")
+            herb_count = self.player.inventory.count("Heilkraut")
+            if quest and not quest.completed and herb_count >= quest.target:
+                for _ in range(quest.target):
+                    self.player.inventory.remove("Heilkraut")
+                quest.advance(quest.target)
+                messages.extend(
+                    [
+                        f"Quest abgeschlossen: {quest.title}",
+                        "Jack kann genügend Medizin für die Verletzten herstellen.",
+                    ]
+                )
         return messages
+
+    def activate_story_for_location(self) -> bool:
+        return StoryEngine(self).activate_location_trigger()
+
+    def create_encounter(self, rng: random.Random | None = None) -> Enemy | None:
+        """Erzeugt eine zum Spielerlevel passende Begegnung am aktuellen Ort."""
+
+        if not self.location.encounters:
+            return None
+        generator = rng or random
+        template = generator.choice(self.location.encounters)
+        return template.create_enemy(self.player.level, generator)
 
     def run(self, input_fn: Input = input, output: Output = print) -> None:
         output("Das Abenteuer des Rache-Dackels")
@@ -102,7 +194,10 @@ class Game:
 
         while self.player.is_alive and not self.finished:
             self._show_location(output)
-            output("\n1. Erkunden  2. Reisen  3. Inventar  4. Status  5. Speichern  6. Beenden")
+            output(
+                "\n1. Erkunden  2. Reisen  3. Inventar  4. Status  "
+                "5. Speichern  6. Beenden  7. Dungeon"
+            )
             choice = input_fn("> ").strip()
 
             if choice == "1":
@@ -121,6 +216,8 @@ class Game:
             elif choice == "6":
                 output("Daisy setzt ihr Abenteuer später fort.")
                 return
+            elif choice == "7":
+                self._dungeon(input_fn, output)
             else:
                 output("Bitte wähle eine der angezeigten Nummern.")
 
@@ -180,6 +277,8 @@ class Game:
             self._battle(location.enemy, input_fn, output)
         for message in self.update_location_quests():
             output(message)
+        if self.activate_story_for_location():
+            self._run_story(input_fn, output)
 
     def _travel_menu(self, input_fn: Input, output: Output) -> None:
         connections = self.location.connections
@@ -189,13 +288,38 @@ class Game:
         if not choice.isdigit() or not 1 <= int(choice) <= len(connections):
             output("Dieses Reiseziel gibt es nicht.")
             return
-        self.travel(connections[int(choice) - 1])
+        destination = connections[int(choice) - 1]
+        reason = self.travel_block_reason(destination)
+        if reason:
+            output(reason)
+            return
+        self.travel(destination)
+        if self.activate_story_for_location():
+            self._run_story(input_fn, output)
+        elif self.location.encounters and random.random() < 0.25:
+            enemy = self.create_encounter()
+            if enemy:
+                output("Auf dem Weg lauert Daisy eine Gegnergruppe auf.")
+                self._battle(enemy, input_fn, output)
+
+    def _dungeon(self, input_fn: Input, output: Output) -> None:
+        enemy = self.create_encounter()
+        if enemy is None or not self.location.dungeon_name:
+            output("An diesem Ort gibt es keinen zugänglichen Dungeon.")
+            return
+        output(f"Daisy betritt: {self.location.dungeon_name}")
+        self._battle(enemy, input_fn, output)
 
     def _inventory_menu(self, input_fn: Input, output: Output) -> None:
         if not self.player.inventory:
             output("Daisys Inventar ist leer.")
             return
-        output("Inventar: " + ", ".join(self.player.inventory))
+        stacks = ", ".join(
+            f"{amount}× {item}" for item, amount in Counter(self.player.inventory).items()
+        )
+        output(
+            f"Inventar ({len(self.player.inventory)}/{self.player.inventory_capacity}): {stacks}"
+        )
         if (
             "Heilkraut" in self.player.inventory
             and self.player.health < self.player.max_health
@@ -251,6 +375,8 @@ class Game:
             return
         for message in self.complete_victory(enemy):
             output(message)
+        if self.activate_story_for_location():
+            self._run_story(input_fn, output)
 
 
 def main() -> None:

@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import random
 import tkinter as tk
+from collections import Counter
 from pathlib import Path
 from tkinter import messagebox, ttk
 from typing import TYPE_CHECKING
@@ -277,11 +279,17 @@ class DaisyApp(tk.Tk):
                 f"{player.health}/{player.max_health} LP\n"
                 f"{player.experience}/{player.experience_for_next_level} EP\n"
                 f"{sum(player.defeated_enemies.values())} Siege\n\n"
-                f"{self.game.story.chapter}"
+                f"{self.game.story.chapter}\n\n"
+                f"Team: {', '.join(self.game.story.party) or 'Daisy allein'}"
             )
         )
+        stacks = Counter(player.inventory)
+        inventory_text = "\n".join(f"• {amount}× {item}" for item, amount in stacks.items())
         self.inventory_label.configure(
-            text="\n".join(f"• {item}" for item in player.inventory) or "Noch leer"
+            text=(
+                f"{len(player.inventory)}/{player.inventory_capacity} Plätze\n"
+                f"{inventory_text or 'Noch leer'}"
+            )
         )
         self.health_canvas.delete("all")
         self.health_canvas.update_idletasks()
@@ -315,13 +323,18 @@ class DaisyApp(tk.Tk):
             ).pack(side="left", padx=(0, 8))
 
     def show_main_actions(self) -> None:
-        self.set_actions(
-            [
-                ("Erkunden", self.explore, "Daisy.TButton"),
-                ("Reisen", self.show_travel_actions, "Quiet.TButton"),
-                ("Heilkraut", self.heal, "Quiet.TButton"),
-            ]
-        )
+        actions = [
+            ("Erkunden", self.explore, "Daisy.TButton"),
+            ("Reisen", self.show_travel_actions, "Quiet.TButton"),
+            ("Heilkraut", self.heal, "Quiet.TButton"),
+        ]
+        if (
+            self.game is not None
+            and self.game.location.dungeon_name
+            and self.game.location.encounters
+        ):
+            actions.append(("Dungeon", self.enter_dungeon, "Danger.TButton"))
+        self.set_actions(actions)
 
     def show_story_node(self) -> None:
         if self.game is None or self.game.story.complete:
@@ -349,8 +362,10 @@ class DaisyApp(tk.Tk):
             self.log(message)
         self.refresh()
         if self.game.story.complete:
-            self.log("Die offene Welt ist nun verfügbar.")
-            self.show_main_actions()
+            if self.game.finished:
+                self.set_actions([("Zum Titel", self.show_title, "Daisy.TButton")])
+            else:
+                self.show_main_actions()
         else:
             self.show_story_node()
 
@@ -368,6 +383,9 @@ class DaisyApp(tk.Tk):
             return
         for message in self.game.update_location_quests():
             self.log(message)
+        if self.game.activate_story_for_location():
+            self.show_story_node()
+            return
         self.refresh()
 
     def show_travel_actions(self) -> None:
@@ -383,10 +401,34 @@ class DaisyApp(tk.Tk):
     def travel(self, destination: str) -> None:
         if self.game is None:
             return
+        reason = self.game.travel_block_reason(destination)
+        if reason:
+            self.log(reason)
+            self.show_main_actions()
+            return
         self.game.travel(destination)
         self.log(f"Daisy reist nach {destination}.")
         self.refresh()
-        self.show_main_actions()
+        if self.game.activate_story_for_location():
+            self.show_story_node()
+        elif self.game.location.encounters and random.random() < 0.25:
+            enemy = self.game.create_encounter()
+            if enemy:
+                self.log("Auf dem Weg lauert Daisy eine Gegnergruppe auf.")
+                self.start_battle(enemy)
+        else:
+            self.show_main_actions()
+
+    def enter_dungeon(self) -> None:
+        if self.game is None:
+            return
+        enemy = self.game.create_encounter()
+        if enemy is None or not self.game.location.dungeon_name:
+            self.log("An diesem Ort gibt es keinen zugänglichen Dungeon.")
+            self.show_main_actions()
+            return
+        self.log(f"Daisy betritt: {self.game.location.dungeon_name}")
+        self.start_battle(enemy)
 
     def heal(self) -> None:
         if self.game is None:
@@ -457,7 +499,9 @@ class DaisyApp(tk.Tk):
             self.log(message)
         self.enemy = None
         self.refresh()
-        if self.game.finished:
+        if self.game.activate_story_for_location():
+            self.show_story_node()
+        elif self.game.finished:
             self.set_actions([("Zum Titel", self.show_title, "Daisy.TButton")])
         else:
             self.show_main_actions()

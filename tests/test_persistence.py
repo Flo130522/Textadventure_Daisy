@@ -25,4 +25,6 @@ def test_save_and_load_round_trip(tmp_path):
     assert loaded.story.choices == {"prologue_morning": "father"}
     assert "spoke_with_father" in loaded.story.flags
     assert loaded.locations["Finsterwald"].enemy is not None
-    assert loaded.locations["Finsterwald"].enemy.name == "Spinnen-Monster"
+    assert loaded.locations["Finsterwald"].enemy.name == "Spinnenkönigin"
+    assert loaded.locations["Finsterwald"].dungeon_name == "Das Netzgewölbe"
+    assert loaded.locations["Finsterwald"].encounters[0].name == "Waldwolf"
