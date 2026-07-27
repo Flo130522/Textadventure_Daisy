@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from .game import Game
     from .models import Attack, Enemy
 
-ASSET_DIR = Path(__file__).parent.parent / "assets"
+ASSET_DIR = Path(__file__).parent / "assets"
 TITLE_IMAGE = ASSET_DIR / "daisy-title.png"
 
 COLORS = {

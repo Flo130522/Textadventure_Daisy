@@ -63,9 +63,9 @@ daisy/
   world.py      Laden und Validieren der Welt
   persistence.py  Speichern und Laden als JSON
   data/         Editierbare Welt- und Gegnerdaten
+  assets/       Illustrationen und visuelle Spielinhalte
 tests/          Automatische Tests
 docs/           Präsentation und ursprüngliche Systemskizze
-assets/         Illustrationen und visuelle Spielinhalte
 run_game.py     Einfacher Einstiegspunkt
 run_gui.py      Grafische Desktop-Version
 ```
