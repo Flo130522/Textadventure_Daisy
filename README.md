@@ -12,6 +12,8 @@ Der spielbare Kern enthält:
 - einen rundenbasierten Kampf mit mehreren Attacken,
 - Erfahrung, Level und Kampfstatistiken,
 - JSON-basierte Weltdaten und Spielstände,
+- einen datengetriebenen Prolog mit Entscheidungen,
+- Quests, Gruppenmitglieder und individuelle Freundschaftswerte,
 - eine Lebensanzeige für Bosskämpfe,
 - ein erreichbares Spielziel.
 
@@ -62,6 +64,7 @@ daisy/
   models.py     Figuren, Gegner und Orte
   world.py      Laden und Validieren der Welt
   persistence.py  Speichern und Laden als JSON
+  story.py      Storyknoten, Quests und Freundschaften
   data/         Editierbare Welt- und Gegnerdaten
   assets/       Illustrationen und visuelle Spielinhalte
 tests/          Automatische Tests

@@ -4,9 +4,10 @@ from __future__ import annotations
 
 import random
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from .models import Attack, Character, Enemy, Location
+from .story import StoryEngine, StoryState
 
 Input = Callable[[str], str]
 Output = Callable[[str], None]
@@ -20,6 +21,7 @@ class Game:
     locations: dict[str, Location]
     current_location: str
     finished: bool = False
+    story: StoryState = field(default_factory=StoryState)
 
     @property
     def location(self) -> Location:
@@ -74,13 +76,29 @@ class Game:
             )
         return messages
 
+    def update_location_quests(self) -> list[str]:
+        """Aktualisiert Storyquests für den gegenwärtigen Ort."""
+
+        messages: list[str] = []
+        if self.current_location == "Dorfmarkt":
+            quest = self.story.quests.get("trace_collectors")
+            if quest and quest.advance():
+                messages.extend(
+                    [
+                        f"Quest abgeschlossen: {quest.title}",
+                        "Zwischen den Marktständen entdeckt Daisy Schleifspuren "
+                        "und schwarzen Stoff. Die Eintreiber flohen in den Finsterwald.",
+                    ]
+                )
+        return messages
+
     def run(self, input_fn: Input = input, output: Output = print) -> None:
         output("Das Abenteuer des Rache-Dackels")
         output("Daisy gegen Hubertus Snickers\n")
-        output(
-            "Hubertus' Gefolge hat Grauholz überfallen. "
-            "Daisy folgt der Spur und schwört, ihn aufzuhalten."
-        )
+
+        if not self.story.complete:
+            self._run_story(input_fn, output)
+            output("\nDie offene Welt ist nun verfügbar.")
 
         while self.player.is_alive and not self.finished:
             self._show_location(output)
@@ -108,6 +126,24 @@ class Game:
 
         if not self.player.is_alive:
             output("\nDaisy wurde besiegt. Doch ein Rache-Dackel gibt niemals endgültig auf!")
+
+    def _run_story(self, input_fn: Input, output: Output) -> None:
+        engine = StoryEngine(self)
+        while not self.story.complete:
+            node = engine.current
+            output(f"\n=== {node.title} ===")
+            for paragraph in node.text:
+                output(paragraph)
+            for number, choice in enumerate(node.choices, start=1):
+                output(f"{number}. {choice.label}")
+
+            answer = input_fn("> ").strip()
+            if not answer.isdigit() or not 1 <= int(answer) <= len(node.choices):
+                output("Bitte wähle eine der angezeigten Nummern.")
+                continue
+            selected = node.choices[int(answer) - 1]
+            for message in engine.choose(selected.id):
+                output(message)
 
     def _show_location(self, output: Output) -> None:
         output(f"\n=== {self.location.name} ===")
@@ -142,6 +178,8 @@ class Game:
 
         if location.enemy and location.enemy.is_alive:
             self._battle(location.enemy, input_fn, output)
+        for message in self.update_location_quests():
+            output(message)
 
     def _travel_menu(self, input_fn: Input, output: Output) -> None:
         connections = self.location.connections

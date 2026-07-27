@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from .models import Attack, Character, Enemy, Location
+from .story import QuestState, StoryState
 
 if TYPE_CHECKING:
     from .game import Game
@@ -43,6 +44,7 @@ def load_game(path: Path = DEFAULT_SAVE_FILE) -> Game:
         locations=locations,
         current_location=data["current_location"],
         finished=data["finished"],
+        story=_story_from_dict(data.get("story")),
     )
 
 
@@ -92,4 +94,45 @@ def _game_to_dict(game: Game) -> dict[str, Any]:
         "locations": locations,
         "current_location": game.current_location,
         "finished": game.finished,
+        "story": _story_to_dict(game.story),
     }
+
+
+def _story_to_dict(story: StoryState) -> dict[str, Any]:
+    return {
+        "current_node": story.current_node,
+        "chapter": story.chapter,
+        "complete": story.complete,
+        "flags": sorted(story.flags),
+        "choices": story.choices,
+        "friendship": story.friendship,
+        "party": story.party,
+        "quests": {
+            quest_id: {
+                "title": quest.title,
+                "description": quest.description,
+                "status": quest.status,
+                "progress": quest.progress,
+                "target": quest.target,
+            }
+            for quest_id, quest in story.quests.items()
+        },
+    }
+
+
+def _story_from_dict(data: dict[str, Any] | None) -> StoryState:
+    if data is None:
+        # Alte Spielstände beginnen direkt in der bereits freigeschalteten Welt.
+        return StoryState(complete=True, chapter="Kapitel I – Asche über Grauholz")
+    return StoryState(
+        current_node=data["current_node"],
+        chapter=data["chapter"],
+        complete=data["complete"],
+        flags=set(data.get("flags", [])),
+        choices=dict(data.get("choices", {})),
+        friendship=dict(data.get("friendship", {})),
+        party=list(data.get("party", [])),
+        quests={
+            quest_id: QuestState(**quest) for quest_id, quest in data.get("quests", {}).items()
+        },
+    )
