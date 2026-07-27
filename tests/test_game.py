@@ -69,3 +69,21 @@ def test_health_bar_reflects_enemy_health():
     enemy = Enemy("Boss", health=50, max_health=100, attack_power=1)
 
     assert game._health_bar(enemy, width=10) == "[#####-----] 50/100"
+
+
+def test_victory_rewards_are_shared_by_all_interfaces():
+    game = create_game()
+    enemy = Enemy(
+        "Testgegner",
+        health=0,
+        attack_power=1,
+        reward="Testschlüssel",
+        experience_reward=40,
+    )
+
+    messages = game.complete_victory(enemy)
+
+    assert game.player.experience == 40
+    assert game.player.inventory == ["Testschlüssel"]
+    assert game.player.defeated_enemies == {"Testgegner": 1}
+    assert any("40 EP" in message for message in messages)

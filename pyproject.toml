@@ -7,6 +7,15 @@ requires-python = ">=3.10"
 [project.optional-dependencies]
 dev = ["pytest>=8", "ruff>=0.16"]
 
+[project.gui-scripts]
+daisy-gui = "daisy.ui:main"
+
+[tool.setuptools.packages.find]
+include = ["daisy*"]
+
+[tool.setuptools.package-data]
+daisy = ["assets/*.png", "data/*.json"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
