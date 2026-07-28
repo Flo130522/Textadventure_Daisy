@@ -194,3 +194,37 @@ def test_dungeon_encounter_carries_location_loot():
 
     assert enemy is not None
     assert enemy.reward in game.location.dungeon_loot
+
+
+def test_encounter_group_size_follows_party_size():
+    solo_game = create_game()
+    solo_game.current_location = "Finsterwald"
+    assert len(solo_game.create_encounter_group(random.Random(0))) == 1
+
+    duo_game = create_game()
+    duo_game.current_location = "Finsterwald"
+    duo_game.story.party = ["Leika"]
+    assert len(duo_game.create_encounter_group(random.Random(0))) == 2
+
+    full_game = create_game()
+    full_game.current_location = "Finsterwald"
+    full_game.story.party = ["Leika", "Bruno", "Jack"]
+    assert len(full_game.create_encounter_group(random.Random(0))) == 4
+
+
+def test_group_battle_rewards_every_defeated_enemy():
+    game = create_game()
+    game.story.complete = True
+    enemies = [
+        Enemy("Ratte A", health=1, attack_power=0, experience_reward=10),
+        Enemy("Ratte B", health=1, attack_power=0, experience_reward=15),
+    ]
+    answers = iter(["1", "1", "1", "1", "1"])
+    messages: list[str] = []
+
+    game._battle_group(enemies, lambda _prompt: next(answers), messages.append)
+
+    assert game.player.experience == 25
+    assert game.player.defeated_enemies == {"Ratte A": 1, "Ratte B": 1}
+    assert any("Ratte A wurde besiegt" in message for message in messages)
+    assert any("Ratte B wurde besiegt" in message for message in messages)

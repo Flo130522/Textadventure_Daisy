@@ -16,6 +16,7 @@ Der spielbare Kern enthält:
 - einen rundenbasierten Kampf mit Lähmung, Schwächung und Vergiftung,
 - Erfahrung, Level und Kampfstatistiken,
 - skalierende Zufallsbegegnungen und neun wiederholbare Dungeons mit Beute,
+- Gegnergruppen, deren Größe mit Daisys eigenem Team von eins bis vier wächst,
 - sichere Baumhäuser zum Rasten, Speichern und Ausmisten des Inventars,
 - JSON-basierte Weltdaten und Spielstände,
 - eine vollständig datengetriebene Geschichte mit Entscheidungen,
