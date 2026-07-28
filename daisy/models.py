@@ -184,6 +184,8 @@ class Location:
     required_flags: list[str] = field(default_factory=list)
     encounters: list[EncounterTemplate] = field(default_factory=list)
     dungeon_name: str | None = None
+    dungeon_loot: list[str] = field(default_factory=list)
+    safe_haven: bool = False
 
     def connect(self, *location_names: str) -> None:
         for name in location_names:

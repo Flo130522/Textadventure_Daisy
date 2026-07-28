@@ -44,6 +44,8 @@ def create_world(path: Path = WORLD_FILE) -> dict[str, Location]:
             required_flags=list(location_data.get("required_flags", [])),
             encounters=encounters,
             dungeon_name=location_data.get("dungeon_name"),
+            dungeon_loot=list(location_data.get("dungeon_loot", [])),
+            safe_haven=location_data.get("safe_haven", False),
         )
         world[location.name] = location
 

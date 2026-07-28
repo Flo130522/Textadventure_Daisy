@@ -28,3 +28,9 @@ def test_save_and_load_round_trip(tmp_path):
     assert loaded.locations["Finsterwald"].enemy.name == "Spinnenkönigin"
     assert loaded.locations["Finsterwald"].dungeon_name == "Das Netzgewölbe"
     assert loaded.locations["Finsterwald"].encounters[0].name == "Waldwolf"
+    assert loaded.locations["Finsterwald"].dungeon_loot == [
+        "Spinnenseide",
+        "Heilkraut",
+        "Leuchtpilz",
+    ]
+    assert loaded.locations["Dorfbaumhaus"].safe_haven

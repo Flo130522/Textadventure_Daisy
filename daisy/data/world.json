@@ -9,7 +9,13 @@
     {
       "name": "Grauholz",
       "description": "Das eingeschüchterte Dorf versucht, nach dem Überfall wieder auf die Pfoten zu kommen.",
-      "connections": ["Zuhause", "Dorfmarkt"]
+      "connections": ["Zuhause", "Dorfmarkt", "Dorfbaumhaus"],
+      "dungeon_name": "Die verschütteten Keller",
+      "dungeon_loot": ["Alte Münze", "Heilkraut", "Verbandszeug"],
+      "encounters": [
+        {"name": "Keller-Ratte", "base_health": 18, "base_attack": 3, "base_experience": 12},
+        {"name": "Plünderer", "base_health": 26, "base_attack": 5, "base_experience": 18}
+      ]
     },
     {
       "name": "Dorfmarkt",
@@ -20,8 +26,9 @@
     {
       "name": "Finsterwald",
       "description": "Dichte Zweige verschlucken das Tageslicht. Zwischen den Bäumen lauert ein großes Spinnennest.",
-      "connections": ["Dorfmarkt", "Hundewacht", "Magierturm"],
+      "connections": ["Dorfmarkt", "Hundewacht", "Magierturm", "Kristallhöhle", "Waldbaumhaus"],
       "dungeon_name": "Das Netzgewölbe",
+      "dungeon_loot": ["Spinnenseide", "Heilkraut", "Leuchtpilz"],
       "encounters": [
         {"name": "Waldwolf", "base_health": 28, "base_attack": 5, "base_experience": 18},
         {"name": "Riesenspinne", "base_health": 24, "base_attack": 5, "base_experience": 20, "status_effect": "Vergiftung", "effect_chance": 0.15, "effect_duration": 2}
@@ -47,7 +54,7 @@
     {
       "name": "Hundewacht",
       "description": "Hinter der glänzenden Stadtmauer verbergen sich Kerker, Schuldner und Hubertus' Informanten.",
-      "connections": ["Finsterwald", "Rettungs-Hundehütte", "Water-City"],
+      "connections": ["Finsterwald", "Rettungs-Hundehütte", "Heilkräuterhöhle", "Water-City"],
       "items": ["Heilkraut"]
     },
     {
@@ -61,6 +68,7 @@
       "connections": ["Hundewacht", "Bootswacht"],
       "required_flags": ["leo_joined"],
       "dungeon_name": "Die versunkenen Kanäle",
+      "dungeon_loot": ["Heilwasser", "Perle", "Heilkraut"],
       "encounters": [
         {"name": "Sumpfschnecke", "base_health": 40, "base_attack": 6, "base_experience": 25, "status_effect": "Vergiftung", "effect_chance": 0.1, "effect_duration": 2},
         {"name": "See-Wächter", "base_health": 38, "base_attack": 8, "base_experience": 28}
@@ -79,6 +87,7 @@
       "connections": ["Water-City", "Wolkenstadt"],
       "required_flags": ["water_sign"],
       "dungeon_name": "Die Ogerstollen",
+      "dungeon_loot": ["Eisenerz", "Ogerzahn", "Heilkraut"],
       "encounters": [
         {"name": "Goblin-Plünderer", "base_health": 42, "base_attack": 8, "base_experience": 30},
         {"name": "Oger-Schmied", "base_health": 58, "base_attack": 9, "base_experience": 36}
@@ -94,9 +103,10 @@
     {
       "name": "Wolkenstadt",
       "description": "Von der Stadt über den Wolken überwachen Dämonenhunde jeden Handelsweg.",
-      "connections": ["Bootswacht", "Säuresumpf"],
+      "connections": ["Bootswacht", "Säuresumpf", "Wolkenbaumhaus"],
       "required_flags": ["earth_sign"],
       "dungeon_name": "Der Sturmhorst",
+      "dungeon_loot": ["Sturmfeder", "Wolkenkristall", "Heilkraut"],
       "encounters": [
         {"name": "Dämonenhund-Späher", "base_health": 52, "base_attack": 10, "base_experience": 40},
         {"name": "Wolkenjäger", "base_health": 46, "base_attack": 11, "base_experience": 42}
@@ -112,9 +122,10 @@
     {
       "name": "Säuresumpf",
       "description": "Giftige Nebel liegen über dem letzten Weg zum Chihuahua-Höllenreich.",
-      "connections": ["Wolkenstadt", "Schlosstor"],
+      "connections": ["Wolkenstadt", "Feuerreich"],
       "required_flags": ["sky_sign"],
       "dungeon_name": "Die Säurekatakomben",
+      "dungeon_loot": ["Säuredrüse", "Schwarzes Salz", "Heilkraut"],
       "encounters": [
         {"name": "Sumpfschnecke", "base_health": 58, "base_attack": 11, "base_experience": 46, "status_effect": "Vergiftung", "effect_chance": 0.2, "effect_duration": 2},
         {"name": "Kaltklingen-Schatten", "base_health": 55, "base_attack": 13, "base_experience": 50}
@@ -131,10 +142,74 @@
       }
     },
     {
+      "name": "Dorfbaumhaus",
+      "description": "Ein geschützter Rückzugsort in den alten Ästen über Grauholz. Hier kann Daisy sicher schlafen und Vorräte ordnen.",
+      "connections": ["Grauholz"],
+      "safe_haven": true
+    },
+    {
+      "name": "Waldbaumhaus",
+      "description": "Brunos getarnter Hochsitz wacht über den Finsterwald. Eine weiche Moosnische bietet dem Team Ruhe.",
+      "connections": ["Finsterwald"],
+      "required_flags": ["bruno_joined"],
+      "safe_haven": true
+    },
+    {
+      "name": "Wolkenbaumhaus",
+      "description": "Ein windgeschütztes Nest zwischen den höchsten Baumkronen des Himmelreichs.",
+      "connections": ["Wolkenstadt"],
+      "safe_haven": true
+    },
+    {
+      "name": "Kristallhöhle",
+      "description": "In der glitzernden Höhle sucht Bruno nach seltenen Leuchtpilzen und Spuren verschwundener Waldtiere.",
+      "connections": ["Finsterwald"],
+      "required_flags": ["bruno_joined"],
+      "items": ["Leuchtpilz", "Kristallsplitter"],
+      "dungeon_name": "Der tiefe Kristallgang",
+      "dungeon_loot": ["Leuchtpilz", "Kristallsplitter", "Heilkraut"],
+      "encounters": [
+        {"name": "Höhlenspinne", "base_health": 30, "base_attack": 6, "base_experience": 24, "status_effect": "Vergiftung", "effect_chance": 0.15, "effect_duration": 2},
+        {"name": "Kristallkäfer", "base_health": 38, "base_attack": 5, "base_experience": 27}
+      ]
+    },
+    {
+      "name": "Heilkräuterhöhle",
+      "description": "Jack kennt zwischen den feuchten Felsen jeden heilenden Pilz und jedes seltene Kraut.",
+      "connections": ["Hundewacht", "Rettungs-Hundehütte"],
+      "required_flags": ["met_jack"],
+      "items": ["Heilkraut", "Heilkraut", "Verbandszeug"],
+      "dungeon_name": "Die unterirdische Quelle",
+      "dungeon_loot": ["Heilkraut", "Heilpilz", "Verbandszeug"],
+      "encounters": [
+        {"name": "Höhlenmolch", "base_health": 32, "base_attack": 6, "base_experience": 25},
+        {"name": "Giftkröte", "base_health": 34, "base_attack": 7, "base_experience": 28, "status_effect": "Vergiftung", "effect_chance": 0.2, "effect_duration": 2}
+      ]
+    },
+    {
+      "name": "Feuerreich",
+      "description": "Schwarze Lavaadern ziehen sich durch Hubertus' verbranntes Kernland. Hinter der Höllenwache liegt das Schlosstor.",
+      "connections": ["Säuresumpf", "Schlosstor"],
+      "required_flags": ["defeated:Kaltklinge"],
+      "dungeon_name": "Die Glutminen",
+      "dungeon_loot": ["Glutstein", "Feuerblume", "Heilkraut"],
+      "encounters": [
+        {"name": "Glut-Chihuahua", "base_health": 62, "base_attack": 13, "base_experience": 52},
+        {"name": "Lavamolch", "base_health": 70, "base_attack": 12, "base_experience": 55}
+      ],
+      "enemy": {
+        "name": "Höllenwache",
+        "health": 190,
+        "attack_power": 20,
+        "reward": "Feuersiegel",
+        "experience_reward": 275
+      }
+    },
+    {
       "name": "Schlosstor",
       "description": "Vor dem schwarzen Schloss wacht der gefesselte Beschützerdrache Willy.",
-      "connections": ["Säuresumpf", "Thronsaal"],
-      "required_flags": ["defeated:Kaltklinge"],
+      "connections": ["Feuerreich", "Thronsaal"],
+      "required_flags": ["defeated:Höllenwache"],
       "enemy": {
         "name": "Willy",
         "health": 220,

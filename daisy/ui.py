@@ -334,6 +334,13 @@ class DaisyApp(tk.Tk):
             and self.game.location.encounters
         ):
             actions.append(("Dungeon", self.enter_dungeon, "Danger.TButton"))
+        if self.game is not None and self.game.location.safe_haven:
+            actions.extend(
+                [
+                    ("Rasten & speichern", self.rest, "Quiet.TButton"),
+                    ("Inventar ausmisten", self.show_discard_actions, "Quiet.TButton"),
+                ]
+            )
         self.set_actions(actions)
 
     def show_story_node(self) -> None:
@@ -422,13 +429,52 @@ class DaisyApp(tk.Tk):
     def enter_dungeon(self) -> None:
         if self.game is None:
             return
-        enemy = self.game.create_encounter()
+        enemy = self.game.create_encounter(dungeon=True)
         if enemy is None or not self.game.location.dungeon_name:
             self.log("An diesem Ort gibt es keinen zugänglichen Dungeon.")
             self.show_main_actions()
             return
         self.log(f"Daisy betritt: {self.game.location.dungeon_name}")
         self.start_battle(enemy)
+
+    def rest(self) -> None:
+        if self.game is None:
+            return
+        healed = self.game.rest()
+        if healed is None:
+            self.log("Daisy kann hier nicht sicher rasten.")
+            return
+        save_game(self.game)
+        self.log(f"Daisy ruht sich aus, heilt {healed} LP und speichert das Abenteuer.")
+        self.refresh()
+
+    def show_discard_actions(self) -> None:
+        if self.game is None or not self.game.location.safe_haven:
+            self.show_main_actions()
+            return
+        stacks = list(Counter(self.game.player.inventory))
+        if not stacks:
+            self.log("Daisys Inventar ist leer.")
+            self.show_main_actions()
+            return
+        actions = [
+            (
+                f"{item} ({self.game.player.inventory.count(item)}×)",
+                lambda selected=item: self.discard_stack(selected),
+                "Danger.TButton",
+            )
+            for item in stacks
+        ]
+        actions.append(("Zurück", self.show_main_actions, "Quiet.TButton"))
+        self.set_actions(actions)
+
+    def discard_stack(self, item: str) -> None:
+        if self.game is None:
+            return
+        amount = self.game.discard_inventory_stack(item)
+        self.log(f"{amount}× {item} zurückgelassen.")
+        self.refresh()
+        self.show_discard_actions()
 
     def heal(self) -> None:
         if self.game is None:
