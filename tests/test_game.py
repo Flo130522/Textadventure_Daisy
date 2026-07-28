@@ -13,6 +13,7 @@ def test_world_has_a_route_to_the_final_location():
             "earth_sign",
             "sky_sign",
             "defeated:Kaltklinge",
+            "defeated:Höllenwache",
             "willy_resolved",
         }
     )
@@ -26,6 +27,7 @@ def test_world_has_a_route_to_the_final_location():
         "Bootswacht",
         "Wolkenstadt",
         "Säuresumpf",
+        "Feuerreich",
         "Schlosstor",
         "Thronsaal",
     ]
@@ -157,3 +159,38 @@ def test_inventory_capacity_grows_with_level():
 
     game.player.level += 1
     assert game.player.add_item("Passt nach Levelaufstieg")
+
+
+def test_treehouse_restores_health_clears_status_and_discards_stacks():
+    game = create_game()
+    game.current_location = "Dorfbaumhaus"
+    game.player.take_damage(45)
+    game.player.statuses["Vergiftung"] = 2
+    game.player.inventory = ["Heilkraut", "Stein", "Heilkraut"]
+
+    assert game.rest() == 45
+    assert game.player.health == game.player.max_health
+    assert game.player.statuses == {}
+    assert game.discard_inventory_stack("Heilkraut") == 2
+    assert game.player.inventory == ["Stein"]
+
+
+def test_rest_and_discard_require_a_safe_haven():
+    game = create_game()
+    game.player.take_damage(10)
+    game.player.inventory = ["Stein"]
+
+    assert game.rest() is None
+    assert game.discard_inventory_stack("Stein") == 0
+    assert game.player.health == 90
+    assert game.player.inventory == ["Stein"]
+
+
+def test_dungeon_encounter_carries_location_loot():
+    game = create_game()
+    game.current_location = "Finsterwald"
+
+    enemy = game.create_encounter(random.Random(3), dungeon=True)
+
+    assert enemy is not None
+    assert enemy.reward in game.location.dungeon_loot

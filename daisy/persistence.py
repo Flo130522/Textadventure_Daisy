@@ -114,6 +114,8 @@ def _game_to_dict(game: Game) -> dict[str, Any]:
                 for encounter in location.encounters
             ],
             "dungeon_name": location.dungeon_name,
+            "dungeon_loot": location.dungeon_loot,
+            "safe_haven": location.safe_haven,
         }
     return {
         "player": player,

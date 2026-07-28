@@ -175,14 +175,42 @@ class Game:
     def activate_story_for_location(self) -> bool:
         return StoryEngine(self).activate_location_trigger()
 
-    def create_encounter(self, rng: random.Random | None = None) -> Enemy | None:
+    def create_encounter(
+        self,
+        rng: random.Random | None = None,
+        *,
+        dungeon: bool = False,
+    ) -> Enemy | None:
         """Erzeugt eine zum Spielerlevel passende Begegnung am aktuellen Ort."""
 
         if not self.location.encounters:
             return None
         generator = rng or random
         template = generator.choice(self.location.encounters)
-        return template.create_enemy(self.player.level, generator)
+        enemy = template.create_enemy(self.player.level, generator)
+        if dungeon and self.location.dungeon_loot:
+            enemy.reward = generator.choice(self.location.dungeon_loot)
+        return enemy
+
+    def rest(self) -> int | None:
+        """Heilt Daisy an einem sicheren Rastplatz vollständig."""
+
+        if not self.location.safe_haven:
+            return None
+        healed = self.player.heal(self.player.max_health)
+        self.player.statuses.clear()
+        return healed
+
+    def discard_inventory_stack(self, item: str) -> int:
+        """Entfernt einen vollständigen Gegenstandsstapel."""
+
+        if not self.location.safe_haven:
+            return 0
+        amount = self.player.inventory.count(item)
+        self.player.inventory = [
+            inventory_item for inventory_item in self.player.inventory if inventory_item != item
+        ]
+        return amount
 
     def run(self, input_fn: Input = input, output: Output = print) -> None:
         output("Das Abenteuer des Rache-Dackels")
@@ -196,7 +224,7 @@ class Game:
             self._show_location(output)
             output(
                 "\n1. Erkunden  2. Reisen  3. Inventar  4. Status  "
-                "5. Speichern  6. Beenden  7. Dungeon"
+                "5. Speichern  6. Beenden  7. Dungeon  8. Rasten  9. Ausmisten"
             )
             choice = input_fn("> ").strip()
 
@@ -218,6 +246,10 @@ class Game:
                 return
             elif choice == "7":
                 self._dungeon(input_fn, output)
+            elif choice == "8":
+                self._rest(output)
+            elif choice == "9":
+                self._discard_menu(input_fn, output)
             else:
                 output("Bitte wähle eine der angezeigten Nummern.")
 
@@ -303,12 +335,40 @@ class Game:
                 self._battle(enemy, input_fn, output)
 
     def _dungeon(self, input_fn: Input, output: Output) -> None:
-        enemy = self.create_encounter()
+        enemy = self.create_encounter(dungeon=True)
         if enemy is None or not self.location.dungeon_name:
             output("An diesem Ort gibt es keinen zugänglichen Dungeon.")
             return
         output(f"Daisy betritt: {self.location.dungeon_name}")
         self._battle(enemy, input_fn, output)
+
+    def _rest(self, output: Output) -> None:
+        healed = self.rest()
+        if healed is None:
+            output("Daisy kann nur in einem sicheren Baumhaus rasten.")
+            return
+        from .persistence import save_game
+
+        save_game(self)
+        output(f"Daisy ruht sich aus, heilt {healed} LP und speichert das Abenteuer.")
+
+    def _discard_menu(self, input_fn: Input, output: Output) -> None:
+        if not self.location.safe_haven:
+            output("Das Inventar lässt sich nur an einem sicheren Baumhaus ausmisten.")
+            return
+        stacks = list(Counter(self.player.inventory))
+        if not stacks:
+            output("Daisys Inventar ist leer.")
+            return
+        for number, item in enumerate(stacks, start=1):
+            output(f"{number}. {item} ({self.player.inventory.count(item)}×)")
+        choice = input_fn("Welchen Stapel zurücklassen? ").strip()
+        if not choice.isdigit() or not 1 <= int(choice) <= len(stacks):
+            output("Dieser Stapel existiert nicht.")
+            return
+        item = stacks[int(choice) - 1]
+        amount = self.discard_inventory_stack(item)
+        output(f"{amount}× {item} zurückgelassen.")
 
     def _inventory_menu(self, input_fn: Input, output: Output) -> None:
         if not self.player.inventory:

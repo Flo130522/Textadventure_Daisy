@@ -20,10 +20,18 @@ def test_world_is_loaded_from_json():
         "Bootswacht",
         "Wolkenstadt",
         "Säuresumpf",
+        "Dorfbaumhaus",
+        "Waldbaumhaus",
+        "Wolkenbaumhaus",
+        "Kristallhöhle",
+        "Heilkräuterhöhle",
+        "Feuerreich",
         "Schlosstor",
         "Thronsaal",
     }
     assert world["Finsterwald"].enemy is not None
+    assert world["Dorfbaumhaus"].safe_haven
+    assert world["Feuerreich"].enemy is not None
 
 
 def test_unknown_connection_is_rejected(tmp_path):

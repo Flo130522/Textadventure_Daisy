@@ -155,6 +155,10 @@ def test_complete_campaign_reaches_justice_ending():
         play_prologue(game, [choice])
         assert flag in game.story.flags
 
+    assert game.travel("Feuerreich")
+    fire_guard = game.location.enemy
+    win_battle(game, fire_guard)
+
     assert game.travel("Schlosstor")
     assert game.activate_story_for_location()
     play_prologue(game, ["free"])
