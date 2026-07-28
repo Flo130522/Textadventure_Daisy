@@ -43,7 +43,7 @@ class DaisyApp(tk.Tk):
         self.minsize(980, 680)
         self.configure(bg=COLORS["background"])
         self.game: Game | None = None
-        self.enemy: Enemy | None = None
+        self.enemies: list[Enemy] = []
         self.title_image: tk.PhotoImage | None = None
         self._configure_styles()
         self.show_title()
@@ -160,7 +160,7 @@ class DaisyApp(tk.Tk):
         if self.game is None:
             return
         self.clear()
-        self.enemy = None
+        self.enemies = []
 
         header = tk.Frame(self, bg=COLORS["background"], padx=24, pady=18)
         header.pack(fill="x")
@@ -419,23 +419,23 @@ class DaisyApp(tk.Tk):
         if self.game.activate_story_for_location():
             self.show_story_node()
         elif self.game.location.encounters and random.random() < 0.25:
-            enemy = self.game.create_encounter()
-            if enemy:
+            enemies = self.game.create_encounter_group()
+            if enemies:
                 self.log("Auf dem Weg lauert Daisy eine Gegnergruppe auf.")
-                self.start_battle(enemy)
+                self.start_battle(enemies)
         else:
             self.show_main_actions()
 
     def enter_dungeon(self) -> None:
         if self.game is None:
             return
-        enemy = self.game.create_encounter(dungeon=True)
-        if enemy is None or not self.game.location.dungeon_name:
+        enemies = self.game.create_encounter_group(dungeon=True)
+        if not enemies or not self.game.location.dungeon_name:
             self.log("An diesem Ort gibt es keinen zugänglichen Dungeon.")
             self.show_main_actions()
             return
         self.log(f"Daisy betritt: {self.game.location.dungeon_name}")
-        self.start_battle(enemy)
+        self.start_battle(enemies)
 
     def rest(self) -> None:
         if self.game is None:
@@ -489,16 +489,21 @@ class DaisyApp(tk.Tk):
         save_game(self.game)
         self.log("Spielstand gespeichert.")
 
-    def start_battle(self, enemy: Enemy) -> None:
-        self.enemy = enemy
-        self.log(f"{enemy.name} greift an!")
+    def start_battle(self, enemies: Enemy | list[Enemy]) -> None:
+        self.enemies = enemies if isinstance(enemies, list) else [enemies]
+        names = ", ".join(enemy.name for enemy in self.enemies)
+        self.log(f"{len(self.enemies)} Gegner greifen an: {names}")
         self.show_attack_actions()
 
     def show_attack_actions(self) -> None:
         if self.game is None:
             return
         actions = [
-            (attack.name, lambda selected=attack: self.perform_attack(selected), "Daisy.TButton")
+            (
+                attack.name,
+                lambda selected=attack: self.show_target_actions(selected),
+                "Daisy.TButton",
+            )
             for attack in self.game.player.attacks
         ]
         actions.extend(
@@ -509,12 +514,31 @@ class DaisyApp(tk.Tk):
         )
         self.set_actions(actions)
 
-    def perform_attack(self, attack: Attack) -> None:
-        if self.game is None or self.enemy is None:
+    def show_target_actions(self, attack: Attack) -> None:
+        if len(self.enemies) == 1:
+            self.perform_attack(attack, self.enemies[0])
             return
-        damage = self.game.attack(self.enemy, attack=attack)
-        self.log(f"{attack.name}: {damage} Schaden.")
-        if not self.enemy.is_alive:
+        actions = [
+            (
+                f"{enemy.name} ({enemy.health}/{enemy.max_health} LP)",
+                lambda target=enemy: self.perform_attack(attack, target),
+                "Danger.TButton",
+            )
+            for enemy in self.enemies
+        ]
+        actions.append(("Zurück", self.show_attack_actions, "Quiet.TButton"))
+        self.set_actions(actions)
+
+    def perform_attack(self, attack: Attack, enemy: Enemy) -> None:
+        if self.game is None or enemy not in self.enemies:
+            return
+        damage = self.game.attack(enemy, attack=attack)
+        self.log(f"{attack.name} gegen {enemy.name}: {damage} Schaden.")
+        if not enemy.is_alive:
+            for message in self.game.complete_victory(enemy):
+                self.log(message)
+            self.enemies.remove(enemy)
+        if not self.enemies:
             self.finish_battle()
             return
         self.enemy_turn()
@@ -529,21 +553,22 @@ class DaisyApp(tk.Tk):
         self.refresh()
 
     def enemy_turn(self) -> None:
-        if self.game is None or self.enemy is None:
+        if self.game is None or not self.enemies:
             return
-        damage = self.game.enemy_attack(self.enemy)
-        self.log(f"{self.enemy.name} verursacht {damage} Schaden.")
+        for enemy in self.enemies:
+            damage = self.game.enemy_attack(enemy)
+            self.log(f"{enemy.name} verursacht {damage} Schaden.")
+            if not self.game.player.is_alive:
+                break
         self.refresh()
         if not self.game.player.is_alive:
             self.set_actions([("Neues Spiel", self.start_new_game, "Danger.TButton")])
             self.log("Daisy wurde besiegt. Das Abenteuer ist noch nicht vorbei.")
 
     def finish_battle(self) -> None:
-        if self.game is None or self.enemy is None:
+        if self.game is None:
             return
-        for message in self.game.complete_victory(self.enemy):
-            self.log(message)
-        self.enemy = None
+        self.enemies = []
         self.refresh()
         if self.game.activate_story_for_location():
             self.show_story_node()
@@ -554,7 +579,7 @@ class DaisyApp(tk.Tk):
 
     def flee(self) -> None:
         self.log("Daisy zieht sich zurück.")
-        self.enemy = None
+        self.enemies = []
         self.show_main_actions()
 
 

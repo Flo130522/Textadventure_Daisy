@@ -192,6 +192,25 @@ class Game:
             enemy.reward = generator.choice(self.location.dungeon_loot)
         return enemy
 
+    def create_encounter_group(
+        self,
+        rng: random.Random | None = None,
+        *,
+        dungeon: bool = False,
+    ) -> list[Enemy]:
+        """Erzeugt eine Gegnergruppe passend zur Größe von Daisys Team."""
+
+        if not self.location.encounters:
+            return []
+        generator = rng or random
+        team_size = 1 + len(self.story.party)
+        enemy_count = generator.randint(1, team_size)
+        enemies = [self.create_encounter(generator) for _ in range(enemy_count)]
+        group = [enemy for enemy in enemies if enemy is not None]
+        if dungeon and group and self.location.dungeon_loot:
+            generator.choice(group).reward = generator.choice(self.location.dungeon_loot)
+        return group
+
     def rest(self) -> int | None:
         """Heilt Daisy an einem sicheren Rastplatz vollständig."""
 
@@ -329,18 +348,18 @@ class Game:
         if self.activate_story_for_location():
             self._run_story(input_fn, output)
         elif self.location.encounters and random.random() < 0.25:
-            enemy = self.create_encounter()
-            if enemy:
+            enemies = self.create_encounter_group()
+            if enemies:
                 output("Auf dem Weg lauert Daisy eine Gegnergruppe auf.")
-                self._battle(enemy, input_fn, output)
+                self._battle_group(enemies, input_fn, output)
 
     def _dungeon(self, input_fn: Input, output: Output) -> None:
-        enemy = self.create_encounter(dungeon=True)
-        if enemy is None or not self.location.dungeon_name:
+        enemies = self.create_encounter_group(dungeon=True)
+        if not enemies or not self.location.dungeon_name:
             output("An diesem Ort gibt es keinen zugänglichen Dungeon.")
             return
         output(f"Daisy betritt: {self.location.dungeon_name}")
-        self._battle(enemy, input_fn, output)
+        self._battle_group(enemies, input_fn, output)
 
     def _rest(self, output: Output) -> None:
         healed = self.rest()
@@ -404,17 +423,38 @@ class Game:
         return f"[{'#' * filled}{'-' * (width - filled)}] {enemy.health}/{enemy.max_health}"
 
     def _battle(self, enemy: Enemy, input_fn: Input, output: Output) -> None:
-        output(f"\n{enemy.name} greift an!")
-        while self.player.is_alive and enemy.is_alive:
+        self._battle_group([enemy], input_fn, output)
+
+    def _battle_group(
+        self,
+        enemies: list[Enemy],
+        input_fn: Input,
+        output: Output,
+    ) -> None:
+        active = [enemy for enemy in enemies if enemy.is_alive]
+        output(f"\n{len(active)} Gegner greifen an!")
+        while self.player.is_alive and active:
             output(f"Daisy: {self.player.health}/{self.player.max_health} LP")
-            output(f"{enemy.name}: {self._health_bar(enemy)}")
+            for number, enemy in enumerate(active, start=1):
+                output(f"{number}. {enemy.name}: {self._health_bar(enemy)}")
             choice = input_fn("1. Angreifen  2. Heilkraut  3. Fliehen\n> ").strip()
             if choice == "1":
                 selected_attack = self._choose_attack(input_fn, output)
                 if selected_attack is None:
                     continue
-                damage = self.attack(enemy, attack=selected_attack)
+                target = active[0]
+                if len(active) > 1:
+                    target_choice = input_fn("Ziel: ").strip()
+                    if not target_choice.isdigit() or not 1 <= int(target_choice) <= len(active):
+                        output("Dieses Ziel existiert nicht.")
+                        continue
+                    target = active[int(target_choice) - 1]
+                damage = self.attack(target, attack=selected_attack)
                 output(f"{selected_attack.name} verursacht {damage} Schaden.")
+                if not target.is_alive:
+                    for message in self.complete_victory(target):
+                        output(message)
+                    active.remove(target)
             elif choice == "2":
                 healed = self.player.use_healing_item()
                 output(f"Daisy heilt {healed} LP." if healed else "Daisy hat kein Heilkraut.")
@@ -427,14 +467,14 @@ class Game:
                 output("Ungültige Auswahl.")
                 continue
 
-            if enemy.is_alive:
+            for enemy in active:
                 damage = self.enemy_attack(enemy)
                 output(f"{enemy.name} verursacht {damage} Schaden.")
+                if not self.player.is_alive:
+                    break
 
-        if enemy.is_alive:
+        if active:
             return
-        for message in self.complete_victory(enemy):
-            output(message)
         if self.activate_story_for_location():
             self._run_story(input_fn, output)
 
