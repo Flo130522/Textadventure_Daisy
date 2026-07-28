@@ -210,6 +210,482 @@
           }
         }
       ]
+    },
+    {
+      "id": "market_aftermath",
+      "title": "Eine Spur im Staub",
+      "text": [
+        "Am Dorfmarkt erkennt Daisy die Schleifspuren eines schweren Wagens. Ein verletzter Händler liegt zwischen umgestürzten Kisten. Am Waldrand verschwinden drei schwarze Mäntel.",
+        "Leika sieht zwischen dem Händler und der fliehenden Gruppe hin und her. „Wenn wir ihnen jetzt folgen, holen wir sie vielleicht ein.“"
+      ],
+      "choices": [
+        {
+          "id": "help",
+          "label": "Dem Händler zuerst helfen",
+          "next_node": "forest_mission",
+          "effects": {
+            "flag": "helped_market_trader",
+            "friendship": {"character": "Leika", "points": 2},
+            "add_item": "Heilkraut"
+          }
+        },
+        {
+          "id": "chase",
+          "label": "Sofort die Verfolgung aufnehmen",
+          "next_node": "forest_mission",
+          "effects": {
+            "flag": "chased_collectors",
+            "friendship": {"character": "Leika", "points": 1}
+          }
+        }
+      ]
+    },
+    {
+      "id": "forest_mission",
+      "title": "Die Höhle zwischen den Bäumen",
+      "text": [
+        "Der Händler kennt einen Bernhardiner namens Bruno. Er bewacht einen alten Schmugglerpfad durch den Finsterwald, doch ein Spinnennest hat den Weg abgeschnitten.",
+        "Wer Hubertus' Eintreiber verfolgen will, muss zuerst die Spinnenkönigin aus der Höhle vertreiben."
+      ],
+      "choices": [
+        {
+          "id": "accept",
+          "label": "Zum Finsterwald aufbrechen",
+          "next_node": "COMPLETE",
+          "effects": {
+            "chapter": "Kapitel II – Der Finsterwald",
+            "start_quest": {
+              "id": "clear_spider_nest",
+              "title": "Brunos verlorener Pfad",
+              "description": "Besiege die Spinnenkönigin im Finsterwald.",
+              "target": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "bruno_recruit",
+      "title": "Der Wächter des Waldes",
+      "text": [
+        "Nach dem Kampf tritt Bruno aus der Höhle. Der große Bernhardiner trägt Narben unter seinem dichten Fell, aber seine Stimme ist ruhig.",
+        "„Ihr habt nicht nur euch selbst geholfen. Der Weg ist wieder sicher.“ Er kennt eine Route nach Hundewacht und die Zeichen von Hubertus' Eintreibern.",
+        "Bruno will den Wald verlassen – vorausgesetzt, Daisy versteht, dass Stärke auch bedeutet, andere zu beschützen."
+      ],
+      "choices": [
+        {
+          "id": "protect",
+          "label": "„Dann beschützen wir sie gemeinsam.“",
+          "next_node": "COMPLETE",
+          "effects": {
+            "join_party": "Bruno",
+            "friendship": {"character": "Bruno", "points": 2},
+            "complete_quest": "clear_spider_nest",
+            "chapter": "Kapitel III – Die Gefangenen von Hundewacht",
+            "flag": "bruno_joined"
+          }
+        },
+        {
+          "id": "need_strength",
+          "label": "„Ich brauche deine Stärke gegen Hubertus.“",
+          "next_node": "COMPLETE",
+          "effects": {
+            "join_party": "Bruno",
+            "friendship": {"character": "Bruno", "points": 1},
+            "complete_quest": "clear_spider_nest",
+            "chapter": "Kapitel III – Die Gefangenen von Hundewacht",
+            "flag": "bruno_joined"
+          }
+        }
+      ]
+    },
+    {
+      "id": "jack_meeting",
+      "title": "Die Rettungs-Hundehütte",
+      "text": [
+        "Hundewacht glänzt nach außen, doch in den Seitengassen liegen Verletzte und Flüchtlinge. Jack versorgt sie in einer kleinen Rettungs-Hundehütte.",
+        "Der Pudel hört sich Daisys Geschichte schweigend an. „Wenn du nur sterben willst, brauchst du keinen Heiler. Wenn du etwas retten willst, komme ich mit.“",
+        "Seine Vorräte sind fast aufgebraucht. Für die Gefangenen im Kerker benötigt er zwei Bündel Heilkraut."
+      ],
+      "choices": [
+        {
+          "id": "promise",
+          "label": "Heilkräuter für Jack sammeln",
+          "next_node": "COMPLETE",
+          "effects": {
+            "flag": "met_jack",
+            "start_quest": {
+              "id": "gather_herbs_for_jack",
+              "title": "Nicht nur Rache",
+              "description": "Bringe Jack zwei Heilkräuter für die Verletzten.",
+              "target": 2
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "jack_recruit",
+      "title": "Jacks Entscheidung",
+      "text": [
+        "Jack verarbeitet die Heilkräuter und verteilt die Medizin, bevor er auch nur an seine eigene Reiseausrüstung denkt.",
+        "„Du bist zurückgekommen“, sagt er zu Daisy. „Das bedeutet, dass für dich noch mehr zählt als Hubertus.“",
+        "Er hängt sich seine Heiltasche um. „Dann sorgen wir gemeinsam dafür, dass du dich daran erinnerst.“"
+      ],
+      "choices": [
+        {
+          "id": "welcome",
+          "label": "Jack im Team willkommen heißen",
+          "next_node": "COMPLETE",
+          "effects": {
+            "join_party": "Jack",
+            "friendship": {"character": "Jack", "points": 2},
+            "flag": "jack_joined",
+            "chapter": "Kapitel IV – Der Magierturm"
+          }
+        }
+      ]
+    },
+    {
+      "id": "leo_recruit",
+      "title": "Der Zauberlehrling",
+      "text": [
+        "Leo erwartet das Team bereits im Magierturm. Magische Karten zeigen, dass Hubertus sein Schloss hinter drei Wegzeichen verborgen hat: Wasser, Erde und Himmel.",
+        "„Macht ohne Verständnis ist nur ein weiterer Käfig“, warnt Leo. Daisy muss eine Rune stabilisieren, statt sie mit Gewalt zu brechen.",
+        "Als die Rune ruhig leuchtet, nickt Leo. „Gut. Dann lernen wir unterwegs weiter.“"
+      ],
+      "choices": [
+        {
+          "id": "learn",
+          "label": "Leo als Lehrer und Gefährten annehmen",
+          "next_node": "COMPLETE",
+          "effects": {
+            "join_party": "Leo",
+            "friendship": {"character": "Leo", "points": 2},
+            "flag": "leo_joined",
+            "chapter": "Kapitel V – Die drei Wege",
+            "start_quest": {
+              "id": "collect_way_signs",
+              "title": "Die drei Wegzeichen",
+              "description": "Befreie Wasser-, Erd- und Himmelreich und sammle ihre Wegzeichen.",
+              "target": 3
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "water_liberated",
+      "title": "Der heilende See",
+      "text": [
+        "Mit dem Fall des Wächters gehört der heilende See wieder den Bewohnern von Water-City. Jack hilft dabei, die ersten freien Rationen zu verteilen.",
+        "Die Hüterin des Sees überreicht Daisy das Wegzeichen des Wassers."
+      ],
+      "choices": [
+        {
+          "id": "accept",
+          "label": "Das Wegzeichen annehmen",
+          "next_node": "COMPLETE",
+          "effects": {
+            "flag": "water_sign",
+            "friendship": {"character": "Jack", "points": 2},
+            "heal_full": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "earth_liberated",
+      "title": "Die Schmieden von Bootswacht",
+      "text": [
+        "Der Oger-Aufseher fällt. Zwerge und Bootsbauer öffnen die Lagerhäuser, die Hubertus für seine Armee beschlagnahmt hatte.",
+        "Bruno hilft beim Schutz der ersten freien Karawane. Als Dank erhält Daisy das Wegzeichen der Erde."
+      ],
+      "choices": [
+        {
+          "id": "accept",
+          "label": "Das Wegzeichen annehmen",
+          "next_node": "COMPLETE",
+          "effects": {
+            "flag": "earth_sign",
+            "friendship": {"character": "Bruno", "points": 2},
+            "heal_full": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "sky_liberated",
+      "title": "Über den Wolken",
+      "text": [
+        "Der Dämonenhund verliert die Kontrolle über den Himmelspass. Zum ersten Mal seit Jahren ziehen Händler ohne Hubertus' Beobachter durch die Wolkenstadt.",
+        "Leo entschlüsselt das letzte Zeichen. Gemeinsam weisen die drei Symbole auf den Säuresumpf."
+      ],
+      "choices": [
+        {
+          "id": "accept",
+          "label": "Den Weg zum Säuresumpf öffnen",
+          "next_node": "COMPLETE",
+          "effects": {
+            "flag": "sky_sign",
+            "friendship": {"character": "Leo", "points": 2},
+            "complete_quest": "collect_way_signs",
+            "chapter": "Kapitel VI – Der Höllenschlund",
+            "heal_full": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "kaltklinge_defeated",
+      "title": "Kaltklinges Ende",
+      "text": [
+        "Kaltklinge sinkt in den giftigen Schlamm. An seiner Rüstung erkennt Daisy dieselbe schwarze Spange wie in ihrem Elternhaus.",
+        "Er gesteht, dass er die Eintreiber nach Grauholz geschickt hat. Hubertus habe jeden Widerstand mit einem Beispiel beantworten wollen.",
+        "Daisy könnte Kaltklinge töten. Stattdessen entscheidet sie, was ihre Reise aus ihr machen soll."
+      ],
+      "choices": [
+        {
+          "id": "spare",
+          "label": "Kaltklinge den Befreiten übergeben",
+          "next_node": "COMPLETE",
+          "effects": {
+            "flag": "spared_kaltklinge",
+            "friendship": {"character": "Leika", "points": 2},
+            "heal_full": true
+          }
+        },
+        {
+          "id": "revenge",
+          "label": "Die Rache an ihm vollenden",
+          "next_node": "COMPLETE",
+          "effects": {
+            "flag": "killed_kaltklinge",
+            "friendship": {"character": "Leika", "points": -1}
+          }
+        }
+      ]
+    },
+    {
+      "id": "willy_choice",
+      "title": "Der gefesselte Drache",
+      "text": [
+        "Willy brüllt, doch zwischen seinen Schuppen verlaufen schwarze Ketten. Die drei Wegzeichen reagieren auf dieselbe Magie.",
+        "Hubertus hält den Drachen nicht durch Loyalität, sondern durch Zwang am Schlosstor."
+      ],
+      "choices": [
+        {
+          "id": "free",
+          "label": "Die Wegzeichen nutzen und Willy befreien",
+          "next_node": "COMPLETE",
+          "effects": {
+            "flags": ["freed_willy", "willy_resolved"],
+            "pacify_enemy": true,
+            "friendship": {"character": "Jack", "points": 2},
+            "heal_full": true
+          }
+        },
+        {
+          "id": "fight",
+          "label": "Den Drachen im Kampf überwinden",
+          "next_node": "COMPLETE",
+          "effects": {"flag": "chose_to_fight_willy"}
+        }
+      ]
+    },
+    {
+      "id": "willy_after_battle",
+      "title": "Der gefallene Wächter",
+      "text": [
+        "Als Willy zu Boden geht, zerbrechen die schwarzen Ketten. Der Drache war nie Daisys Feind.",
+        "Er öffnet mit letzter Kraft das Tor. Ob er sich erholen wird, bleibt ungewiss."
+      ],
+      "choices": [
+        {
+          "id": "continue",
+          "label": "Das Tor zum Thronsaal öffnen",
+          "next_node": "COMPLETE",
+          "effects": {"flag": "willy_resolved"}
+        }
+      ]
+    },
+    {
+      "id": "hubertus_entrance",
+      "title": "Daisy gegen Hubertus Snickers",
+      "text": [
+        "Hubertus wartet auf seinem Thron zwischen schwarzen Flammen. Zwei Chow-Chow-Wachen versperren den Weg, fliehen jedoch, als draußen der Aufstand beginnt.",
+        "„Du bist weit gekommen für einen kleinen Hund“, spottet Hubertus.",
+        "Daisy stellt sich vor ihr Team. „Ich bin nicht allein gekommen.“"
+      ],
+      "choices": [
+        {
+          "id": "fight",
+          "label": "Den letzten Kampf beginnen",
+          "next_node": "COMPLETE",
+          "effects": {"flag": "final_battle_started"}
+        }
+      ]
+    },
+    {
+      "id": "final_choice",
+      "title": "Was nach der Rache bleibt",
+      "text": [
+        "Hubertus liegt besiegt vor dem Thron. Seine Magie erlischt, und im ganzen Reich brechen die Siegel seiner Herrschaft.",
+        "Daisy hat den Hund gefunden, der ihre Familie zerstörte. Nun entscheidet sie, wer sie nach diesem Augenblick sein wird."
+      ],
+      "choices": [
+        {
+          "id": "revenge",
+          "label": "Hubertus selbst töten",
+          "next_node": "ending_revenge",
+          "effects": {"flag": "ending_revenge"}
+        },
+        {
+          "id": "justice",
+          "label": "Hubertus den befreiten Völkern übergeben",
+          "next_node": "ending_justice",
+          "effects": {"flag": "ending_justice"}
+        },
+        {
+          "id": "mercy",
+          "label": "Seine Macht brechen und ihn verschonen",
+          "next_node": "ending_mercy",
+          "effects": {"flag": "ending_mercy"}
+        }
+      ]
+    },
+    {
+      "id": "ending_revenge",
+      "title": "Das Ende der Jagd",
+      "text": [
+        "Daisy vollendet ihre Rache. Hubertus wird nie wieder ein Dorf bedrohen.",
+        "Als sie nach Grauholz zurückkehrt, ist die Stille im Elternhaus noch immer da. Doch Leika, Bruno, Jack und Leo treten hinter ihr ein. Rache hat die Vergangenheit nicht geheilt – aber Daisy muss die Zukunft nicht allein tragen."
+      ],
+      "choices": [
+        {
+          "id": "end",
+          "label": "Das Abenteuer beenden",
+          "next_node": "COMPLETE",
+          "effects": {"finish_game": true}
+        }
+      ]
+    },
+    {
+      "id": "ending_justice",
+      "title": "Ein freies Grauholz",
+      "text": [
+        "Daisy übergibt Hubertus den Völkern, die er unterdrückt hat. Zum ersten Mal muss er den Stimmen zuhören, die er jahrelang zum Schweigen brachte.",
+        "In Grauholz bleibt Daisys Elternhaus nicht leer. Ihre Gefährten füllen es mit Streit, Geschichten und gemeinsamem Frühstück. Niemand ersetzt ihre Familie. Aber Daisy hat eine neue gefunden."
+      ],
+      "choices": [
+        {
+          "id": "end",
+          "label": "Das Abenteuer beenden",
+          "next_node": "COMPLETE",
+          "effects": {"finish_game": true}
+        }
+      ]
+    },
+    {
+      "id": "ending_mercy",
+      "title": "Der durchbrochene Kreis",
+      "text": [
+        "Leo bindet Hubertus' Magie an die zerbrochenen Wegzeichen. Ohne seine Macht bleibt nur ein kleiner, verängstigter Chihuahua zurück.",
+        "Daisy verzeiht ihm nicht. Aber sie weigert sich, ihr weiteres Leben von seinem Tod bestimmen zu lassen. Gemeinsam mit ihren Gefährten beginnt sie den langen Heimweg."
+      ],
+      "choices": [
+        {
+          "id": "end",
+          "label": "Das Abenteuer beenden",
+          "next_node": "COMPLETE",
+          "effects": {"finish_game": true}
+        }
+      ]
+    }
+  ],
+  "triggers": [
+    {
+      "id": "market_story",
+      "location": "Dorfmarkt",
+      "node": "market_aftermath",
+      "quest_completed": "trace_collectors"
+    },
+    {
+      "id": "bruno_story",
+      "location": "Finsterwald",
+      "node": "bruno_recruit",
+      "requires_flags": ["defeated:Spinnenkönigin"],
+      "quest_active": "clear_spider_nest"
+    },
+    {
+      "id": "jack_story",
+      "location": "Rettungs-Hundehütte",
+      "node": "jack_meeting",
+      "requires_flags": ["bruno_joined"],
+      "excludes_flags": ["met_jack"]
+    },
+    {
+      "id": "jack_recruit_story",
+      "location": "Rettungs-Hundehütte",
+      "node": "jack_recruit",
+      "quest_completed": "gather_herbs_for_jack",
+      "excludes_flags": ["jack_joined"]
+    },
+    {
+      "id": "leo_story",
+      "location": "Magierturm",
+      "node": "leo_recruit",
+      "requires_flags": ["jack_joined"],
+      "min_level": 2
+    },
+    {
+      "id": "water_story",
+      "location": "Water-City",
+      "node": "water_liberated",
+      "requires_flags": ["defeated:Wächter des Heilsees"]
+    },
+    {
+      "id": "earth_story",
+      "location": "Bootswacht",
+      "node": "earth_liberated",
+      "requires_flags": ["defeated:Oger-Aufseher"]
+    },
+    {
+      "id": "sky_story",
+      "location": "Wolkenstadt",
+      "node": "sky_liberated",
+      "requires_flags": ["defeated:Dämonenhund"]
+    },
+    {
+      "id": "kaltklinge_story",
+      "location": "Säuresumpf",
+      "node": "kaltklinge_defeated",
+      "requires_flags": ["defeated:Kaltklinge"]
+    },
+    {
+      "id": "willy_story",
+      "location": "Schlosstor",
+      "node": "willy_choice",
+      "excludes_flags": ["willy_resolved", "chose_to_fight_willy"]
+    },
+    {
+      "id": "willy_battle_story",
+      "location": "Schlosstor",
+      "node": "willy_after_battle",
+      "requires_flags": ["defeated:Willy"],
+      "excludes_flags": ["willy_resolved"]
+    },
+    {
+      "id": "hubertus_intro",
+      "location": "Thronsaal",
+      "node": "hubertus_entrance",
+      "excludes_flags": ["final_battle_started"]
+    },
+    {
+      "id": "hubertus_ending",
+      "location": "Thronsaal",
+      "node": "final_choice",
+      "requires_flags": ["defeated:Hubertus Snickers"]
     }
   ]
 }

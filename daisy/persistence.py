@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-from .models import Attack, Character, Enemy, Location
+from .models import Attack, Character, EncounterTemplate, Enemy, Location
 from .story import QuestState, StoryState
 
 if TYPE_CHECKING:
@@ -38,6 +38,9 @@ def load_game(path: Path = DEFAULT_SAVE_FILE) -> Game:
     for name, location_data in data["locations"].items():
         enemy_data = location_data.pop("enemy")
         location_data["enemy"] = Enemy(**enemy_data) if enemy_data else None
+        location_data["encounters"] = [
+            EncounterTemplate(**encounter) for encounter in location_data.get("encounters", [])
+        ]
         locations[name] = Location(**location_data)
     return Game(
         player=player,
@@ -62,12 +65,16 @@ def _game_to_dict(game: Game) -> dict[str, Any]:
                 "name": attack.name,
                 "power": attack.power,
                 "description": attack.description,
+                "effect": attack.effect,
+                "effect_chance": attack.effect_chance,
+                "effect_duration": attack.effect_duration,
             }
             for attack in game.player.attacks
         ],
         "level": game.player.level,
         "experience": game.player.experience,
         "defeated_enemies": game.player.defeated_enemies,
+        "statuses": game.player.statuses,
     }
     locations = {}
     for name, location in game.locations.items():
@@ -80,6 +87,10 @@ def _game_to_dict(game: Game) -> dict[str, Any]:
                 "reward": location.enemy.reward,
                 "experience_reward": location.enemy.experience_reward,
                 "max_health": location.enemy.max_health,
+                "status_effect": location.enemy.status_effect,
+                "effect_chance": location.enemy.effect_chance,
+                "effect_duration": location.enemy.effect_duration,
+                "statuses": location.enemy.statuses,
             }
         locations[name] = {
             "name": location.name,
@@ -88,6 +99,21 @@ def _game_to_dict(game: Game) -> dict[str, Any]:
             "items": location.items,
             "enemy": enemy,
             "visited": location.visited,
+            "required_level": location.required_level,
+            "required_flags": location.required_flags,
+            "encounters": [
+                {
+                    "name": encounter.name,
+                    "base_health": encounter.base_health,
+                    "base_attack": encounter.base_attack,
+                    "base_experience": encounter.base_experience,
+                    "status_effect": encounter.status_effect,
+                    "effect_chance": encounter.effect_chance,
+                    "effect_duration": encounter.effect_duration,
+                }
+                for encounter in location.encounters
+            ],
+            "dungeon_name": location.dungeon_name,
         }
     return {
         "player": player,

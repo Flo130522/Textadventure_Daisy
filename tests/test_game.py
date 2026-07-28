@@ -6,16 +6,32 @@ from daisy.world import create_game
 
 def test_world_has_a_route_to_the_final_location():
     game = create_game()
+    game.story.flags.update(
+        {
+            "leo_joined",
+            "water_sign",
+            "earth_sign",
+            "sky_sign",
+            "defeated:Kaltklinge",
+            "willy_resolved",
+        }
+    )
 
     route = [
         "Grauholz",
         "Dorfmarkt",
         "Finsterwald",
         "Hundewacht",
-        "Chihuahua-Höllenreich",
+        "Water-City",
+        "Bootswacht",
+        "Wolkenstadt",
+        "Säuresumpf",
+        "Schlosstor",
+        "Thronsaal",
     ]
+
     assert all(game.travel(destination) for destination in route)
-    assert game.current_location == "Chihuahua-Höllenreich"
+    assert game.current_location == "Thronsaal"
 
 
 def test_collecting_items_only_works_once():
@@ -34,7 +50,7 @@ def test_player_attack_reduces_enemy_health():
     damage = game.attack(enemy, random.Random(1))
 
     assert damage > 0
-    assert enemy.health == 42 - damage
+    assert enemy.health == 70 - damage
 
 
 def test_invalid_travel_does_not_move_player():
@@ -87,3 +103,57 @@ def test_victory_rewards_are_shared_by_all_interfaces():
     assert game.player.inventory == ["Testschlüssel"]
     assert game.player.defeated_enemies == {"Testgegner": 1}
     assert any("40 EP" in message for message in messages)
+
+
+def test_encounters_scale_with_player_level():
+    game = create_game()
+    game.current_location = "Finsterwald"
+    game.player.level = 5
+
+    enemy = game.create_encounter(random.Random(4))
+
+    assert enemy is not None
+    assert "(Level 5)" in enemy.name
+    assert enemy.health > 50
+    assert enemy.experience_reward > 40
+
+
+def test_attack_effects_and_poison_are_applied():
+    game = create_game()
+    enemy = Enemy(
+        "Giftzahn",
+        health=100,
+        attack_power=1,
+        status_effect="Vergiftung",
+        effect_chance=1,
+        effect_duration=2,
+    )
+    stunning_attack = Attack(
+        "Sicherer Sprung",
+        0,
+        "",
+        effect="Lähmung",
+        effect_chance=1,
+        effect_duration=1,
+    )
+
+    game.attack(enemy, random.Random(1), stunning_attack)
+    assert enemy.statuses == {"Lähmung": 1}
+    assert game.enemy_attack(enemy, random.Random(1)) == 0
+
+    game.enemy_attack(enemy, random.Random(1))
+    assert game.player.statuses == {"Vergiftung": 2}
+    health_before_poison = game.player.health
+    game.attack(enemy, random.Random(1))
+    assert game.player.health == health_before_poison - 5
+
+
+def test_inventory_capacity_grows_with_level():
+    game = create_game()
+
+    for number in range(game.player.inventory_capacity):
+        assert game.player.add_item(f"Gegenstand {number}")
+    assert not game.player.add_item("Zu viel")
+
+    game.player.level += 1
+    assert game.player.add_item("Passt nach Levelaufstieg")

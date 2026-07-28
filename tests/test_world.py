@@ -14,7 +14,14 @@ def test_world_is_loaded_from_json():
         "Dorfmarkt",
         "Finsterwald",
         "Hundewacht",
-        "Chihuahua-Höllenreich",
+        "Magierturm",
+        "Rettungs-Hundehütte",
+        "Water-City",
+        "Bootswacht",
+        "Wolkenstadt",
+        "Säuresumpf",
+        "Schlosstor",
+        "Thronsaal",
     }
     assert world["Finsterwald"].enemy is not None
 

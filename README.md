@@ -1,21 +1,27 @@
 # Das Abenteuer des Rache-Dackels
 
-Ein kleines Terminal-Textadventure über Daisy und ihren Weg durch Grauholz.
+Ein storygetriebenes Text-RPG über Daisy, ihre Gefährten und den Weg zu
+Hubertus Snickers. Spielbar im Terminal oder in einer illustrierten
+Desktop-Oberfläche.
 
 ## Aktueller Stand
 
 Der spielbare Kern enthält:
 
-- eine verbundene Welt mit mehreren Orten,
+- eine vollständige Kampagne vom Überfall auf Grauholz bis zum Thronsaal,
+- drei unterschiedliche Enden durch Daisys letzte Entscheidung,
+- eine verbundene Welt mit dreizehn Orten und mehreren Reichen,
 - Reisen und Erkundung,
-- Gegenstände und Inventar,
-- einen rundenbasierten Kampf mit mehreren Attacken,
+- stapelbare Gegenstände und ein mit dem Level wachsendes Inventar,
+- einen rundenbasierten Kampf mit Lähmung, Schwächung und Vergiftung,
 - Erfahrung, Level und Kampfstatistiken,
+- skalierende Zufallsbegegnungen und fünf wiederholbare Dungeons,
 - JSON-basierte Weltdaten und Spielstände,
-- einen datengetriebenen Prolog mit Entscheidungen,
-- Quests, Gruppenmitglieder und individuelle Freundschaftswerte,
+- eine vollständig datengetriebene Geschichte mit Entscheidungen,
+- Rekrutierungsquests für Leika, Bruno, Jack und Leo,
+- individuelle Freundschaftswerte und Team-Boni,
 - eine Lebensanzeige für Bosskämpfe,
-- ein erreichbares Spielziel.
+- automatische Zugangssperren durch Storyfortschritt und Level.
 
 Die früheren Experimente wurden aus dem aktuellen Projektstand entfernt. Sie
 bleiben vollständig über die Git-Historie und die alten Branches erhalten.
@@ -73,8 +79,8 @@ run_game.py     Einfacher Einstiegspunkt
 run_gui.py      Grafische Desktop-Version
 ```
 
-## Geplante Erweiterungen
+## Denkbare Erweiterungen
 
-- weitere Orte und Begegnungen
-- individuelle Fähigkeiten für Daisys Freunde
-- ausführlichere Geschichte und Dialoge
+- zusätzliche Nebenquests und optionale NPC-Dialoge
+- eigene aktive Fähigkeiten für Daisys Freunde
+- Musik, Animationen und weitere Illustrationen

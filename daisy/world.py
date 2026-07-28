@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-from .models import Character, Enemy, Location
+from .models import Character, EncounterTemplate, Enemy, Location
 
 if TYPE_CHECKING:
     from .game import Game
@@ -31,12 +31,19 @@ def create_world(path: Path = WORLD_FILE) -> dict[str, Location]:
     for location_data in load_world_data(path)["locations"]:
         enemy_data = location_data.get("enemy")
         enemy = Enemy(**enemy_data) if enemy_data else None
+        encounters = [
+            EncounterTemplate(**encounter) for encounter in location_data.get("encounters", [])
+        ]
         location = Location(
             name=location_data["name"],
             description=location_data["description"],
             connections=list(location_data.get("connections", [])),
             items=list(location_data.get("items", [])),
             enemy=enemy,
+            required_level=location_data.get("required_level", 1),
+            required_flags=list(location_data.get("required_flags", [])),
+            encounters=encounters,
+            dungeon_name=location_data.get("dungeon_name"),
         )
         world[location.name] = location
 

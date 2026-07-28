@@ -1,4 +1,5 @@
 import json
+import random
 
 import pytest
 
@@ -12,6 +13,16 @@ def play_prologue(game, choices):
     for choice in choices:
         messages.extend(engine.choose(choice))
     return messages
+
+
+def win_battle(game, enemy, seed=7):
+    rng = random.Random(seed)
+    while enemy.is_alive and game.player.is_alive:
+        game.attack(enemy, rng=rng, attack=game.player.attacks[1])
+        if enemy.is_alive:
+            game.enemy_attack(enemy, rng=rng)
+    assert game.player.is_alive
+    return game.complete_victory(enemy)
 
 
 def test_accepting_leika_starts_first_quest_and_friendship():
@@ -88,3 +99,75 @@ def test_story_loader_rejects_unknown_nodes(tmp_path):
 
     with pytest.raises(ValueError, match="Unbekannte Storyknoten"):
         load_story(story_file)
+
+
+def test_complete_campaign_reaches_justice_ending():
+    game = create_game()
+    play_prologue(
+        game,
+        ["breakfast", "hide", "leave_house", "meet_leika", "accept", "begin"],
+    )
+    game.collect_items()
+
+    assert game.travel("Grauholz")
+    assert game.travel("Dorfmarkt")
+    game.collect_items()
+    game.update_location_quests()
+    assert game.activate_story_for_location()
+    play_prologue(game, ["help", "accept"])
+
+    assert game.travel("Finsterwald")
+    spider = game.location.enemy
+    win_battle(game, spider)
+    assert game.activate_story_for_location()
+    play_prologue(game, ["protect"])
+    assert "Bruno" in game.story.party
+    assert game.player.level >= 2
+
+    assert game.travel("Hundewacht")
+    assert game.travel("Rettungs-Hundehütte")
+    assert game.activate_story_for_location()
+    play_prologue(game, ["promise"])
+    game.update_location_quests()
+    assert game.activate_story_for_location()
+    play_prologue(game, ["welcome"])
+    assert "Jack" in game.story.party
+
+    assert game.travel("Hundewacht")
+    assert game.travel("Finsterwald")
+    assert game.travel("Magierturm")
+    assert game.activate_story_for_location()
+    play_prologue(game, ["learn"])
+    assert "Leo" in game.story.party
+
+    assert game.travel("Finsterwald")
+    assert game.travel("Hundewacht")
+    for location, choice, flag in [
+        ("Water-City", "accept", "water_sign"),
+        ("Bootswacht", "accept", "earth_sign"),
+        ("Wolkenstadt", "accept", "sky_sign"),
+        ("Säuresumpf", "spare", "spared_kaltklinge"),
+    ]:
+        assert game.travel(location)
+        enemy = game.location.enemy
+        win_battle(game, enemy)
+        assert game.activate_story_for_location()
+        play_prologue(game, [choice])
+        assert flag in game.story.flags
+
+    assert game.travel("Schlosstor")
+    assert game.activate_story_for_location()
+    play_prologue(game, ["free"])
+    assert "willy_resolved" in game.story.flags
+
+    assert game.travel("Thronsaal")
+    assert game.activate_story_for_location()
+    play_prologue(game, ["fight"])
+    hubertus = game.location.enemy
+    win_battle(game, hubertus)
+    assert game.activate_story_for_location()
+    play_prologue(game, ["justice", "end"])
+
+    assert game.finished
+    assert "ending_justice" in game.story.flags
+    assert game.story.party == ["Leika", "Bruno", "Jack", "Leo"]

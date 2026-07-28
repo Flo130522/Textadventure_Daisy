@@ -2,50 +2,160 @@
   "locations": [
     {
       "name": "Zuhause",
-      "description": "Daisys Elternhaus. Eine Blutspur führt zur offenen Haustür.",
+      "description": "Das zerstörte Elternhaus. Zwischen den Erinnerungen wächst langsam Daisys Entschlossenheit.",
       "connections": ["Grauholz"],
       "items": ["Heilkraut"]
     },
     {
       "name": "Grauholz",
-      "description": "Ein sonst friedliches Dorf. Heute sind die Straßen verdächtig still.",
+      "description": "Das eingeschüchterte Dorf versucht, nach dem Überfall wieder auf die Pfoten zu kommen.",
       "connections": ["Zuhause", "Dorfmarkt"]
     },
     {
       "name": "Dorfmarkt",
-      "description": "Zwischen verlassenen Ständen liegt eine zerrissene Karte.",
+      "description": "Händler flüstern über schwarze Mäntel und eine Spur in Richtung Finsterwald.",
       "connections": ["Grauholz", "Finsterwald"],
-      "items": ["Karte des Finsterwalds"]
+      "items": ["Heilkraut", "Karte des Finsterwalds"]
     },
     {
       "name": "Finsterwald",
-      "description": "Dichte Zweige verschlucken das Tageslicht.",
-      "connections": ["Dorfmarkt", "Hundewacht"],
+      "description": "Dichte Zweige verschlucken das Tageslicht. Zwischen den Bäumen lauert ein großes Spinnennest.",
+      "connections": ["Dorfmarkt", "Hundewacht", "Magierturm"],
+      "dungeon_name": "Das Netzgewölbe",
+      "encounters": [
+        {"name": "Waldwolf", "base_health": 28, "base_attack": 5, "base_experience": 18},
+        {"name": "Riesenspinne", "base_health": 24, "base_attack": 5, "base_experience": 20, "status_effect": "Vergiftung", "effect_chance": 0.15, "effect_duration": 2}
+      ],
       "enemy": {
-        "name": "Spinnen-Monster",
-        "health": 42,
-        "attack_power": 9,
-        "reward": "Silberner Schlüssel",
-        "experience_reward": 45
+        "name": "Spinnenkönigin",
+        "health": 70,
+        "attack_power": 10,
+        "reward": "Seidenschlüssel",
+        "experience_reward": 110,
+        "status_effect": "Vergiftung",
+        "effect_chance": 0.2,
+        "effect_duration": 2
       }
     },
     {
+      "name": "Magierturm",
+      "description": "Runen glimmen an den Wänden des Turms, in dem Leo seine Zauberexperimente durchführt.",
+      "connections": ["Finsterwald"],
+      "required_level": 2,
+      "required_flags": ["jack_joined"]
+    },
+    {
       "name": "Hundewacht",
-      "description": "Die Stadtmauer trägt das Zeichen von Hubertus Snickers.",
-      "connections": ["Finsterwald", "Chihuahua-Höllenreich"],
+      "description": "Hinter der glänzenden Stadtmauer verbergen sich Kerker, Schuldner und Hubertus' Informanten.",
+      "connections": ["Finsterwald", "Rettungs-Hundehütte", "Water-City"],
       "items": ["Heilkraut"]
     },
     {
-      "name": "Chihuahua-Höllenreich",
-      "description": "Hinter dem schwarzen Tor wartet Hubertus Snickers.",
-      "connections": ["Hundewacht"],
+      "name": "Rettungs-Hundehütte",
+      "description": "Jack versorgt hier Verletzte und Flüchtlinge aus Hubertus' Herrschaftsgebiet.",
+      "connections": ["Hundewacht"]
+    },
+    {
+      "name": "Water-City",
+      "description": "Eine schwimmende Stadt, deren heilender See von Hubertus' Wächtern kontrolliert wird.",
+      "connections": ["Hundewacht", "Bootswacht"],
+      "required_flags": ["leo_joined"],
+      "dungeon_name": "Die versunkenen Kanäle",
+      "encounters": [
+        {"name": "Sumpfschnecke", "base_health": 40, "base_attack": 6, "base_experience": 25, "status_effect": "Vergiftung", "effect_chance": 0.1, "effect_duration": 2},
+        {"name": "See-Wächter", "base_health": 38, "base_attack": 8, "base_experience": 28}
+      ],
+      "enemy": {
+        "name": "Wächter des Heilsees",
+        "health": 95,
+        "attack_power": 13,
+        "reward": "Wegzeichen des Wassers",
+        "experience_reward": 120
+      }
+    },
+    {
+      "name": "Bootswacht",
+      "description": "Das Erdreich muss Boote, Waffen und Vorräte für Hubertus' Armee herstellen.",
+      "connections": ["Water-City", "Wolkenstadt"],
+      "required_flags": ["water_sign"],
+      "dungeon_name": "Die Ogerstollen",
+      "encounters": [
+        {"name": "Goblin-Plünderer", "base_health": 42, "base_attack": 8, "base_experience": 30},
+        {"name": "Oger-Schmied", "base_health": 58, "base_attack": 9, "base_experience": 36}
+      ],
+      "enemy": {
+        "name": "Oger-Aufseher",
+        "health": 120,
+        "attack_power": 15,
+        "reward": "Wegzeichen der Erde",
+        "experience_reward": 160
+      }
+    },
+    {
+      "name": "Wolkenstadt",
+      "description": "Von der Stadt über den Wolken überwachen Dämonenhunde jeden Handelsweg.",
+      "connections": ["Bootswacht", "Säuresumpf"],
+      "required_flags": ["earth_sign"],
+      "dungeon_name": "Der Sturmhorst",
+      "encounters": [
+        {"name": "Dämonenhund-Späher", "base_health": 52, "base_attack": 10, "base_experience": 40},
+        {"name": "Wolkenjäger", "base_health": 46, "base_attack": 11, "base_experience": 42}
+      ],
+      "enemy": {
+        "name": "Dämonenhund",
+        "health": 145,
+        "attack_power": 17,
+        "reward": "Wegzeichen des Himmels",
+        "experience_reward": 200
+      }
+    },
+    {
+      "name": "Säuresumpf",
+      "description": "Giftige Nebel liegen über dem letzten Weg zum Chihuahua-Höllenreich.",
+      "connections": ["Wolkenstadt", "Schlosstor"],
+      "required_flags": ["sky_sign"],
+      "dungeon_name": "Die Säurekatakomben",
+      "encounters": [
+        {"name": "Sumpfschnecke", "base_health": 58, "base_attack": 11, "base_experience": 46, "status_effect": "Vergiftung", "effect_chance": 0.2, "effect_duration": 2},
+        {"name": "Kaltklingen-Schatten", "base_health": 55, "base_attack": 13, "base_experience": 50}
+      ],
+      "enemy": {
+        "name": "Kaltklinge",
+        "health": 180,
+        "attack_power": 20,
+        "reward": "Schwarzer Torschlüssel",
+        "experience_reward": 250,
+        "status_effect": "Vergiftung",
+        "effect_chance": 0.3,
+        "effect_duration": 3
+      }
+    },
+    {
+      "name": "Schlosstor",
+      "description": "Vor dem schwarzen Schloss wacht der gefesselte Beschützerdrache Willy.",
+      "connections": ["Säuresumpf", "Thronsaal"],
+      "required_flags": ["defeated:Kaltklinge"],
+      "enemy": {
+        "name": "Willy",
+        "health": 220,
+        "attack_power": 22,
+        "experience_reward": 300
+      }
+    },
+    {
+      "name": "Thronsaal",
+      "description": "Am Ende des Höllenschlunds wartet Hubertus Snickers zwischen schwarzen Flammen.",
+      "connections": ["Schlosstor"],
+      "required_flags": ["willy_resolved"],
       "enemy": {
         "name": "Hubertus Snickers",
-        "health": 70,
-        "attack_power": 13,
-        "experience_reward": 100
+        "health": 200,
+        "attack_power": 20,
+        "experience_reward": 500,
+        "status_effect": "Vergiftung",
+        "effect_chance": 0.25,
+        "effect_duration": 2
       }
     }
   ]
 }
-
