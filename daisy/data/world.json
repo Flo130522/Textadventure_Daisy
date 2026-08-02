@@ -39,6 +39,9 @@
         "attack_power": 10,
         "reward": "Seidenschlüssel",
         "experience_reward": 110,
+        "behavior": "tactical",
+        "heal_power": 8,
+        "phase_threshold": 0.4,
         "status_effect": "Vergiftung",
         "effect_chance": 0.2,
         "effect_duration": 2
@@ -49,7 +52,8 @@
       "description": "Runen glimmen an den Wänden des Turms, in dem Leo seine Zauberexperimente durchführt.",
       "connections": ["Finsterwald"],
       "required_level": 2,
-      "required_flags": ["jack_joined"]
+      "required_flags": ["jack_joined"],
+      "locked_reason": "Daisy sollte zuerst Jack in der Rettungs-Hundehütte helfen."
     },
     {
       "name": "Hundewacht",
@@ -67,6 +71,7 @@
       "description": "Eine schwimmende Stadt, deren heilender See von Hubertus' Wächtern kontrolliert wird.",
       "connections": ["Hundewacht", "Bootswacht"],
       "required_flags": ["leo_joined"],
+      "locked_reason": "Der Weg nach Water-City wird erst mit Leos Magie passierbar.",
       "dungeon_name": "Die versunkenen Kanäle",
       "dungeon_loot": ["Heilwasser", "Perle", "Heilkraut"],
       "encounters": [
@@ -86,6 +91,7 @@
       "description": "Das Erdreich muss Boote, Waffen und Vorräte für Hubertus' Armee herstellen.",
       "connections": ["Water-City", "Wolkenstadt"],
       "required_flags": ["water_sign"],
+      "locked_reason": "Das Wasserzeichen öffnet den Übergang nach Bootswacht.",
       "dungeon_name": "Die Ogerstollen",
       "dungeon_loot": ["Eisenerz", "Ogerzahn", "Heilkraut"],
       "encounters": [
@@ -105,6 +111,7 @@
       "description": "Von der Stadt über den Wolken überwachen Dämonenhunde jeden Handelsweg.",
       "connections": ["Bootswacht", "Säuresumpf", "Wolkenbaumhaus"],
       "required_flags": ["earth_sign"],
+      "locked_reason": "Das Erdzeichen wird benötigt, um Wolkenstadt zu erreichen.",
       "dungeon_name": "Der Sturmhorst",
       "dungeon_loot": ["Sturmfeder", "Wolkenkristall", "Heilkraut"],
       "encounters": [
@@ -124,6 +131,7 @@
       "description": "Giftige Nebel liegen über dem letzten Weg zum Chihuahua-Höllenreich.",
       "connections": ["Wolkenstadt", "Feuerreich"],
       "required_flags": ["sky_sign"],
+      "locked_reason": "Das Himmelszeichen weist einen sicheren Weg durch den Säuresumpf.",
       "dungeon_name": "Die Säurekatakomben",
       "dungeon_loot": ["Säuredrüse", "Schwarzes Salz", "Heilkraut"],
       "encounters": [
@@ -152,6 +160,7 @@
       "description": "Brunos getarnter Hochsitz wacht über den Finsterwald. Eine weiche Moosnische bietet dem Team Ruhe.",
       "connections": ["Finsterwald"],
       "required_flags": ["bruno_joined"],
+      "locked_reason": "Bruno kennt den verborgenen Weg zu diesem Ort.",
       "safe_haven": true
     },
     {
@@ -165,6 +174,7 @@
       "description": "In der glitzernden Höhle sucht Bruno nach seltenen Leuchtpilzen und Spuren verschwundener Waldtiere.",
       "connections": ["Finsterwald"],
       "required_flags": ["bruno_joined"],
+      "locked_reason": "Bruno kann den versiegelten Zugang zur Kristallhöhle öffnen.",
       "items": ["Leuchtpilz", "Kristallsplitter"],
       "dungeon_name": "Der tiefe Kristallgang",
       "dungeon_loot": ["Leuchtpilz", "Kristallsplitter", "Heilkraut"],
@@ -178,6 +188,7 @@
       "description": "Jack kennt zwischen den feuchten Felsen jeden heilenden Pilz und jedes seltene Kraut.",
       "connections": ["Hundewacht", "Rettungs-Hundehütte"],
       "required_flags": ["met_jack"],
+      "locked_reason": "Jack muss Daisy zuerst von der Heilkräuterhöhle erzählen.",
       "items": ["Heilkraut", "Heilkraut", "Verbandszeug"],
       "dungeon_name": "Die unterirdische Quelle",
       "dungeon_loot": ["Heilkraut", "Heilpilz", "Verbandszeug"],
@@ -191,6 +202,7 @@
       "description": "Schwarze Lavaadern ziehen sich durch Hubertus' verbranntes Kernland. Hinter der Höllenwache liegt das Schlosstor.",
       "connections": ["Säuresumpf", "Schlosstor"],
       "required_flags": ["defeated:Kaltklinge"],
+      "locked_reason": "Kaltklinge versperrt weiterhin den Weg ins Feuerreich.",
       "dungeon_name": "Die Glutminen",
       "dungeon_loot": ["Glutstein", "Feuerblume", "Heilkraut"],
       "encounters": [
@@ -210,6 +222,7 @@
       "description": "Vor dem schwarzen Schloss wacht der gefesselte Beschützerdrache Willy.",
       "connections": ["Feuerreich", "Thronsaal"],
       "required_flags": ["defeated:Höllenwache"],
+      "locked_reason": "Die Höllenwache hält den Weg zum Schlosstor geschlossen.",
       "enemy": {
         "name": "Willy",
         "health": 220,
@@ -222,11 +235,15 @@
       "description": "Am Ende des Höllenschlunds wartet Hubertus Snickers zwischen schwarzen Flammen.",
       "connections": ["Schlosstor"],
       "required_flags": ["willy_resolved"],
+      "locked_reason": "Willy bewacht noch immer den Zugang zum Thronsaal.",
       "enemy": {
         "name": "Hubertus Snickers",
         "health": 200,
         "attack_power": 20,
         "experience_reward": 500,
+        "behavior": "boss",
+        "heal_power": 15,
+        "phase_threshold": 0.5,
         "status_effect": "Vergiftung",
         "effect_chance": 0.25,
         "effect_duration": 2

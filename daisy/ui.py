@@ -2,14 +2,26 @@
 
 from __future__ import annotations
 
+import ctypes
 import random
+import sys
 import tkinter as tk
 from collections import Counter
+from contextlib import suppress
 from pathlib import Path
 from tkinter import messagebox, ttk
 from typing import TYPE_CHECKING
 
-from .persistence import DEFAULT_SAVE_FILE, load_game, save_game
+from .models import item_definition
+from .persistence import (
+    DEFAULT_SAVE_FILE,
+    MANUAL_SLOTS,
+    autosave,
+    available_saves,
+    load_game,
+    load_slot,
+    save_slot,
+)
 from .story import StoryEngine
 from .world import create_game
 
@@ -43,8 +55,11 @@ class DaisyApp(tk.Tk):
         self.minsize(980, 680)
         self.configure(bg=COLORS["background"])
         self.game: Game | None = None
+        self.active_slot: str | None = None
         self.enemies: list[Enemy] = []
         self.title_image: tk.PhotoImage | None = None
+        self.scene_image: tk.PhotoImage | None = None
+        self.protocol("WM_DELETE_WINDOW", self.close_game)
         self._configure_styles()
         self.show_title()
 
@@ -96,20 +111,23 @@ class DaisyApp(tk.Tk):
         )
         canvas.pack(fill="both", expand=True)
 
+        image_item = None
         if TITLE_IMAGE.exists():
             original = tk.PhotoImage(file=TITLE_IMAGE)
             self.title_image = original.subsample(2, 2)
-            canvas.create_image(0, 0, image=self.title_image, anchor="nw")
+            image_item = canvas.create_image(590, 0, image=self.title_image, anchor="n")
 
-        canvas.create_rectangle(0, 470, 1180, 760, fill=COLORS["background"], outline="")
-        canvas.create_text(
+        cover = canvas.create_rectangle(
+            0, 470, 1180, 760, fill=COLORS["background"], outline=""
+        )
+        title = canvas.create_text(
             590,
             515,
             text="DAS ABENTEUER DES RACHE-DACKELS",
             fill=COLORS["gold"],
             font=("Georgia", 26, "bold"),
         )
-        canvas.create_text(
+        subtitle = canvas.create_text(
             590,
             557,
             text="Daisy gegen Hubertus Snickers",
@@ -123,16 +141,16 @@ class DaisyApp(tk.Tk):
             style="Daisy.TButton",
             command=self.start_new_game,
         )
-        canvas.create_window(480, 625, window=new_button, width=220)
+        new_window = canvas.create_window(480, 625, window=new_button, width=220)
         load_button = ttk.Button(
             canvas,
             text="Spielstand laden",
             style="Quiet.TButton",
-            command=self.load_saved_game,
-            state="normal" if DEFAULT_SAVE_FILE.exists() else "disabled",
+            command=self.show_load_slots,
+            state="normal" if available_saves() or DEFAULT_SAVE_FILE.exists() else "disabled",
         )
-        canvas.create_window(710, 625, window=load_button, width=200)
-        canvas.create_text(
+        load_window = canvas.create_window(710, 625, window=load_button, width=200)
+        footer = canvas.create_text(
             590,
             705,
             text="Ein kleines datengetriebenes Text-RPG",
@@ -140,21 +158,76 @@ class DaisyApp(tk.Tk):
             font=("Segoe UI", 10),
         )
 
+        def center_title(event: tk.Event) -> None:
+            center = event.width / 2
+            canvas.coords(cover, 0, 470, event.width, max(760, event.height))
+            canvas.coords(title, center, 515)
+            canvas.coords(subtitle, center, 557)
+            canvas.coords(new_window, center - 115, 625)
+            canvas.coords(load_window, center + 115, 625)
+            canvas.coords(footer, center, 705)
+            if image_item is not None:
+                canvas.coords(image_item, center, 0)
+
+        canvas.bind("<Configure>", center_title)
+
     def start_new_game(self) -> None:
         self.game = create_game()
+        self.active_slot = None
         self.show_game()
 
-    def load_saved_game(self) -> None:
+    def show_load_slots(self) -> None:
+        """Zeigt valide Saves mit genug Kontext für eine sichere Auswahl."""
+
+        self.clear()
+        frame = tk.Frame(self, bg=COLORS["background"], padx=80, pady=55)
+        frame.pack(fill="both", expand=True)
+        tk.Label(
+            frame,
+            text="ABENTEUER FORTSETZEN",
+            bg=COLORS["background"],
+            fg=COLORS["gold"],
+            font=("Georgia", 24, "bold"),
+        ).pack(pady=(0, 24))
+        saves = available_saves()
+        for metadata in saves:
+            slot_name = (
+                "Autosave"
+                if metadata.slot == "autosave"
+                else metadata.slot.replace("slot-", "Slot ")
+            )
+            label = (
+                f"{slot_name}: {metadata.location}, Level {metadata.level}\n"
+                f"{metadata.chapter} · {metadata.modified:%d.%m.%Y %H:%M}"
+            )
+            ttk.Button(
+                frame,
+                text=label,
+                style="Quiet.TButton",
+                command=lambda slot=metadata.slot: self.load_saved_game(slot=slot),
+            ).pack(fill="x", pady=5)
+        if DEFAULT_SAVE_FILE.exists():
+            ttk.Button(
+                frame,
+                text="Alten saved_game.json laden",
+                style="Quiet.TButton",
+                command=lambda: self.load_saved_game(legacy=True),
+            ).pack(fill="x", pady=5)
+        ttk.Button(
+            frame, text="Zurück", style="Danger.TButton", command=self.show_title
+        ).pack(pady=(24, 0))
+
+    def load_saved_game(self, *, slot: str | None = None, legacy: bool = False) -> None:
         try:
-            self.game = load_game()
-        except (OSError, ValueError, KeyError) as error:
+            self.game = load_game() if legacy else load_slot(slot or "autosave")
+        except (OSError, TypeError, ValueError, KeyError) as error:
             messagebox.showerror(
                 "Spielstand", f"Der Spielstand konnte nicht geladen werden:\n{error}"
             )
             return
+        self.active_slot = None if legacy or slot == "autosave" else slot
         self.show_game()
-        if self.game.story.complete:
-            self.log("Willkommen zurück, Daisy. Dein Abenteuer geht weiter.")
+        self.log("Willkommen zurück, Daisy. Dein Abenteuer geht weiter.")
 
     def show_game(self) -> None:
         if self.game is None:
@@ -187,8 +260,15 @@ class DaisyApp(tk.Tk):
         right.pack(side="right", fill="y", padx=(18, 0))
         right.pack_propagate(False)
 
+        self.scene_label = tk.Label(
+            left,
+            bg=COLORS["panel"],
+            bd=0,
+        )
         self.story = tk.Text(
             left,
+            height=8,
+            width=50,
             wrap="word",
             bg=COLORS["panel"],
             fg=COLORS["text"],
@@ -202,6 +282,15 @@ class DaisyApp(tk.Tk):
             state="disabled",
         )
         self.story.pack(fill="both", expand=True)
+        self.battle_label = tk.Label(
+            left,
+            justify="left",
+            bg=COLORS["background"],
+            fg=COLORS["text"],
+            font=("Consolas", 11, "bold"),
+            padx=12,
+            pady=8,
+        )
         self.actions = tk.Frame(left, bg=COLORS["panel"], pady=14)
         self.actions.pack(fill="x")
 
@@ -215,6 +304,7 @@ class DaisyApp(tk.Tk):
         self.status_label = tk.Label(
             right,
             justify="left",
+            wraplength=245,
             bg=COLORS["panel_light"],
             fg=COLORS["text"],
             font=("Segoe UI", 11),
@@ -253,13 +343,13 @@ class DaisyApp(tk.Tk):
             bottom,
             text="Speichern",
             style="Quiet.TButton",
-            command=self.save,
+            command=self.show_save_actions,
         ).pack(fill="x", pady=4)
         ttk.Button(
             bottom,
             text="Zum Titel",
             style="Quiet.TButton",
-            command=self.show_title,
+            command=self.return_to_title,
         ).pack(fill="x", pady=4)
 
         self.refresh()
@@ -280,11 +370,16 @@ class DaisyApp(tk.Tk):
                 f"{player.experience}/{player.experience_for_next_level} EP\n"
                 f"{sum(player.defeated_enemies.values())} Siege\n\n"
                 f"{self.game.story.chapter}\n\n"
-                f"Team: {', '.join(self.game.story.party) or 'Daisy allein'}"
+                f"Nächstes Ziel:\n{self.game.primary_objective()}\n\n"
+                f"Team: {', '.join(self.game.story.party) or 'Daisy allein'}\n"
+                f"Ausrüstung: {', '.join(player.equipment.values()) or 'Keine'}\n"
+                f"Ausrüstungsboni: ANG +{player.equipment_attack_bonus}, "
+                f"VER +{player.equipment_defense_bonus}"
             )
         )
-        stacks = Counter(player.inventory)
-        inventory_text = "\n".join(f"• {amount}× {item}" for item, amount in stacks.items())
+        inventory_text = "\n".join(
+            f"• {line}" for line in self.game.inventory_summary(detailed=False)
+        )
         self.inventory_label.configure(
             text=(
                 f"{len(player.inventory)}/{player.inventory_capacity} Plätze\n"
@@ -311,23 +406,48 @@ class DaisyApp(tk.Tk):
         self.story.see("end")
         self.story.configure(state="disabled")
 
-    def set_actions(self, actions: list[tuple[str, object, str]]) -> None:
+    def set_actions(
+        self,
+        actions: list[tuple[str, object, str]],
+        *,
+        vertical: bool = False,
+    ) -> None:
         for child in self.actions.winfo_children():
             child.destroy()
         for text, command, style in actions:
-            ttk.Button(
+            button = ttk.Button(
                 self.actions,
                 text=text,
                 command=command,
                 style=style,
-            ).pack(side="left", padx=(0, 8))
+            )
+            if vertical:
+                button.pack(fill="x", pady=(0, 6))
+            else:
+                index = len(self.actions.grid_slaves())
+                button.grid(
+                    row=index // 3,
+                    column=index % 3,
+                    sticky="ew",
+                    padx=(0, 8),
+                    pady=(0, 6),
+                )
+        if not vertical:
+            for column in range(3):
+                self.actions.grid_columnconfigure(column, weight=1)
 
     def show_main_actions(self) -> None:
+        self.show_story_image(None)
         actions = [
             ("Erkunden", self.explore, "Daisy.TButton"),
             ("Reisen", self.show_travel_actions, "Quiet.TButton"),
-            ("Heilkraut", self.heal, "Quiet.TButton"),
+            ("Heilen", self.show_healing_actions, "Quiet.TButton"),
+            ("Quests", self.show_quests, "Quiet.TButton"),
+            ("Team", self.show_team, "Quiet.TButton"),
+            ("Ausrüstung", self.show_equipment_actions, "Quiet.TButton"),
         ]
+        if self.game is not None and self.game.available_quest_turn_ins():
+            actions.append(("Quest abgeben", self.show_quest_turn_ins, "Daisy.TButton"))
         if (
             self.game is not None
             and self.game.location.dungeon_name
@@ -343,11 +463,131 @@ class DaisyApp(tk.Tk):
             )
         self.set_actions(actions)
 
+    def show_quests(self) -> None:
+        if self.game is None:
+            return
+        quests = self.game.quest_summary()
+        self.log("QUESTBUCH\n" + ("\n".join(quests) if quests else "Noch keine Quests."))
+        self.show_main_actions()
+
+    def show_team(self) -> None:
+        if self.game is None:
+            return
+        members = self.game.party_summary()
+        details = "\n\n".join(members) if members else "Daisy reist allein."
+        self.log("TEAM & FREUNDSCHAFT\n" + details)
+        self.show_main_actions()
+
+    def show_quest_turn_ins(self) -> None:
+        if self.game is None:
+            return
+        actions = []
+        for quest_id, quest in self.game.available_quest_turn_ins():
+            owned = self.game.player.inventory.count(quest.objective_target or "")
+            remaining = quest.target - quest.progress
+            actions.append(
+                (
+                    f"{quest.objective_target} übergeben ({owned}/{remaining})",
+                    lambda selected=quest_id: self.turn_in_quest(selected),
+                    "Daisy.TButton",
+                )
+            )
+        actions.append(("Zurück", self.show_main_actions, "Danger.TButton"))
+        self.set_actions(actions, vertical=True)
+
+    def turn_in_quest(self, quest_id: str) -> None:
+        if self.game is None:
+            return
+        for message in self.game.turn_in_quest(quest_id):
+            self.log(message)
+        self.autosave_safely()
+        self.refresh()
+        if self.game.activate_story_for_location():
+            self.show_story_node()
+        else:
+            self.show_main_actions()
+
+    def show_equipment_actions(self) -> None:
+        if self.game is None:
+            return
+        equipment = [
+            item
+            for item in dict.fromkeys(self.game.player.inventory)
+            if item_definition(item).kind == "equipment"
+        ]
+        if not equipment:
+            self.log("Daisy besitzt noch keine Ausrüstung.")
+            self.show_main_actions()
+            return
+        actions = []
+        for item in equipment:
+            definition = item_definition(item)
+            marker = " ✓" if item in self.game.player.equipment.values() else ""
+            label = (
+                f"{item}{marker} (ANG +{definition.attack_bonus}, "
+                f"VER +{definition.defense_bonus})"
+            )
+            actions.append(
+                (label, lambda selected=item: self.equip_item(selected), "Quiet.TButton")
+            )
+        actions.append(("Zurück", self.show_main_actions, "Danger.TButton"))
+        self.set_actions(actions)
+
+    def equip_item(self, item: str) -> None:
+        if self.game is None:
+            return
+        definition = item_definition(item)
+        previous = self.game.player.equipment.get(definition.slot or "")
+        if self.game.player.equip(item):
+            if previous and previous != item:
+                self.log(f"Daisy wechselt {previous} gegen {item}.")
+            else:
+                self.log(f"Daisy legt {item} an.")
+        else:
+            self.log(f"{item} kann nicht angelegt werden.")
+        self.refresh()
+        self.show_equipment_actions()
+
+    def show_healing_actions(self, *, battle: bool = False) -> None:
+        if self.game is None:
+            return
+        consumables = self.game.available_consumables()
+        if not consumables:
+            self.log("Daisy besitzt kein verwendbares Heilitem.")
+            self.show_attack_actions() if battle else self.show_main_actions()
+            return
+        actions = [
+            (
+                f"{item} (+{item_definition(item).healing} LP)",
+                lambda selected=item: self.use_consumable(selected, battle=battle),
+                "Quiet.TButton",
+            )
+            for item in consumables
+        ]
+        back = self.show_attack_actions if battle else self.show_main_actions
+        actions.append(("Zurück", back, "Danger.TButton"))
+        self.set_actions(actions)
+
+    def use_consumable(self, item: str, *, battle: bool = False) -> None:
+        if self.game is None:
+            return
+        healed = self.game.player.use_consumable(item)
+        self.log(f"{item}: Daisy heilt {healed} LP." if healed else "Heilung nicht nötig.")
+        self.refresh()
+        if battle and healed:
+            self.enemy_turn()
+        elif battle:
+            self.show_attack_actions()
+        else:
+            self.show_main_actions()
+
     def show_story_node(self) -> None:
         if self.game is None or self.game.story.complete:
             self.show_main_actions()
             return
-        node = StoryEngine(self.game).current
+        engine = StoryEngine(self.game)
+        node = engine.current
+        self.show_story_image(node.image)
         self.log(node.title.upper())
         for paragraph in node.text:
             self.log(paragraph)
@@ -358,15 +598,63 @@ class DaisyApp(tk.Tk):
                     lambda choice_id=choice.id: self.choose_story(choice_id),
                     "Daisy.TButton",
                 )
-                for choice in node.choices
-            ]
+                for choice in engine.available_choices
+            ],
+            vertical=True,
         )
+
+    def show_story_image(self, filename: str | None) -> None:
+        """Blendet ein optionales, vom Storyknoten referenziertes Szenenbild ein."""
+
+        self.scene_label.pack_forget()
+        self.scene_image = None
+        if not filename:
+            return
+        path = ASSET_DIR / filename
+        if not path.exists():
+            self.log(f"Szenenbild fehlt: {filename}")
+            return
+        original = tk.PhotoImage(file=path)
+        self.update_idletasks()
+        available_width = max(1, self.story.winfo_width())
+        factor = max(1, (original.width() + available_width - 1) // available_width)
+        self.scene_image = original.subsample(factor, factor)
+        self.scene_label.configure(image=self.scene_image, cursor="hand2")
+        self.scene_label.bind(
+            "<Button-1>", lambda _event: self.enlarge_story_image(path)
+        )
+        self.scene_label.pack(fill="x", before=self.story, pady=(0, 12))
+
+    def enlarge_story_image(self, path: Path) -> None:
+        """Öffnet ein Szenenbild möglichst groß, ohne es abzuschneiden."""
+
+        popup = tk.Toplevel(self)
+        popup.title("Szenenbild – zum Schließen anklicken")
+        popup.configure(bg=COLORS["background"])
+        original = tk.PhotoImage(file=path)
+        max_width = max(1, int(self.winfo_screenwidth() * 0.9))
+        max_height = max(1, int(self.winfo_screenheight() * 0.85))
+        factor = max(
+            1,
+            (original.width() + max_width - 1) // max_width,
+            (original.height() + max_height - 1) // max_height,
+        )
+        popup.scene_image = original.subsample(factor, factor)
+        label = tk.Label(
+            popup,
+            image=popup.scene_image,
+            bg=COLORS["background"],
+            cursor="hand2",
+        )
+        label.pack()
+        label.bind("<Button-1>", lambda _event: popup.destroy())
 
     def choose_story(self, choice_id: str) -> None:
         if self.game is None:
             return
         for message in StoryEngine(self.game).choose(choice_id):
             self.log(message)
+        self.autosave_safely()
         self.refresh()
         if self.game.story.complete:
             if self.game.finished:
@@ -384,12 +672,14 @@ class DaisyApp(tk.Tk):
         self.log(f"{location.name}\n{location.description}")
         found = self.game.collect_items()
         self.log("Gefunden: " + ", ".join(found) if found else "Daisy findet nichts Neues.")
+        quest_messages = self.game.update_location_quests()
+        for message in quest_messages:
+            self.log(message)
+        self.autosave_safely()
         self.refresh()
         if location.enemy and location.enemy.is_alive:
             self.start_battle(location.enemy)
             return
-        for message in self.game.update_location_quests():
-            self.log(message)
         if self.game.activate_story_for_location():
             self.show_story_node()
             return
@@ -444,17 +734,21 @@ class DaisyApp(tk.Tk):
         if healed is None:
             self.log("Daisy kann hier nicht sicher rasten.")
             return
-        save_game(self.game)
-        self.log(f"Daisy ruht sich aus, heilt {healed} LP und speichert das Abenteuer.")
+        self.autosave_safely()
+        self.log(f"Daisy ruht sich aus, heilt {healed} LP; der Autosave wurde aktualisiert.")
         self.refresh()
 
     def show_discard_actions(self) -> None:
         if self.game is None or not self.game.location.safe_haven:
             self.show_main_actions()
             return
-        stacks = list(Counter(self.game.player.inventory))
+        stacks = [
+            item
+            for item in Counter(self.game.player.inventory)
+            if not self.game.discard_block_reason(item)
+        ]
         if not stacks:
-            self.log("Daisys Inventar ist leer.")
+            self.log("Daisy hat keine ablegbaren Gegenstände.")
             self.show_main_actions()
             return
         actions = [
@@ -476,31 +770,85 @@ class DaisyApp(tk.Tk):
         self.refresh()
         self.show_discard_actions()
 
-    def heal(self) -> None:
+    def show_save_actions(self) -> None:
         if self.game is None:
             return
-        healed = self.game.player.use_healing_item()
-        self.log(f"Daisy heilt {healed} LP." if healed else "Daisy hat kein Heilkraut.")
-        self.refresh()
+        metadata = {save.slot: save for save in available_saves()}
+        actions = []
+        for slot in MANUAL_SLOTS:
+            saved = metadata.get(slot)
+            label = slot.replace("slot-", "Slot ")
+            if saved:
+                label += f" überschreiben ({saved.location}, Level {saved.level})"
+            actions.append(
+                (label, lambda selected=slot: self.save_to_slot(selected), "Quiet.TButton")
+            )
+        actions.append(("Zurück", self.show_main_actions, "Danger.TButton"))
+        self.set_actions(actions, vertical=True)
 
-    def save(self) -> None:
+    def save_to_slot(self, slot: str) -> None:
         if self.game is None:
             return
-        save_game(self.game)
-        self.log("Spielstand gespeichert.")
+        existing = {save.slot for save in available_saves()}
+        if slot in existing and not messagebox.askyesno(
+            "Spielstand überschreiben", "Diesen Spielstand wirklich überschreiben?"
+        ):
+            self.show_save_actions()
+            return
+        try:
+            save_slot(self.game, slot)
+        except OSError as error:
+            messagebox.showerror("Spielstand", f"Speichern fehlgeschlagen:\n{error}")
+            return
+        self.active_slot = slot
+        self.log(f"{slot.replace('slot-', 'Slot ')} gespeichert.")
+        self.show_main_actions()
+
+    def autosave_safely(self) -> None:
+        # Eine Niederlage darf den letzten fortsetzbaren Autosave nicht ersetzen.
+        if self.game is None or not self.game.player.is_alive:
+            return
+        try:
+            autosave(self.game)
+        except OSError as error:
+            self.log(f"Autosave fehlgeschlagen: {error}")
+
+    def return_to_title(self) -> None:
+        if self.game is not None:
+            self.autosave_safely()
+        self.show_title()
+
+    def close_game(self) -> None:
+        if self.game is not None:
+            self.autosave_safely()
+        self.destroy()
 
     def start_battle(self, enemies: Enemy | list[Enemy]) -> None:
         self.enemies = enemies if isinstance(enemies, list) else [enemies]
         names = ", ".join(enemy.name for enemy in self.enemies)
         self.log(f"{len(self.enemies)} Gegner greifen an: {names}")
+        self.battle_label.pack(fill="x", before=self.actions, pady=(8, 0))
+        self.refresh_battle_status()
         self.show_attack_actions()
+
+    def refresh_battle_status(self) -> None:
+        if not self.enemies:
+            self.battle_label.pack_forget()
+            return
+        lines = []
+        for enemy in self.enemies:
+            maximum = max(1, enemy.max_health or enemy.health)
+            filled = round(18 * enemy.health / maximum)
+            bar = "█" * filled + "░" * (18 - filled)
+            lines.append(f"{enemy.name:<24} [{bar}] {enemy.health}/{maximum} LP")
+        self.battle_label.configure(text="\n".join(lines))
 
     def show_attack_actions(self) -> None:
         if self.game is None:
             return
         actions = [
             (
-                attack.name,
+                f"{attack.name}\n{attack.description}",
                 lambda selected=attack: self.show_target_actions(selected),
                 "Daisy.TButton",
             )
@@ -508,7 +856,7 @@ class DaisyApp(tk.Tk):
         ]
         actions.extend(
             [
-                ("Heilkraut", self.battle_heal, "Quiet.TButton"),
+                ("Heilitem", lambda: self.show_healing_actions(battle=True), "Quiet.TButton"),
                 ("Fliehen", self.flee, "Danger.TButton"),
             ]
         )
@@ -534,6 +882,12 @@ class DaisyApp(tk.Tk):
             return
         damage = self.game.attack(enemy, attack=attack)
         self.log(f"{attack.name} gegen {enemy.name}: {damage} Schaden.")
+        self.refresh_battle_status()
+        if not self.game.player.is_alive:
+            self.refresh()
+            self.show_defeat_actions()
+            self.log("Die Vergiftung war zu stark. Daisy wurde besiegt.")
+            return
         if not enemy.is_alive:
             for message in self.game.complete_victory(enemy):
                 self.log(message)
@@ -543,32 +897,28 @@ class DaisyApp(tk.Tk):
             return
         self.enemy_turn()
 
-    def battle_heal(self) -> None:
-        if self.game is None:
-            return
-        healed = self.game.player.use_healing_item()
-        self.log(f"Daisy heilt {healed} LP." if healed else "Kein Heilkraut vorhanden.")
-        if healed:
-            self.enemy_turn()
-        self.refresh()
-
     def enemy_turn(self) -> None:
         if self.game is None or not self.enemies:
             return
         for enemy in self.enemies:
-            damage = self.game.enemy_attack(enemy)
-            self.log(f"{enemy.name} verursacht {damage} Schaden.")
+            _result, message = self.game.resolve_enemy_action(enemy)
+            self.log(message)
             if not self.game.player.is_alive:
                 break
         self.refresh()
+        self.refresh_battle_status()
         if not self.game.player.is_alive:
-            self.set_actions([("Neues Spiel", self.start_new_game, "Danger.TButton")])
+            self.show_defeat_actions()
             self.log("Daisy wurde besiegt. Das Abenteuer ist noch nicht vorbei.")
+        else:
+            self.show_attack_actions()
 
     def finish_battle(self) -> None:
         if self.game is None:
             return
         self.enemies = []
+        self.refresh_battle_status()
+        self.autosave_safely()
         self.refresh()
         if self.game.activate_story_for_location():
             self.show_story_node()
@@ -580,13 +930,37 @@ class DaisyApp(tk.Tk):
     def flee(self) -> None:
         self.log("Daisy zieht sich zurück.")
         self.enemies = []
+        self.refresh_battle_status()
         self.show_main_actions()
+
+    def show_defeat_actions(self) -> None:
+        self.set_actions(
+            [
+                ("Autosave laden", self.show_load_slots, "Daisy.TButton"),
+                ("Neues Spiel", self.start_new_game, "Danger.TButton"),
+                ("Zum Titel", self.return_to_title, "Quiet.TButton"),
+            ],
+            vertical=True,
+        )
 
 
 def main() -> None:
     """Startet die grafische Oberfläche."""
 
+    _enable_dpi_awareness()
     DaisyApp().mainloop()
+
+
+def _enable_dpi_awareness() -> None:
+    """Verhindert unscharfe Windows-Skalierung auf hochauflösenden Displays."""
+
+    if sys.platform != "win32":
+        return
+    try:
+        ctypes.windll.shcore.SetProcessDpiAwareness(1)
+    except (AttributeError, OSError):
+        with suppress(AttributeError, OSError):
+            ctypes.windll.user32.SetProcessDPIAware()
 
 
 if __name__ == "__main__":

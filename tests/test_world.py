@@ -53,3 +53,29 @@ def test_unknown_connection_is_rejected(tmp_path):
 
     with pytest.raises(ValueError, match="Unbekannte Verbindung"):
         create_world(world_file)
+
+
+def test_invalid_enemy_behavior_is_rejected(tmp_path):
+    world_file = tmp_path / "world.json"
+    world_file.write_text(
+        json.dumps(
+            {
+                "locations": [
+                    {
+                        "name": "Arena",
+                        "description": "Test",
+                        "enemy": {
+                            "name": "Fehler",
+                            "health": 10,
+                            "attack_power": 2,
+                            "behavior": "unbekannt",
+                        },
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="Gegnerverhalten"):
+        create_world(world_file)

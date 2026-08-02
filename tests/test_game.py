@@ -107,6 +107,97 @@ def test_victory_rewards_are_shared_by_all_interfaces():
     assert any("40 EP" in message for message in messages)
 
 
+def test_victory_does_not_claim_reward_when_inventory_is_full():
+    game = create_game()
+    game.player.inventory = [
+        f"Ballast {number}" for number in range(game.player.inventory_capacity)
+    ]
+    enemy = Enemy("Beutelhüter", health=0, attack_power=1, reward="Seltener Fund")
+
+    messages = game.complete_victory(enemy)
+
+    assert "Seltener Fund" not in game.player.inventory
+    assert any("Inventar voll" in message and "Seltener Fund" in message for message in messages)
+    assert not any("Daisy erhält: Seltener Fund" in message for message in messages)
+    assert "Seltener Fund" in game.location.items
+
+
+def test_same_enemy_victory_cannot_be_rewarded_twice():
+    game = create_game()
+    enemy = Enemy("Einmalig", health=0, attack_power=1, experience_reward=25)
+
+    first = game.complete_victory(enemy)
+    second = game.complete_victory(enemy)
+
+    assert first
+    assert second == []
+    assert game.player.experience == 25
+    assert game.player.defeated_enemies == {"Einmalig": 1}
+
+
+def test_poison_death_prevents_player_attack():
+    game = create_game()
+    game.player.health = 5
+    game.player.statuses["Vergiftung"] = 1
+    enemy = Enemy("Ziel", health=20, attack_power=1)
+
+    assert game.attack(enemy, random.Random(1)) == 0
+    assert not game.player.is_alive
+    assert enemy.health == 20
+
+
+def test_tactical_enemy_can_prepare_and_execute_strong_attack():
+    game = create_game()
+    enemy = Enemy(
+        "Taktiker",
+        health=30,
+        max_health=100,
+        attack_power=10,
+        behavior="boss",
+        phase_threshold=0.5,
+    )
+
+    prepared = game.enemy_turn(enemy, random.Random(9))
+    health_before = game.player.health
+    strong = game.enemy_turn(enemy, random.Random(1))
+
+    assert prepared.action == "prepare"
+    assert strong.action == "strong"
+    assert strong.damage == health_before - game.player.health
+
+
+def test_enemy_can_heal_and_dead_enemy_cannot_act():
+    game = create_game()
+    enemy = Enemy(
+        "Heiler",
+        health=30,
+        max_health=100,
+        attack_power=5,
+        heal_power=12,
+    )
+
+    healed = game.enemy_turn(enemy, random.Random(1))
+    assert healed.action == "heal"
+    assert healed.healing == 12
+    assert enemy.health == 42
+
+    enemy.health = 0
+    assert game.enemy_turn(enemy, random.Random(1)).action == "inactive"
+
+
+def test_enemy_defense_reduces_exactly_one_player_attack():
+    game = create_game()
+    enemy = Enemy("Wächter", health=100, attack_power=5)
+    enemy.statuses["Verteidigung"] = 1
+
+    defended = game.attack(enemy, random.Random(3), Attack("Test", 0, ""))
+    enemy.health = 100
+    normal = game.attack(enemy, random.Random(3), Attack("Test", 0, ""))
+
+    assert defended < normal
+    assert "Verteidigung" not in enemy.statuses
+
+
 def test_encounters_scale_with_player_level():
     game = create_game()
     game.current_location = "Finsterwald"
@@ -184,6 +275,80 @@ def test_rest_and_discard_require_a_safe_haven():
     assert game.discard_inventory_stack("Stein") == 0
     assert game.player.health == 90
     assert game.player.inventory == ["Stein"]
+
+
+def test_safe_haven_does_not_discard_equipped_or_quest_items():
+    game = create_game()
+    game.current_location = "Dorfbaumhaus"
+    game.player.inventory = ["Spinnenfänger-Halsband", "Schwarzes Abzeichen", "Stein"]
+    assert game.player.equip("Spinnenfänger-Halsband")
+
+    assert game.discard_inventory_stack("Spinnenfänger-Halsband") == 0
+    assert game.discard_inventory_stack("Schwarzes Abzeichen") == 0
+    assert game.discard_inventory_stack("Stein") == 1
+    assert game.player.equipment_defense_bonus == 2
+
+
+def test_cli_equipment_menu_uses_the_same_character_rules():
+    game = create_game()
+    game.player.inventory.append("Runenhalsband")
+    messages: list[str] = []
+
+    game._equipment_menu(lambda _prompt: "1", messages.append)
+
+    assert game.player.equipment == {"collar": "Runenhalsband"}
+    assert game.player.equipment_attack_bonus == 3
+    assert any("Daisy legt Runenhalsband an" in message for message in messages)
+
+
+def test_equipment_menu_reports_replacing_the_current_collar():
+    game = create_game()
+    game.player.inventory = ["Spinnenfänger-Halsband", "Runenhalsband"]
+    game.player.equip("Spinnenfänger-Halsband")
+    messages: list[str] = []
+
+    game._equipment_menu(lambda _prompt: "2", messages.append)
+
+    assert game.player.equipment == {"collar": "Runenhalsband"}
+    assert game.player.equipment_attack_bonus == 3
+    assert game.player.equipment_defense_bonus == 0
+    assert any("wechselt Spinnenfänger-Halsband" in message for message in messages)
+
+
+def test_inventory_summary_shows_types_and_equipped_state():
+    game = create_game()
+    game.player.inventory = ["Heilkraut", "Schwarzes Abzeichen", "Runenhalsband"]
+    game.player.equip("Runenhalsband")
+
+    summary = game.inventory_summary()
+
+    assert any("Heilkraut [Verbrauch]" in line and "Heilt 30 LP" in line for line in summary)
+    assert any("Schwarzes Abzeichen [Questitem]" in line for line in summary)
+    assert any("Runenhalsband [Ausrüstung] – angelegt" in line for line in summary)
+
+
+def test_inventory_summary_groups_items_for_quick_scanning():
+    game = create_game()
+    game.player.inventory = ["Stein", "Heilkraut", "Runenhalsband", "Schwarzes Abzeichen"]
+
+    summary = game.inventory_summary(detailed=False)
+
+    assert [line.split(" [")[1].split("]")[0] for line in summary] == [
+        "Questitem",
+        "Ausrüstung",
+        "Verbrauch",
+        "Beute",
+    ]
+
+
+def test_locked_destination_explains_story_reason_without_exposing_flags():
+    game = create_game()
+    game.current_location = "Hundewacht"
+
+    reason = game.travel_block_reason("Water-City")
+
+    assert reason == "Der Weg nach Water-City wird erst mit Leos Magie passierbar."
+    assert "leo_joined" not in reason
 
 
 def test_dungeon_encounter_carries_location_loot():

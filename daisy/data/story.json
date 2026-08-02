@@ -190,6 +190,7 @@
     {
       "id": "ashes_of_grauholz",
       "title": "Kapitel I – Asche über Grauholz",
+      "image": "story-leika-joins.png",
       "text": [
         "Die Spur der Eintreiber führt zum Dorfmarkt. Dort könnten Händler oder Reisende wissen, wohin Hubertus' Leute verschwunden sind.",
         "Daisy verlässt ihr Zuhause nicht als Heldin. Sie verlässt es als trauernde Tochter mit einer Freundin an ihrer Seite und einer ersten Spur in den Pfoten."
@@ -205,7 +206,13 @@
               "id": "trace_collectors",
               "title": "Die Spur der Eintreiber",
               "description": "Untersuche den Dorfmarkt und finde heraus, wohin Hubertus' Leute geflohen sind.",
-              "target": 1
+              "target": 1,
+              "kind": "main",
+              "objective_type": "visit_location",
+              "objective_target": "Dorfmarkt",
+              "completion_text": "Zwischen den Marktständen entdeckt Daisy Schleifspuren und schwarzen Stoff. Die Eintreiber flohen in den Finsterwald.",
+              "reward_experience": 30,
+              "reward_items": ["Heilkraut"]
             }
           }
         }
@@ -225,6 +232,20 @@
           "next_node": "forest_mission",
           "effects": {
             "flag": "helped_market_trader",
+            "friendship": {"character": "Leika", "points": 2},
+            "add_item": "Heilkraut"
+          }
+        },
+        {
+          "id": "trust_leika",
+          "label": "Leika die Entscheidung überlassen",
+          "next_node": "forest_mission",
+          "conditions": {
+            "party_contains": "Leika",
+            "min_friendship": {"Leika": 1}
+          },
+          "effects": {
+            "flag": "trusted_leika_at_market",
             "friendship": {"character": "Leika", "points": 2},
             "add_item": "Heilkraut"
           }
@@ -258,7 +279,13 @@
               "id": "clear_spider_nest",
               "title": "Brunos verlorener Pfad",
               "description": "Besiege die Spinnenkönigin im Finsterwald.",
-              "target": 1
+              "target": 1,
+              "kind": "main",
+              "objective_type": "defeat_enemy",
+              "objective_target": "Spinnenkönigin",
+              "completion_text": "Mit dem Fall der Spinnenkönigin ist Brunos verlorener Pfad wieder frei.",
+              "reward_experience": 60,
+              "reward_items": ["Spinnenfänger-Halsband"]
             }
           }
         }
@@ -267,6 +294,7 @@
     {
       "id": "bruno_recruit",
       "title": "Der Wächter des Waldes",
+      "image": "story-bruno-joins.png",
       "text": [
         "Nach dem Kampf tritt Bruno aus der Höhle. Der große Bernhardiner trägt Narben unter seinem dichten Fell, aber seine Stimme ist ruhig.",
         "„Ihr habt nicht nur euch selbst geholfen. Der Weg ist wieder sicher.“ Er kennt eine Route nach Hundewacht und die Zeichen von Hubertus' Eintreibern.",
@@ -304,7 +332,7 @@
       "title": "Die Rettungs-Hundehütte",
       "text": [
         "Hundewacht glänzt nach außen, doch in den Seitengassen liegen Verletzte und Flüchtlinge. Jack versorgt sie in einer kleinen Rettungs-Hundehütte.",
-        "Der Pudel hört sich Daisys Geschichte schweigend an. „Wenn du nur sterben willst, brauchst du keinen Heiler. Wenn du etwas retten willst, komme ich mit.“",
+        "Der kleine schwarz-silbergraue Toypudel hört sich Daisys Geschichte schweigend an. „Wenn du nur sterben willst, brauchst du keinen Heiler. Wenn du etwas retten willst, komme ich mit.“",
         "Seine Vorräte sind fast aufgebraucht. Für die Gefangenen im Kerker benötigt er zwei Bündel Heilkraut."
       ],
       "choices": [
@@ -318,7 +346,14 @@
               "id": "gather_herbs_for_jack",
               "title": "Nicht nur Rache",
               "description": "Bringe Jack zwei Heilkräuter für die Verletzten.",
-              "target": 2
+              "target": 2,
+              "kind": "personal",
+              "objective_type": "deliver_item",
+              "objective_target": "Heilkraut",
+              "objective_location": "Rettungs-Hundehütte",
+              "completion_text": "Jack kann genügend Medizin für die Verletzten herstellen.",
+              "reward_experience": 50,
+              "reward_items": ["Heilkraut"]
             }
           }
         }
@@ -327,10 +362,11 @@
     {
       "id": "jack_recruit",
       "title": "Jacks Entscheidung",
+      "image": "story-jack-joins.png",
       "text": [
         "Jack verarbeitet die Heilkräuter und verteilt die Medizin, bevor er auch nur an seine eigene Reiseausrüstung denkt.",
         "„Du bist zurückgekommen“, sagt er zu Daisy. „Das bedeutet, dass für dich noch mehr zählt als Hubertus.“",
-        "Er hängt sich seine Heiltasche um. „Dann sorgen wir gemeinsam dafür, dass du dich daran erinnerst.“"
+        "Er hängt sich seine winzige Heiltasche um und behält Daisy aufmerksam im Blick. „Dann sorgen wir gemeinsam dafür, dass du dich daran erinnerst.“"
       ],
       "choices": [
         {
@@ -342,6 +378,39 @@
             "friendship": {"character": "Jack", "points": 2},
             "flag": "jack_joined",
             "chapter": "Kapitel IV – Der Magierturm"
+          }
+        }
+      ]
+    },
+    {
+      "id": "jack_backpack_memory",
+      "title": "Bin da. Geht's los?",
+      "image": "story-jack-backpack.png",
+      "text": [
+        "Im Waldbaumhaus findet Daisy Jack nicht bei den Vorräten, sondern vor ihrem offenen Reiserucksack. Er sitzt ganz still davor, schaut erst hinein und dann zu ihr, als wäre die Frage offensichtlich: Bin da. Geht's los?",
+        "Als Daisy sich zu ihm setzt, erzählt Jack leise von früher. Man hatte ihn als Zuchtrüden gehalten, nicht als Gefährten. Danach fürchtete er fremde Stimmen, schnelle Bewegungen und beinahe jede ausgestreckte Pfote.",
+        "Nur einem jungen Sanitäter vertraute er sofort. Der drängte ihn nie und trug ihn nah bei sich, im Hoodie oder im Rucksack, wenn Jack selbst dort hineinwollte. Jack lernte, dass Nähe kein Käfig sein muss. Später lernte er zu heilen, damit auch andere diesen sicheren Ort finden können.",
+        "„Ich musste nie mitgehen“, sagt Jack. „Ich wollte bei ihm sein. Seitdem entscheide ich selbst, wem ich folge.“ Dann legt er eine kleine Pfote an Daisys Rucksack."
+      ],
+      "choices": [
+        {
+          "id": "make_room",
+          "label": "Im Rucksack einen festen Platz für Jack schaffen",
+          "next_node": "COMPLETE",
+          "effects": {
+            "flags": ["jack_memory_shared", "jack_has_travel_place"],
+            "friendship": {"character": "Jack", "points": 3},
+            "heal_full": true
+          }
+        },
+        {
+          "id": "wait_for_jack",
+          "label": "Neben ihm warten, bis Jack selbst hineinklettert",
+          "next_node": "COMPLETE",
+          "effects": {
+            "flags": ["jack_memory_shared", "jack_trust_respected"],
+            "friendship": {"character": "Jack", "points": 3},
+            "heal_full": true
           }
         }
       ]
@@ -368,7 +437,10 @@
               "id": "collect_way_signs",
               "title": "Die drei Wegzeichen",
               "description": "Befreie Wasser-, Erd- und Himmelreich und sammle ihre Wegzeichen.",
-              "target": 3
+              "target": 3,
+              "kind": "main",
+              "reward_experience": 150,
+              "reward_items": ["Runenhalsband"]
             }
           }
         }
@@ -388,6 +460,7 @@
           "next_node": "COMPLETE",
           "effects": {
             "flag": "water_sign",
+            "advance_quest": "collect_way_signs",
             "friendship": {"character": "Jack", "points": 2},
             "heal_full": true
           }
@@ -408,6 +481,7 @@
           "next_node": "COMPLETE",
           "effects": {
             "flag": "earth_sign",
+            "advance_quest": "collect_way_signs",
             "friendship": {"character": "Bruno", "points": 2},
             "heal_full": true
           }
@@ -428,6 +502,7 @@
           "next_node": "COMPLETE",
           "effects": {
             "flag": "sky_sign",
+            "advance_quest": "collect_way_signs",
             "friendship": {"character": "Leo", "points": 2},
             "complete_quest": "collect_way_signs",
             "chapter": "Kapitel VI – Der Höllenschlund",
@@ -603,6 +678,89 @@
       ]
     }
   ],
+  "guidance": [
+    {
+      "id": "find_jack",
+      "text": "Reise zur Rettungs-Hundehütte in Hundewacht und suche nach Überlebenden.",
+      "destination": "Rettungs-Hundehütte",
+      "conditions": {
+        "requires_flags": ["bruno_joined"],
+        "excludes_flags": ["met_jack"]
+      }
+    },
+    {
+      "id": "find_leo",
+      "text": "Reise durch den Finsterwald zum Magierturm und suche nach Leo.",
+      "destination": "Magierturm",
+      "conditions": {
+        "requires_flags": ["jack_joined"],
+        "excludes_flags": ["leo_joined"]
+      }
+    },
+    {
+      "id": "free_water_city",
+      "text": "Reise von Hundewacht nach Water-City und befreie das Wasserreich.",
+      "destination": "Water-City",
+      "conditions": {
+        "requires_flags": ["leo_joined"],
+        "excludes_flags": ["water_sign"]
+      }
+    },
+    {
+      "id": "free_bootswacht",
+      "text": "Folge dem Weg von Water-City nach Bootswacht und erringe das Erdzeichen.",
+      "destination": "Bootswacht",
+      "conditions": {
+        "requires_flags": ["water_sign"],
+        "excludes_flags": ["earth_sign"]
+      }
+    },
+    {
+      "id": "free_sky",
+      "text": "Reise weiter nach Wolkenstadt und erringe das Himmelszeichen.",
+      "destination": "Wolkenstadt",
+      "conditions": {
+        "requires_flags": ["earth_sign"],
+        "excludes_flags": ["sky_sign"]
+      }
+    },
+    {
+      "id": "face_kaltklinge",
+      "text": "Durchquere den Säuresumpf und stelle dich Kaltklinge.",
+      "destination": "Säuresumpf",
+      "conditions": {
+        "requires_flags": ["sky_sign"],
+        "excludes_flags": ["defeated:Kaltklinge"]
+      }
+    },
+    {
+      "id": "enter_fire_realm",
+      "text": "Der Weg ins Feuerreich ist frei. Besiege dort die Höllenwache.",
+      "destination": "Feuerreich",
+      "conditions": {
+        "requires_flags": ["defeated:Kaltklinge"],
+        "excludes_flags": ["defeated:Höllenwache"]
+      }
+    },
+    {
+      "id": "reach_castle",
+      "text": "Reise zum Schlosstor und finde einen Weg an Willy vorbei.",
+      "destination": "Schlosstor",
+      "conditions": {
+        "requires_flags": ["defeated:Höllenwache"],
+        "excludes_flags": ["willy_resolved"]
+      }
+    },
+    {
+      "id": "confront_hubertus",
+      "text": "Betritt den Thronsaal und stelle Hubertus Snickers.",
+      "destination": "Thronsaal",
+      "conditions": {
+        "requires_flags": ["willy_resolved"],
+        "excludes_flags": ["defeated:Hubertus Snickers"]
+      }
+    }
+  ],
   "triggers": [
     {
       "id": "market_story",
@@ -615,7 +773,7 @@
       "location": "Finsterwald",
       "node": "bruno_recruit",
       "requires_flags": ["defeated:Spinnenkönigin"],
-      "quest_active": "clear_spider_nest"
+      "quest_completed": "clear_spider_nest"
     },
     {
       "id": "jack_story",
@@ -630,6 +788,14 @@
       "node": "jack_recruit",
       "quest_completed": "gather_herbs_for_jack",
       "excludes_flags": ["jack_joined"]
+    },
+    {
+      "id": "jack_backpack_story",
+      "location": "Waldbaumhaus",
+      "node": "jack_backpack_memory",
+      "requires_flags": ["jack_joined"],
+      "excludes_flags": ["jack_memory_shared"],
+      "party_contains": "Jack"
     },
     {
       "id": "leo_story",

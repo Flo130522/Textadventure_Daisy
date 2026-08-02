@@ -21,6 +21,29 @@ def test_healing_item_is_consumed():
     assert "Heilkraut" not in daisy.inventory
 
 
+def test_healing_item_is_not_consumed_at_full_health():
+    daisy = Character("Daisy", "Dackel-Mix", "Nahkampf", inventory=["Heilkraut"])
+
+    assert daisy.use_healing_item() == 0
+    assert daisy.inventory == ["Heilkraut"]
+
+
+def test_different_consumables_use_their_own_healing_values():
+    daisy = Character(
+        "Daisy",
+        "Dackel-Mix",
+        "Nahkampf",
+        health=20,
+        inventory=["Heilpilz", "Heilwasser", "Verbandszeug"],
+    )
+
+    assert daisy.use_consumable("Heilpilz") == 20
+    assert daisy.use_consumable("Verbandszeug") == 25
+    assert daisy.use_consumable("Heilwasser") == 35
+    assert daisy.health == daisy.max_health
+    assert daisy.inventory == []
+
+
 def test_connections_are_not_duplicated():
     home = Location("Zuhause", "Gemütlich")
 
@@ -57,3 +80,12 @@ def test_victories_are_counted_by_enemy_name():
     daisy.record_victory("Spinne")
 
     assert daisy.defeated_enemies == {"Spinne": 2}
+
+
+def test_string_inventory_supports_optional_equipment_metadata():
+    daisy = Character("Daisy", "Dackel-Mix", "Nahkampf")
+    daisy.add_item("Spinnenfänger-Halsband")
+
+    assert daisy.equip("Spinnenfänger-Halsband")
+    assert daisy.equipment == {"collar": "Spinnenfänger-Halsband"}
+    assert daisy.equipment_defense_bonus == 2

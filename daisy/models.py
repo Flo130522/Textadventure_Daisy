@@ -7,6 +7,79 @@ from dataclasses import dataclass, field
 
 
 @dataclass(frozen=True)
+class ItemDefinition:
+    """Metadaten für einen weiterhin als String gespeicherten Gegenstand."""
+
+    name: str
+    kind: str = "misc"
+    slot: str | None = None
+    attack_bonus: int = 0
+    defense_bonus: int = 0
+    healing: int = 0
+    description: str = "Beute und Handelsware."
+
+
+ITEMS: dict[str, ItemDefinition] = {
+    "Heilkraut": ItemDefinition(
+        "Heilkraut", kind="consumable", healing=30, description="Heilt 30 LP."
+    ),
+    "Heilpilz": ItemDefinition(
+        "Heilpilz", kind="consumable", healing=20, description="Heilt 20 LP."
+    ),
+    "Heilwasser": ItemDefinition(
+        "Heilwasser", kind="consumable", healing=45, description="Heilt 45 LP."
+    ),
+    "Verbandszeug": ItemDefinition(
+        "Verbandszeug", kind="consumable", healing=25, description="Heilt 25 LP."
+    ),
+    "Schwarzes Abzeichen": ItemDefinition(
+        "Schwarzes Abzeichen", kind="quest", description="Zeichen von Hubertus' Eintreibern."
+    ),
+    "Karte des Finsterwalds": ItemDefinition(
+        "Karte des Finsterwalds", kind="quest", description="Zeigt verborgene Waldpfade."
+    ),
+    "Seidenschlüssel": ItemDefinition(
+        "Seidenschlüssel", kind="quest", description="Ein Schlüssel aus gehärteter Seide."
+    ),
+    "Schwarzer Torschlüssel": ItemDefinition(
+        "Schwarzer Torschlüssel", kind="quest", description="Öffnet ein Tor von Hubertus."
+    ),
+    "Feuersiegel": ItemDefinition(
+        "Feuersiegel", kind="quest", description="Ein Siegel aus dem Feuerreich."
+    ),
+    "Wegzeichen des Wassers": ItemDefinition(
+        "Wegzeichen des Wassers", kind="quest", description="Ein magisches Wegzeichen."
+    ),
+    "Wegzeichen der Erde": ItemDefinition(
+        "Wegzeichen der Erde", kind="quest", description="Ein magisches Wegzeichen."
+    ),
+    "Wegzeichen des Himmels": ItemDefinition(
+        "Wegzeichen des Himmels", kind="quest", description="Ein magisches Wegzeichen."
+    ),
+    "Spinnenfänger-Halsband": ItemDefinition(
+        "Spinnenfänger-Halsband",
+        kind="equipment",
+        slot="collar",
+        defense_bonus=2,
+        description="Ein robustes Halsband: Verteidigung +2.",
+    ),
+    "Runenhalsband": ItemDefinition(
+        "Runenhalsband",
+        kind="equipment",
+        slot="collar",
+        attack_bonus=3,
+        description="Ein magisches Halsband: Angriff +3.",
+    ),
+}
+
+
+def item_definition(name: str) -> ItemDefinition:
+    """Liefert sichere Metadaten; unbekannte alte Items bleiben verwendbar."""
+
+    return ITEMS.get(name, ItemDefinition(name))
+
+
+@dataclass(frozen=True)
 class Attack:
     """Eine auswählbare Kampffähigkeit."""
 
@@ -58,6 +131,7 @@ class Character:
     experience: int = 0
     defeated_enemies: dict[str, int] = field(default_factory=dict)
     statuses: dict[str, int] = field(default_factory=dict)
+    equipment: dict[str, str] = field(default_factory=dict)
 
     @property
     def is_alive(self) -> bool:
@@ -88,10 +162,34 @@ class Character:
         return True
 
     def use_healing_item(self) -> int:
-        if "Heilkraut" not in self.inventory:
+        return self.use_consumable("Heilkraut")
+
+    def use_consumable(self, item: str) -> int:
+        definition = item_definition(item)
+        if (
+            item not in self.inventory
+            or definition.kind != "consumable"
+            or definition.healing <= 0
+            or self.health >= self.max_health
+        ):
             return 0
-        self.inventory.remove("Heilkraut")
-        return self.heal(30)
+        self.inventory.remove(item)
+        return self.heal(definition.healing)
+
+    def equip(self, item: str) -> bool:
+        definition = item_definition(item)
+        if item not in self.inventory or definition.kind != "equipment" or not definition.slot:
+            return False
+        self.equipment[definition.slot] = item
+        return True
+
+    @property
+    def equipment_attack_bonus(self) -> int:
+        return sum(item_definition(item).attack_bonus for item in self.equipment.values())
+
+    @property
+    def equipment_defense_bonus(self) -> int:
+        return sum(item_definition(item).defense_bonus for item in self.equipment.values())
 
     def gain_experience(self, amount: int) -> int:
         """Vergibt EP und gibt die Anzahl der neuen Level zurück."""
@@ -125,6 +223,10 @@ class Enemy:
     effect_chance: float = 0.0
     effect_duration: int = 0
     statuses: dict[str, int] = field(default_factory=dict)
+    behavior: str = "aggressive"
+    heal_power: int = 0
+    phase_threshold: float | None = None
+    victory_processed: bool = False
 
     def __post_init__(self) -> None:
         if self.max_health is None:
@@ -182,6 +284,7 @@ class Location:
     visited: bool = False
     required_level: int = 1
     required_flags: list[str] = field(default_factory=list)
+    locked_reason: str | None = None
     encounters: list[EncounterTemplate] = field(default_factory=list)
     dungeon_name: str | None = None
     dungeon_loot: list[str] = field(default_factory=list)
