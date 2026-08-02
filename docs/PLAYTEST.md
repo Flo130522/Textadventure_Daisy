@@ -27,21 +27,13 @@ weiterspielen.
 ## Beobachtungsliste
 
 - War innerhalb von 30 Sekunden erkennbar, was als Nächstes zu tun ist?
-  - Teilweise, USer können erwarten den aktuellen Ort noch weiter erkunden zu müssen anstelle zu Reisen
 - Wurden Hauptziel und Questbuch verstanden?
-  - Jap
 - Waren gesperrte Reiseziele nachvollziehbar erklärt?
-  - Nope, es steht nur dass der Weg versperrt ist aber nicht warum
 - Wurden Kampf, Zielauswahl, Heilung und Flucht verstanden?
-  - Jap
 - War erkennbar, was Friendship und Partyboni bewirken?
-  - Boni bei beiden nicht genau erkennbar, wird nicht offensichtlich angezeigt
 - Waren Itemtyp, Ausrüstung und angelegte Boni verständlich?
-  - Jap
 - Funktionierten manueller Slot, Autosave, Beenden und Fortsetzen?
- - Jap
 - Trat ein Absturz, Softlock, doppelter Lohn oder verlorener Fortschritt auf?
- - Nope
 - Welche Passage fühlte sich zu langsam, zu leicht oder unfair an?
 - Welcher Storymoment blieb besonders positiv oder negativ hängen?
 
@@ -69,15 +61,7 @@ T0 Verständlichkeit:
 -
 
 T1 Politur:
-- Möglichkeit Artworks anzuklicken um sie zu vergrößern
-- Beschreibung der Attacken 
-- Healthbar der Gegner
-- Jacks Aufgabe wird mit "Erkunden" abgeschlossen
-- GUI etwas unscharf, soll sich an Systemauflösung orientieren
-- Inventar nach "Gruppe" sortieren (Questitem, Verbrauch, etc.)
-- Kapitel deutlich erweitern
-- Möglichkeit Teammitgliedern Items zu schenken (erhöht deren Stats, aber je nach Itemstärke das Freundschaftslevel)
-- Titelbild anders positionieren
+-
 
 Backlog-Ideen:
 -
