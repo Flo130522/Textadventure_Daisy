@@ -124,4 +124,4 @@ verwendet werden. Weitere Informationen stehen in [LICENSE.md](LICENSE.md).
 
 Hinweise zu Beiträgen, Verhalten und Sicherheitsmeldungen stehen in
 [CONTRIBUTING.md](CONTRIBUTING.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
-und [SECURITY.md](SECURITY.md).
+und [.github/SECURITY.md](.github/SECURITY.md).
