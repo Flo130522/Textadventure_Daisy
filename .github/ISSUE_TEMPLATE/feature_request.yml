@@ -1,0 +1,31 @@
+name: Idee vorschlagen
+description: Schlage eine Verbesserung oder neue Funktion für Daisy vor.
+title: "[Idee]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Ausgangssituation
+      description: Welches Problem oder Bedürfnis steht hinter der Idee?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Vorschlag
+      description: Wie könnte die Änderung funktionieren oder aussehen?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternativen
+      description: Welche anderen Lösungen hast du bedacht?
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Einordnung
+      options:
+        - label: Die Idee passt zur bestehenden Welt und Projektausrichtung.
+          required: true
