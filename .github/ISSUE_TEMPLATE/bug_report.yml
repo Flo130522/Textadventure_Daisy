@@ -1,0 +1,50 @@
+name: Bug melden
+description: Melde ein reproduzierbares Problem im Spiel oder Projekt.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Danke für den Hinweis! Bitte beschreibe den Fehler möglichst genau.
+  - type: textarea
+    id: description
+    attributes:
+      label: Fehlerbeschreibung
+      description: Was ist passiert und was hättest du erwartet?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Schritte zum Reproduzieren
+      placeholder: "1. Spiel starten\n2. ...\n3. Fehler tritt auf"
+    validations:
+      required: true
+  - type: dropdown
+    id: interface
+    attributes:
+      label: Oberfläche
+      options:
+        - Desktop-GUI
+        - Terminal
+        - Beide
+        - Nicht zutreffend
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Umgebung
+      description: Betriebssystem, Python-Version und verwendeter Commit oder Build.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs oder Screenshots
+      description: Entferne vorher persönliche oder vertrauliche Daten.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Vor dem Absenden
+      options:
+        - label: Ich habe geprüft, ob der Fehler bereits gemeldet wurde.
+          required: true

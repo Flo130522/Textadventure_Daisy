@@ -113,3 +113,15 @@ Die vorbereitete Anleitung für einen Durchlauf ohne Entwicklerwissen liegt in
 - zusätzliche Nebenquests und optionale NPC-Dialoge
 - eigene aktive Fähigkeiten für Daisys Freunde
 - Musik, Animationen und weitere Illustrationen
+
+## Lizenz und Nutzung
+
+Dieses Repository ist öffentlich einsehbar, steht derzeit jedoch nicht unter
+einer Open-Source-Lizenz. Der Quellcode sowie Spielwelt, Story, Figuren,
+Dialoge, Illustrationen und weitere Inhalte dürfen ohne vorherige schriftliche
+Genehmigung nicht kopiert, verändert, weitergegeben oder für abgeleitete Spiele
+verwendet werden. Weitere Informationen stehen in [LICENSE.md](LICENSE.md).
+
+Hinweise zu Beiträgen, Verhalten und Sicherheitsmeldungen stehen in
+[CONTRIBUTING.md](CONTRIBUTING.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
+und [SECURITY.md](SECURITY.md).
