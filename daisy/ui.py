@@ -117,9 +117,7 @@ class DaisyApp(tk.Tk):
             self.title_image = original.subsample(2, 2)
             image_item = canvas.create_image(590, 0, image=self.title_image, anchor="n")
 
-        cover = canvas.create_rectangle(
-            0, 470, 1180, 760, fill=COLORS["background"], outline=""
-        )
+        cover = canvas.create_rectangle(0, 470, 1180, 760, fill=COLORS["background"], outline="")
         title = canvas.create_text(
             590,
             515,
@@ -213,9 +211,9 @@ class DaisyApp(tk.Tk):
                 style="Quiet.TButton",
                 command=lambda: self.load_saved_game(legacy=True),
             ).pack(fill="x", pady=5)
-        ttk.Button(
-            frame, text="Zurück", style="Danger.TButton", command=self.show_title
-        ).pack(pady=(24, 0))
+        ttk.Button(frame, text="Zurück", style="Danger.TButton", command=self.show_title).pack(
+            pady=(24, 0)
+        )
 
     def load_saved_game(self, *, slot: str | None = None, legacy: bool = False) -> None:
         try:
@@ -524,8 +522,7 @@ class DaisyApp(tk.Tk):
             definition = item_definition(item)
             marker = " ✓" if item in self.game.player.equipment.values() else ""
             label = (
-                f"{item}{marker} (ANG +{definition.attack_bonus}, "
-                f"VER +{definition.defense_bonus})"
+                f"{item}{marker} (ANG +{definition.attack_bonus}, VER +{definition.defense_bonus})"
             )
             actions.append(
                 (label, lambda selected=item: self.equip_item(selected), "Quiet.TButton")
@@ -620,9 +617,7 @@ class DaisyApp(tk.Tk):
         factor = max(1, (original.width() + available_width - 1) // available_width)
         self.scene_image = original.subsample(factor, factor)
         self.scene_label.configure(image=self.scene_image, cursor="hand2")
-        self.scene_label.bind(
-            "<Button-1>", lambda _event: self.enlarge_story_image(path)
-        )
+        self.scene_label.bind("<Button-1>", lambda _event: self.enlarge_story_image(path))
         self.scene_label.pack(fill="x", before=self.story, pady=(0, 12))
 
     def enlarge_story_image(self, path: Path) -> None:

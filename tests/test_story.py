@@ -431,9 +431,7 @@ def test_every_final_choice_reaches_its_ending(ending):
 
 
 @pytest.mark.parametrize("battle_seed", [1, 7, 23])
-def test_complete_campaign_reaches_justice_ending_across_save_boundaries(
-    tmp_path, battle_seed
-):
+def test_complete_campaign_reaches_justice_ending_across_save_boundaries(tmp_path, battle_seed):
     game = create_game()
     save_file = tmp_path / "campaign.json"
 

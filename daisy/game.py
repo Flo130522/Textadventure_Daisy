@@ -169,9 +169,7 @@ class Game:
                 messages.append(f"Jack versorgt das Team und heilt Daisy um {healed} LP.")
         return messages
 
-    def advance_quest(
-        self, quest_id: str, amount: int = 1, *, complete: bool = False
-    ) -> list[str]:
+    def advance_quest(self, quest_id: str, amount: int = 1, *, complete: bool = False) -> list[str]:
         """Aktualisiert eine Quest und vergibt ihre Belohnung genau einmal."""
 
         quest = self.story.quests.get(quest_id)
@@ -300,8 +298,7 @@ class Game:
             definition = item_definition(item)
             equipped = " – angelegt" if item in self.player.equipment.values() else ""
             summary = (
-                f"{amount}× {item} [{kind_labels.get(definition.kind, definition.kind)}]"
-                f"{equipped}"
+                f"{amount}× {item} [{kind_labels.get(definition.kind, definition.kind)}]{equipped}"
             )
             if detailed:
                 summary += f": {definition.description}"
@@ -320,10 +317,7 @@ class Game:
                 "Leika": f"Angriff +{2 + level}",
                 "Leo": f"Angriff +{2 + level}",
                 "Bruno": f"Verteidigung +{2 + level}",
-                "Jack": (
-                    f"Verteidigung +{1 + level}; heilt nach Siegen "
-                    f"{10 + level * 5} LP"
-                ),
+                "Jack": (f"Verteidigung +{1 + level}; heilt nach Siegen {10 + level * 5} LP"),
             }.get(character, "Kein aktiver Kampfbonus")
             summaries.append(
                 f"{character} – Freundschaft {points} Punkte / Stufe {level}\n"
@@ -335,8 +329,7 @@ class Game:
         return [
             item
             for item in dict.fromkeys(self.player.inventory)
-            if item_definition(item).kind == "consumable"
-            and item_definition(item).healing > 0
+            if item_definition(item).kind == "consumable" and item_definition(item).healing > 0
         ]
 
     @staticmethod
@@ -363,10 +356,7 @@ class Game:
             if not quest.completed
             and quest.objective_type == "deliver_item"
             and quest.objective_target in self.player.inventory
-            and (
-                not quest.objective_location
-                or quest.objective_location == self.current_location
-            )
+            and (not quest.objective_location or quest.objective_location == self.current_location)
         ]
 
     def turn_in_quest(self, quest_id: str) -> list[str]:
@@ -657,7 +647,8 @@ class Game:
 
     def _equipment_menu(self, input_fn: Input, output: Output) -> None:
         equipment = [
-            item for item in dict.fromkeys(self.player.inventory)
+            item
+            for item in dict.fromkeys(self.player.inventory)
             if item_definition(item).kind == "equipment"
         ]
         if not equipment:
