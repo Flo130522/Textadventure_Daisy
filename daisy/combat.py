@@ -68,11 +68,7 @@ def _deal_damage(
             del enemy.statuses["Geschwächt"]
     damage = max(
         1,
-        enemy.attack_power
-        + generator.randint(-2, 2)
-        + power_bonus
-        - weakened
-        - defense_bonus,
+        enemy.attack_power + generator.randint(-2, 2) + power_bonus - weakened - defense_bonus,
     )
     dealt = player.take_damage(damage)
     if enemy.status_effect and generator.random() < enemy.effect_chance:

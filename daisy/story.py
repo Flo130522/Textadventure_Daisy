@@ -244,8 +244,7 @@ def load_story(path: Path = STORY_FILE) -> dict[str, StoryNode]:
             if quest and bool(quest.get("objective_type")) != bool(quest.get("objective_target")):
                 raise ValueError(f"Unvollständiges Questziel bei Entscheidung: {choice.id}")
             if quest and (
-                not isinstance(quest.get("target", 1), int)
-                or quest.get("target", 1) < 1
+                not isinstance(quest.get("target", 1), int) or quest.get("target", 1) < 1
             ):
                 raise ValueError(f"Ungültiges Questziel bei Entscheidung: {choice.id}")
             if quest and (
@@ -273,9 +272,7 @@ def load_story(path: Path = STORY_FILE) -> dict[str, StoryNode]:
         if len(choice_ids) != len(set(choice_ids)):
             raise ValueError(f"Doppelte Entscheidung in Storyknoten: {node.id}")
         if not any(_is_unconditional(choice.conditions) for choice in node.choices):
-            raise ValueError(
-                f"Storyknoten ohne bedingungslose Rückfallentscheidung: {node.id}"
-            )
+            raise ValueError(f"Storyknoten ohne bedingungslose Rückfallentscheidung: {node.id}")
         nodes[node.id] = node
 
     referenced_nodes = {

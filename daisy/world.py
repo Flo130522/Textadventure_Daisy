@@ -66,8 +66,7 @@ def create_world(path: Path = WORLD_FILE) -> dict[str, Location]:
             if enemy.behavior not in {"aggressive", "tactical", "boss"}:
                 raise ValueError(f"Unbekanntes Gegnerverhalten bei {location.name}")
             if enemy.heal_power < 0 or (
-                enemy.phase_threshold is not None
-                and not 0 < enemy.phase_threshold <= 1
+                enemy.phase_threshold is not None and not 0 < enemy.phase_threshold <= 1
             ):
                 raise ValueError(f"Ungültige Gegnerphase bei {location.name}")
             if not 0 <= enemy.effect_chance <= 1 or enemy.effect_duration < 0:
